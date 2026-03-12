@@ -5,9 +5,17 @@ function Test-TaskLists {
     $midDayTaskFile = "$tasksFolder\Midday-$timestamp.tasks"
     $endOfDayTaskFile = "$tasksFolder\EndOfDay-$timestamp.tasks"
     $summaryReport = "$tasksFolder\Summary-$timestamp.md";
-    $uhOhCounter = 0;
     $now = Get-Date;
-    if ((($now.Hour) -ge 15) -and ($now.Minute) -ge 50) {
+    # Time frames for each task list
+    $middayHour = 12;
+    $middayMinute = 0;
+    $endOfDayHour = 15;
+    $endOfDayMinute = 0;
+    $closeDayHour = 15;
+    $closeDayMinute = 50;
+    # end of time frames
+    $uhOhCounter = 0;
+    if ((($now.Hour) -ge $closeDayHour) -and ($now.Minute) -ge $closeDayMinute) {
         if ((Test-Path $summaryReport) -eq $false) {
             $uhOhCounter += 1;      
             Write-Warning "Gotta compile your end of day report!";
@@ -21,14 +29,14 @@ function Test-TaskLists {
         
     
 
-        if (($now.Hour) -ge 12) {
+        if (($now.Hour) -ge $middayHour -and ($now.Minute) -ge $middayMinute) {
             if ((Test-Path $midDayTaskFile) -eq $false) {
                 $uhOhCounter += 1;      
                 Write-Warning "Gotta start your midday tasks!";
             }
         }
 
-        if (($now.Hour) -ge 15) {
+        if (($now.Hour) -ge $endOfDayHour -and ($now.Minute) -ge $endOfDayMinute) {
             if ((Test-Path $endOfDayTaskFile) -eq $false) {
                 $uhOhCounter += 1;      
                 Write-Warning "Gotta start your end of day tasks!";

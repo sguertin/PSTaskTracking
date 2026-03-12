@@ -6,3 +6,4 @@ function Get-OverdueReminders {
     
     Get-ChildItem -Path (Get-ReminderFolder) -File | Where-Object LastWriteTime -LT $today;
 }
+Set-Alias overdue -Value Get-OverdueReminders;

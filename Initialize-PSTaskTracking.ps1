@@ -1,0 +1,54 @@
+function Initialize-PSTaskTracking {
+    [cmdletBinding()]
+    param()
+
+    Write-Host "Initializing task tracking..."
+    $taskFolder = Get-TaskFolder;
+    if (Test-Path $taskFolder) {
+        Write-Warning "$taskFolder already exists.";
+    } else {
+        New-Item $taskFolder -ItemType Directory -Force | Out-Null;
+    }
+    $templateFolder = Join-Path $taskFolder -ChildPath "templates";
+    if (Test-Path $templateFolder) {
+        Write-Warning "$templateFolder already exists.";
+    } else {
+        New-Item $templateFolder -ItemType Directory | Out-Null;
+    }
+    $morningTaskList = Join-Path $templateFolder -ChildPath "Morning.tasks";
+    $middayTaskList = Join-Path $templateFolder -ChildPath "Midday.tasks";
+    $endOfDayTaskList = Join-Path $templateFolder -ChildPath "EndOfDay.tasks";
+    if (Test-Path $morningTaskList) {
+        Write-Host "$morningTaskList already exists."
+    } else {
+        Write-Host "Creating default version of $morningTaskList..."
+        New-Item $morningTaskList -ItemType File;
+        Set-Content $morningTaskList -Value "1. Do your morning tasks"
+    }
+    if (Test-Path $middayTaskList) {
+        Write-Host "$middayTaskList already exists."
+    } else {
+        Write-Host "Creating default version of $middayTaskList..."
+        New-Item $middayTaskList -ItemType File;
+        Set-Content $middayTaskList -Value "1. Do your mid-day tasks"
+    }
+    if (Test-Path $endOfDayTaskList) {
+        Write-Host "$endOfDayTaskList already exists."
+    } else {
+        Write-Host "Creating default version of $endOfDayTaskList..."
+        New-Item $endOfDayTaskList -ItemType File | Out-Null;
+        Set-Content $endOfDayTaskList -Value "1. Do your end of day tasks"
+    }
+    $remindersFolder = Join-Path $taskFolder -ChildPath "reminders";
+    $closedFolder = Join-Path $remindersFolder -ChildPath "closed";
+    if (Test-Path $remindersFolder) {
+        Write-Host "$remindersFolder already exists...";
+        if ((Test-Path $closedFolder) -eq $false) {
+            New-Item $closedFolder -ItemType Directory | Out-Null;
+        }
+    } else {        
+        New-Item $remindersFolder -ItemType Directory | Out-Null;        
+        New-Item $closedFolder -ItemType Directory | Out-Null;
+    }
+
+}
