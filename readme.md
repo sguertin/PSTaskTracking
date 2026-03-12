@@ -16,7 +16,7 @@ The scripts provided in here need to be 'dot sourced' into your PS session. The 
 
 To initialize the whole task tracking system, run the `Initialize-PSTaskTracking` command, that will scaffold up the folders it uses for work and will create stubs for each of the main daily task lists. Feel free to edit those as you see fit, note that these three files will ultimately be concatenated into a single [Markdown](https://www.markdownguide.org/basic-syntax/) file that will then be converted to a PDF, so keeping the task lists in a Markdown compatible syntax is key.
 
-## Daily Usaqe
+## Daily Usage
 
 The default time frames (based on the system local time) for each of the task list reminders is as follows:
 Morning list expects to be started as soon as the day begins
