@@ -41,7 +41,7 @@ function New-EndOfDayReport {
     & nano $reportFile;    
     & pandoc $reportFile -o $outputFile --template eisvogel | Out-Null;
     $output = Get-Item $outputFile;
-    $destination = Join-Path "\\as1\devel\Scott\DailyTasks" -ChildPath $output.Name;
+    $destination = Join-Path (Get-TaskFolder) -ChildPath $output.Name;
     Copy-Item -Path $output.FullName -Destination $destination | Out-Null;
     Write-Host ($output.Name + " copied to '$destination'");
 }

@@ -2,10 +2,10 @@ function Start-TaskList {
     param(
         [string]$TaskList
     )
-    $tasksFolder = Get-TaskFolder;
-    $taskTemplate = "$tasksFolder\templates\$TaskList.tasks";
+    $taskTemplate = Join-Path (Get-TemplatesFolder) -ChildPath "$TaskList.tasks";
     $today = Get-Date;
     $timestamp = $today.ToString("yyyy-MM-dd");
+    $tasksFolder = Get-TaskFolder;
     $newTaskFile = "$tasksFolder\$TaskList-$timestamp.tasks";
     if (Test-Path $newTaskFile) {
         Write-Error "$newTaskFile already exists!"

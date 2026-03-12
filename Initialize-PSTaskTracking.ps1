@@ -9,7 +9,7 @@ function Initialize-PSTaskTracking {
     } else {
         New-Item $taskFolder -ItemType Directory -Force | Out-Null;
     }
-    $templateFolder = Join-Path $taskFolder -ChildPath "templates";
+    $templateFolder = Get-TemplatesFolder;
     if (Test-Path $templateFolder) {
         Write-Warning "$templateFolder already exists.";
     } else {

@@ -5,14 +5,14 @@ This is a homegrown task tracking system I built primarily to keep myself on top
 ## Prerequisites
 
 - [PowerShell](https://github.com/PowerShell/PowerShell), this is all designed and tested on pwsh 7.4.x but should work fine for any modern version of PowerShell, use PowerShell 5 at your own peril.
-- nano (I install this via [Cygwin](https://cygwin.com/index.html) but other options do exist.)
+- `nano` (I install this via [Cygwin](https://cygwin.com/index.html) but other options do exist.)
 - [pandoc](https://pandoc.org/)
 - [MikTex Console](https://miktex.org/)
 - [eisvogel](https://github.com/enhuiz/eisvogel)
 
 ## Getting Started
 
-The scripts provided in here need to be 'dot sourced' into your PS session. The sample PS profile file, .\Profile\Microsoft.PowerShell_profile.ps1 illustrates how to dot source all powershell scripts from a 'Scripts' folder in your user directory (C:\Users\<USERNAME>), it also shows how to integrate the task reminders into your prompt directly. One option for setting this up is to checkout this repository into that scripts folder. The path to your local powershell profile will always be in the $PROFILE variable in your powershell session.
+The scripts provided in here need to be 'dot sourced' into your PS session. The sample PS profile file, .\Profile\Microsoft.PowerShell_profile.ps1 illustrates how to dot source all powershell scripts from a 'Scripts' folder in your user directory (C:\Users\<USERNAME>), it also shows how to integrate the task reminders into your prompt directly. One option for setting this up is to checkout this repository into that scripts folder. The path to your local powershell profile will always be in the `$PROFILE` variable in your powershell session.
 
 To initialize the whole task tracking system, run the `Initialize-PSTaskTracking` command, that will scaffold up the folders it uses for work and will create stubs for each of the main daily task lists. Feel free to edit those as you see fit, note that these three files will ultimately be concatenated into a single [Markdown](https://www.markdownguide.org/basic-syntax/) file that will then be converted to a PDF, so keeping the task lists in a Markdown compatible syntax is key.
 
@@ -28,15 +28,29 @@ End of Day list expects to be started at 3PM
 The close out report for the day is expected to be generated at 3:50PM
 
 Each of these can be changed by adjusting the script `Test-TaskLists`, there are variables to specify when each task list should be done by, in military time.
+NOTE: all commands are case insensitive
 
 The standard commands you'll use to start filling out your task list for that day have aliases (all case insensitive) for your convenience:
 
-`Start-Day`: `morning`
-`Start-Midday`: `midday`
-`Start-EndOfDay`: `eod`, `endday`, `endofday`
-`New-EndOfDayReport`: `closeday`, `close`, `taskreport`, `report`
+`Start-Day`: `Morning`
+`Start-Midday`: `Midday`
+`Start-EndOfDay`: `eod`, `EndDay`, `EndOfDay`
 
-Running any of these commands will drop you into a nano editor to fill out a fresh copy of the task list for that part of the day.
+Running any of these commands will drop you into a `nano` editor to fill out a fresh copy of the task list for that part of the day.
+
+## Creating a Day Summary Report
+
+The following command will execute the following steps:
+
+1. Combine all three task files into a single markdown file
+2. Launch `nano` to let you edit the final report as needed
+3. After exiting `nano`, a pdf will be generated from the report file via pandoc and dropped in your daily tasks folder.
+
+`New-EndOfDayReport`: `CloseDay`, `close`, `TaskReport`, `report`
+
+### Weekly Tasks
+
+- You can add tasks that only need to be done once a week on a particular day as well, go to the templates folder (can be retrieved via the `Get-TemplatesFolder` command). In that folder if you create a file called `DayOfWeek`.`TimeOfDay`.tasks e.g. `friday.morning.tasks`, it will automatically include the contents of that file when creating the task file for that day/time.
 
 ## Reminders
 
@@ -47,6 +61,7 @@ The following commands are available for managing reminders:
 - `Get-Reminders`, alias: `today` - lists all reminders pending for today
 - `Get-OverdueReminders`, alias: `overdue` - lists all incomplete reminders from prior days
 - `Test-Reminders`, alias: `reminders` - lists you to what reminders are due as of right now.
+- `Close-Reminder`, alias: `close` - Marks a reminder as complete.
 
 ### Creating a Reminder
 
@@ -56,3 +71,16 @@ The following commands are available for managing reminders:
     # All day reminder - will be considered due as of 12AM of the date set
     reminder "All day training" -Date (Get-Date).AddDays(1) -Day # the -Day flag will set the reminder to midnight of the day provided
 ```
+
+### Closing a Reminder
+
+When a reminder is created, it will get an Id assigned to it, and a date stamp, those to values must be passed to the `Close-Reminder` command to mark the reminder as finished.
+
+```pwsh
+    close 1; # Closes reminder with id 1 for today
+    close 2 -Date (Get-Date).AddDays(-1); # Closes reminder 2 from yesterday
+```
+
+## What's Next?
+
+I don't have a clear feature list or plans for enhancement at this time beyond some productionization of where all of the working files are stored and managed from, i.e. storing files in the `%APPDATA%` or `/home/user/.local` directory for POSIX based systems.
