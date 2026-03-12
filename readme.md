@@ -2,7 +2,7 @@
 
 This is a homegrown task tracking system I built primarily to keep myself on top of my day to day tasks.
 
-## Prerequisites
+## Prerequisites - Windows
 
 - [PowerShell](https://github.com/PowerShell/PowerShell), this is all designed and tested on pwsh 7.4.x but should work fine for any modern version of PowerShell, use PowerShell 5 at your own peril.
 - `nano` (I install this via [Cygwin](https://cygwin.com/index.html) but other options do exist.)
