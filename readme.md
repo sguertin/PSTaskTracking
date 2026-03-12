@@ -34,7 +34,9 @@ NOTE: all commands are case insensitive
 The standard commands you'll use to start filling out your task list for that day have aliases (all case insensitive) for your convenience:
 
 `Start-Day`: `Morning`
+
 `Start-Midday`: `Midday`
+
 `Start-EndOfDay`: `eod`, `EndDay`, `EndOfDay`
 
 Running any of these commands will drop you into a `nano` editor to fill out a fresh copy of the task list for that part of the day.
