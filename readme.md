@@ -19,6 +19,7 @@ To initialize the whole task tracking system, run the `Initialize-PSTaskTracking
 ## Daily Usage
 
 The default time frames (based on the system local time) for each of the task list reminders is as follows:
+
 Morning list expects to be started as soon as the day begins
 
 Midday list expects to be started at 12PM
