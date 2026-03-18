@@ -1,5 +1,21 @@
-function Test-Reminders { 
-    [cmdletBinding()]
+function Test-Reminders {
+    <#
+    .SYNOPSIS
+    Provides warnings if reminders have not been done.
+    
+    .DESCRIPTION
+    Checks if reminders are still pending based on the time of day
+    
+    .PARAMETER SilentAllClear
+    Silence output for reminders being pending
+    
+    .EXAMPLE
+    Test-Reminders;
+    
+    .NOTES
+    Aliased as reminders
+    #> 
+    [CmdletBinding()]
     param(
         [switch]$SilentAllClear
     )

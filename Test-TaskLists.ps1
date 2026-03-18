@@ -1,4 +1,18 @@
 function Test-TaskLists {
+    <#
+    .SYNOPSIS
+    Checks if tasks need to be done.
+    
+    .DESCRIPTION
+    Checks to see if files have been created for each of the morning, midday, and end of day task lists for today 
+    based on the current time of day. 
+    
+    .EXAMPLE
+    Test-TaskLists;
+    
+    #>
+    [CmdletBinding()]
+    param()
     $tasksFolder = Get-TaskFolder;
     $timestamp = (Get-Date).ToString("yyyy-MM-dd")
     $morningTaskFile = "$tasksFolder\Morning-$timestamp.tasks"

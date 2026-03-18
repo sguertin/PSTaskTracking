@@ -1,4 +1,25 @@
 function New-EndOfDayReport {
+    <#
+    .SYNOPSIS
+    Generate an end of day report
+    
+    .DESCRIPTION
+    Concatenates together the contents of the morning, midday, and end of day task lists for the provided Date, today by default, then launches nano on the newly created markdown file. Upon exiting, it will generate a pdf of the file via pandoc.
+    
+    .PARAMETER Date
+    The date to create a report for, defaults to today.
+    
+    .EXAMPLE
+    # Generate today's report
+    New-EndOfDayReport;
+
+    # Generate a report for yesterday
+    New-EndOfDayReport -Date (Get-Date).AddDays(-1);
+    
+    .NOTES
+    Several aliases are set for your convenience, Close, CloseDay, TaskReport, and Report
+    #>
+    [CmdletBinding()]
     param(
         [DateTime]$Date = (Get-Date)
     )

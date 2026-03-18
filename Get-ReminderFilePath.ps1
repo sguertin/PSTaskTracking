@@ -1,8 +1,27 @@
 function Get-ReminderFilePath {
-    [cmdletBinding()]
+    <#
+    .SYNOPSIS
+    Returns the file path for a reminder of a given Id
+    
+    .DESCRIPTION
+    Retrieves the reminder with an Id and, optionally, a date if the reminder is not from today.
+    
+    .PARAMETER Id
+    The Id of the reminder
+    
+    .PARAMETER Date
+    The date of the reminder, if not today
+    
+    .EXAMPLE
+    An example
+    
+    .NOTES
+    General notes
+    #>
+    [CmdletBinding()]
     param(
-        [int]$Id,
-        [DateTime]$Date = (Get-Date)
+        [Parameter(Mandatory, Position = 1)][int]$Id,
+        [Parameter(Position = 2)][DateTime]$Date = (Get-Date)
     )
     
     $timestamp = $Date.ToString("yyyy-MM-dd");

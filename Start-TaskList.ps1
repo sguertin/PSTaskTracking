@@ -1,6 +1,22 @@
 function Start-TaskList {
+    <#
+    .SYNOPSIS
+    Starts the specified task list
+    
+    .DESCRIPTION
+    Creates a copy of the specified task template and launches the nano text editor to begin filling it out
+    
+    .PARAMETER TaskList
+    The task list to create, expects Morning, Midday, or EndOfDay
+    
+    .EXAMPLE
+    Start-TaskList "Morning";
+    
+    Start-TaskList -TaskList "Midday";
+    #>
+    [CmdletBinding()]
     param(
-        [string]$TaskList
+        [Parameter(Mandatory, Position = 1)][string]$TaskList
     )
     $taskTemplate = Join-Path (Get-TemplatesFolder) -ChildPath "$TaskList.tasks";
     $today = Get-Date;

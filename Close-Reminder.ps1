@@ -1,4 +1,37 @@
 function Close-Reminder {
+    <#
+    .SYNOPSIS
+    Closes a reminder
+    
+    .DESCRIPTION
+    Closes a reminder by either piping the reminder file to this command or passing an Id and, 
+    optionally a Date if the reminder is not from today, and it will be moved to closed.
+    
+    .PARAMETER File
+    A piped reminder file
+    
+    .PARAMETER Id
+    The Id for the file
+    
+    .PARAMETER Date
+    The date for the reminder, only necessary if reminder is for a different day.
+    
+    .EXAMPLE
+    
+    Get-OverdueReminders | Close-Reminder;
+
+    # Close reminder with id of 1
+    Close-Reminder -Id 1;
+
+    # Close reminder with an id of 2
+    Close-Reminder 2;
+
+    # Close reminder 3 from yesterday
+    Close-Reminder -Id 3 -Date (Get-Date).AddDays(-1);
+    
+    .NOTES
+    Aliased as finish
+    #>    
     [CmdletBinding(DefaultParameterSetName = "Info")]
     param(
         [Parameter(Mandatory, ParameterSetName = "Pipe", ValueFromPipeline = $true)][System.IO.FileInfo]$File,

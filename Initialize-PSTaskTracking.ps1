@@ -1,5 +1,18 @@
 function Initialize-PSTaskTracking {
-    [cmdletBinding()]
+    <#
+    .SYNOPSIS
+    Initialize the PSTaskTracking directories and files
+    
+    .DESCRIPTION
+    Creates a folder structure under the user profile directory, in a folder called Daily Tasks. It then creates 
+    two subdirectories 'templates' and 'reminders'. It also creates empty files for morning, noon, and end of day tasks.
+    These are left to be filled out with your tasks as needed.
+    
+    .EXAMPLE
+    Initialize-PSTaskTracking;
+    
+    #>
+    [CmdletBinding()]
     param()
 
     Write-Host "Initializing task tracking..."

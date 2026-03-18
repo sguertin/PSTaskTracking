@@ -1,8 +1,30 @@
 function New-Reminder {
-    [cmdletBinding()]
+    <#
+    .SYNOPSIS
+    Creates a reminder 
+    
+    .DESCRIPTION
+    Creates a new reminder file in the reminders folder
+    
+    .PARAMETER Reminder
+    The text of the reminder i.e. what you want to be reminded to do.
+    
+    .PARAMETER Date
+    The date/time that you want to start being reminded for.
+    
+    .PARAMETER Day
+    If passed, reminder will be set to midnight of the date provided
+    
+    .EXAMPLE
+    New-Reminder "Remember to review your reminders!";
+    
+    .NOTES
+    Aliased as reminder
+    #>
+    [CmdletBinding()]
     param(
-        [string]$Reminder,
-        [DateTime]$Date,    
+        [Parameter(Mandatory, Position = 1)][string]$Reminder,
+        [Parameter(Mandatory, Position = 2)][DateTime]$Date,    
         [switch]$Day
     )
     $reminderDirectory = Get-ReminderFolder;
