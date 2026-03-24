@@ -22,14 +22,14 @@ function Start-TaskList {
     $today = Get-Date;
     $timestamp = $today.ToString("yyyy-MM-dd");
     $tasksFolder = Get-TaskFolder;
-    $newTaskFile = "$tasksFolder\$TaskList-$timestamp.md";
+    $newTaskFile = Join-Path $tasksFolder -ChildPath "$TaskList-$timestamp.md";
     if (Test-Path $newTaskFile) {
         Write-Error "$newTaskFile already exists!"
         return;
     }
-    $dayOfWeek = $today.DayOfWeek.ToString().ToLower();
-    $dailyTasks = "$tasksFolder\templates\$dayOfWeek.$TaskList.md"
-    Copy-Item $taskTemplate -Destination $newTaskFile;
+    Copy-Item $taskTemplate -Destination $newTaskFile;    
+    $dayOfWeek = $today.DayOfWeek.ToString().ToLower();    
+    $dailyTasks = Join-Path (Get-TemplatesFolder) -ChildPath "$dayOfWeek.$TaskList.md";
     if (Test-Path $dailyTasks) {
         $content = Get-Content $newTaskFile;
         $content += "`n### $dayOfWeek Tasks `n"

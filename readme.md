@@ -86,4 +86,5 @@ When a reminder is created, it will get an Id assigned to it, and a date stamp, 
 
 ## What's Next?
 
-I don't have a clear feature list or plans for enhancement at this time beyond some productionization of where all of the working files are stored and managed from, i.e. storing files in the `%APPDATA%` or `/home/user/.local` directory for POSIX based systems.
+- Make application more configurable via a config file instead of hard coding everything
+  - The default config should match the current hard coded settings

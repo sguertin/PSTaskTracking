@@ -2,23 +2,23 @@ function Test-TaskLists {
     <#
     .SYNOPSIS
     Checks if tasks need to be done.
-    
+
     .DESCRIPTION
-    Checks to see if files have been created for each of the morning, midday, and end of day task lists for today 
-    based on the current time of day. 
-    
+    Checks to see if files have been created for each of the morning, midday, and end of day task lists for today
+    based on the current time of day.
+
     .EXAMPLE
     Test-TaskLists;
-    
+
     #>
     [CmdletBinding()]
     param()
     $tasksFolder = Get-TaskFolder;
     $timestamp = (Get-Date).ToString("yyyy-MM-dd")
-    $morningTaskFile = "$tasksFolder\morning-$timestamp.md"
-    $midDayTaskFile = "$tasksFolder\midday-$timestamp.md"
-    $endOfDayTaskFile = "$tasksFolder\endofday-$timestamp.md"
-    $summaryReport = "$tasksFolder\summary-$timestamp.md";
+    $morningTaskFile = Join-Path $tasksFolder "morning-$timestamp.md"
+    $midDayTaskFile = Join-Path $tasksFolder "midday-$timestamp.md"
+    $endOfDayTaskFile = Join-Path $tasksFolder "endofday-$timestamp.md"
+    $summaryReport = Join-Path $tasksFolder "summary-$timestamp.md";
     $now = Get-Date;
     # Time frames for each task list
     $middayHour = 12;
@@ -31,33 +31,31 @@ function Test-TaskLists {
     $uhOhCounter = 0;
     if ((($now.Hour) -ge $closeDayHour) -and ($now.Minute) -ge $closeDayMinute) {
         if ((Test-Path $summaryReport) -eq $false) {
-            $uhOhCounter += 1;      
+            $uhOhCounter += 1;
             Write-Warning "Gotta compile your end of day report!";
         }
     }
     if ((Test-Path $summaryReport) -eq $false) {
-        if ((Test-Path $morningTaskFile) -eq $false) { 
-            $uhOhCounter += 1;      
+        if ((Test-Path $morningTaskFile) -eq $false) {
+            $uhOhCounter += 1;
             Write-Warning "Gotta start your morning tasks!"
         }
-        
-    
 
         if (($now.Hour) -ge $middayHour -and ($now.Minute) -ge $middayMinute) {
             if ((Test-Path $midDayTaskFile) -eq $false) {
-                $uhOhCounter += 1;      
+                $uhOhCounter += 1;
                 Write-Warning "Gotta start your midday tasks!";
             }
         }
 
         if (($now.Hour) -ge $endOfDayHour -and ($now.Minute) -ge $endOfDayMinute) {
             if ((Test-Path $endOfDayTaskFile) -eq $false) {
-                $uhOhCounter += 1;      
+                $uhOhCounter += 1;
                 Write-Warning "Gotta start your end of day tasks!";
             }
         }
     }
-    
+
     if ($uhOhCounter -gt 1) {
         Write-Error "YOU NEED TO GET YOUR TASKS TOGETHER NOW";
     }
