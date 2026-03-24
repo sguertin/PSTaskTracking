@@ -10,5 +10,5 @@ function Get-TaskFolder {
     [CmdletBinding()]
     param()
     $userDirectory = $env:USERPROFILE
-    return Join-Path $userDirectory -ChildPath "DailyTasks"
+    return Join-Path $userDirectory -ChildPath "dailytasks"
 }

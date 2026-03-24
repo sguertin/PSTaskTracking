@@ -15,10 +15,10 @@ function Test-TaskLists {
     param()
     $tasksFolder = Get-TaskFolder;
     $timestamp = (Get-Date).ToString("yyyy-MM-dd")
-    $morningTaskFile = "$tasksFolder\Morning-$timestamp.tasks"
-    $midDayTaskFile = "$tasksFolder\Midday-$timestamp.tasks"
-    $endOfDayTaskFile = "$tasksFolder\EndOfDay-$timestamp.tasks"
-    $summaryReport = "$tasksFolder\Summary-$timestamp.md";
+    $morningTaskFile = "$tasksFolder\morning-$timestamp.md"
+    $midDayTaskFile = "$tasksFolder\midday-$timestamp.md"
+    $endOfDayTaskFile = "$tasksFolder\endofday-$timestamp.md"
+    $summaryReport = "$tasksFolder\summary-$timestamp.md";
     $now = Get-Date;
     # Time frames for each task list
     $middayHour = 12;

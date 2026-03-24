@@ -18,23 +18,21 @@ function Start-TaskList {
     param(
         [Parameter(Mandatory, Position = 1)][string]$TaskList
     )
-    $taskTemplate = Join-Path (Get-TemplatesFolder) -ChildPath "$TaskList.tasks";
+    $taskTemplate = Join-Path (Get-TemplatesFolder) -ChildPath "$TaskList.md";
     $today = Get-Date;
     $timestamp = $today.ToString("yyyy-MM-dd");
     $tasksFolder = Get-TaskFolder;
-    $newTaskFile = "$tasksFolder\$TaskList-$timestamp.tasks";
+    $newTaskFile = "$tasksFolder\$TaskList-$timestamp.md";
     if (Test-Path $newTaskFile) {
         Write-Error "$newTaskFile already exists!"
         return;
     }
-    $dayOfWeek = $today.DayOfWeek;
-    $dailyTasks = "$tasksFolder\templates\$dayOfWeek.$TaskList.tasks"
+    $dayOfWeek = $today.DayOfWeek.ToString().ToLower();
+    $dailyTasks = "$tasksFolder\templates\$dayOfWeek.$TaskList.md"
     Copy-Item $taskTemplate -Destination $newTaskFile;
-
     if (Test-Path $dailyTasks) {
         $content = Get-Content $newTaskFile;
-        $content += "`n"
-        $content += "$dayOfWeek Tasks `n"
+        $content += "`n### $dayOfWeek Tasks `n"
         $content += Get-Content $dailyTasks -Raw;
         Set-Content $newTaskFile -Value $content
     }

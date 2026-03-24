@@ -26,10 +26,10 @@ function New-EndOfDayReport {
     $tasksFolder = Get-TaskFolder;   
     $archiveFolder = Join-Path $tasksFolder -ChildPath "archive";
     $timestamp = $Date.ToString("yyyy-MM-dd");
-    $morningTaskFile = Get-Item -Path "$tasksFolder\Morning-$timestamp.tasks";
-    $midDayTaskFile = Get-Item -Path "$tasksFolder\Midday-$timestamp.tasks";
-    $endOfDayTaskFile = Get-Item -Path "$tasksFolder\EndOfDay-$timestamp.tasks";
-    $reportFile = "$tasksFolder\Summary-$timestamp.md";
+    $morningTaskFile = Get-Item -Path (Join-Path $tasksFolder -ChildPath "morning-$timestamp.md");
+    $midDayTaskFile = Get-Item -Path (Join-Path $tasksFolder -ChildPath "midday-$timestamp.md");
+    $endOfDayTaskFile = Get-Item -Path (Join-Path $tasksFolder -ChildPath "endofday-$timestamp.md");
+    $reportFile = Join-Path $tasksFolder -ChildPath "Summary-$timestamp.md";
     $outputFile = $reportFile.Replace(".md", ".pdf");
     if (Test-Path $reportFile) {
         Write-Error "'$reportFile' already exists!";
@@ -47,12 +47,11 @@ function New-EndOfDayReport {
         Write-Error "Unable to find $endOfDayTaskFile, did you forget to create it?";
         return;
     }
-    $reportContent = "# Daily Task Report $timestamp`n";
-    $reportContent += "`n## Morning Tasks - $timestamp`n";
+    $reportContent = "# Daily Task Report $timestamp`n`n";
     $reportContent += (Get-Content $morningTaskFile -Raw);
-    $reportContent += "`n## Midday Tasks - $timestamp`n";
+    $reportContent += "`n";
     $reportContent += (Get-Content $midDayTaskFile -Raw);
-    $reportContent += "`n## End of Day Tasks - $timestamp`n";
+    $reportContent += "`n";
     $reportContent += (Get-Content $endOfDayTaskFile -Raw);
     $reportContent += "`n";
     Move-Item $morningTaskFile.FullName -Destination (Join-Path $archiveFolder -ChildPath $morningTaskFile.Name);
@@ -62,9 +61,10 @@ function New-EndOfDayReport {
     & nano $reportFile;    
     & pandoc $reportFile -o $outputFile --template eisvogel | Out-Null;
     $output = Get-Item $outputFile;
-    $destination = Join-Path (Get-TaskFolder) -ChildPath $output.Name;
+    $outputFileName = $output.Name;
+    $destination = Join-Path (Get-TaskFolder) -ChildPath $outputFileName;
     Copy-Item -Path $output.FullName -Destination $destination | Out-Null;
-    Write-Host ($output.Name + " copied to '$destination'");
+    Write-Host ("$outputFileName copied to '$destination'");
 }
 Set-Alias -Name Close -Value New-EndOfDayReport;
 Set-Alias -Name CloseDay -Value New-EndOfDayReport;

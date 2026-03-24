@@ -15,7 +15,7 @@ function Start-EndOfDay {
     [CmdletBinding()]
     param()
     
-    Start-TaskList "EndOfDay";
+    Start-TaskList "endofday";
 }
 Set-Alias -Name EndDay -Value Start-EndOfDay;
 Set-Alias -Name eod -Value Start-EndOfDay;

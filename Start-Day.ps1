@@ -15,6 +15,6 @@ function Start-Day {
     [CmdletBinding()]
     param()
     
-    Start-TaskList "Morning";
+    Start-TaskList "morning";
 }
 Set-Alias -Name morning -Value Start-Day;

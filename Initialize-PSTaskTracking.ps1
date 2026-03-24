@@ -28,29 +28,26 @@ function Initialize-PSTaskTracking {
     } else {
         New-Item $templateFolder -ItemType Directory | Out-Null;
     }
-    $morningTaskList = Join-Path $templateFolder -ChildPath "Morning.tasks";
-    $middayTaskList = Join-Path $templateFolder -ChildPath "Midday.tasks";
-    $endOfDayTaskList = Join-Path $templateFolder -ChildPath "EndOfDay.tasks";
+    $morningTaskList = Join-Path $templateFolder -ChildPath "morning.md";
+    $middayTaskList = Join-Path $templateFolder -ChildPath "midday.md";
+    $endOfDayTaskList = Join-Path $templateFolder -ChildPath "endofday.md";
     if (Test-Path $morningTaskList) {
         Write-Host "$morningTaskList already exists."
     } else {
         Write-Host "Creating default version of $morningTaskList..."
-        New-Item $morningTaskList -ItemType File;
-        Set-Content $morningTaskList -Value "1. Do your morning tasks"
+        New-Item $morningTaskList -ItemType File -Value "## Morning Task List`n`n1. Do your morning tasks"
     }
     if (Test-Path $middayTaskList) {
         Write-Host "$middayTaskList already exists."
     } else {
         Write-Host "Creating default version of $middayTaskList..."
-        New-Item $middayTaskList -ItemType File;
-        Set-Content $middayTaskList -Value "1. Do your mid-day tasks"
+        New-Item $middayTaskList -ItemType File -Value "## Midday Task List`n`n1. Do your mid-day tasks"
     }
     if (Test-Path $endOfDayTaskList) {
         Write-Host "$endOfDayTaskList already exists."
     } else {
         Write-Host "Creating default version of $endOfDayTaskList..."
-        New-Item $endOfDayTaskList -ItemType File | Out-Null;
-        Set-Content $endOfDayTaskList -Value "1. Do your end of day tasks"
+        New-Item $endOfDayTaskList -ItemType File -Value "## End of Day Task List`n`n1. Do your end of day tasks"
     }
     $remindersFolder = Join-Path $taskFolder -ChildPath "reminders";
     $closedFolder = Join-Path $remindersFolder -ChildPath "closed";

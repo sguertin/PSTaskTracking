@@ -15,6 +15,6 @@ function Start-MidDay {
     [CmdletBinding()]
     param()
     
-    Start-TaskList "Midday";
+    Start-TaskList "midday";
 }
 Set-Alias -Name midday -Value Start-MidDay;
