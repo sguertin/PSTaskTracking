@@ -4,7 +4,7 @@ function Start-EndOfDay {
     Start the end of day task list
     
     .DESCRIPTION
-    Creates a copy of the end of day task template and launches the nano text editor to begin filling it out
+    Creates a copy of the end of day task template and launches the text editor to begin filling it out
     
     .EXAMPLE
     Start-EndOfDay;
@@ -17,6 +17,5 @@ function Start-EndOfDay {
     
     Start-TaskList "endofday";
 }
-Set-Alias -Name EndDay -Value Start-EndOfDay;
 Set-Alias -Name eod -Value Start-EndOfDay;
 Set-Alias -Name EndOfDay -Value Start-EndOfDay;

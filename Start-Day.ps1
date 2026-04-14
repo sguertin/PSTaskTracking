@@ -4,7 +4,7 @@ function Start-Day {
     Start the morning task list
     
     .DESCRIPTION
-    Creates a copy of the morning task template and launches the nano text editor to begin filling it out
+    Creates a copy of the morning task template and launches the text editor to begin filling it out
     
     .EXAMPLE
     Start-Day;

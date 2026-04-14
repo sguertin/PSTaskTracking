@@ -59,4 +59,4 @@ function Close-Reminder {
     $currentItem = $File.FullName;   
     Move-Item $currentItem -Destination $closedItem -Force | Out-Null;
 }
-Set-Alias finish -Value Close-Reminder
+Set-Alias -Name finish -Value Close-Reminder

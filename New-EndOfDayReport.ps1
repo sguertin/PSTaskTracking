@@ -4,7 +4,7 @@ function New-EndOfDayReport {
     Generate an end of day report
     
     .DESCRIPTION
-    Concatenates together the contents of the morning, midday, and end of day task lists for the provided Date, today by default, then launches nano on the newly created markdown file. Upon exiting, it will generate a pdf of the file via pandoc.
+    Concatenates together the contents of the morning, midday, and end of day task lists for the provided Date, today by default, then launches a text editor on the newly created markdown file. Upon exiting, it will generate a pdf of the file via pandoc.
     
     .PARAMETER Date
     The date to create a report for, defaults to today.
@@ -26,9 +26,9 @@ function New-EndOfDayReport {
     $tasksFolder = Get-TaskFolder;   
     $archiveFolder = Join-Path $tasksFolder -ChildPath "archive";
     $timestamp = $Date.ToString("yyyy-MM-dd");
-    $morningTaskFile = Get-Item -Path (Join-Path $tasksFolder -ChildPath "morning-$timestamp.md");
-    $midDayTaskFile = Get-Item -Path (Join-Path $tasksFolder -ChildPath "midday-$timestamp.md");
-    $endOfDayTaskFile = Get-Item -Path (Join-Path $tasksFolder -ChildPath "endofday-$timestamp.md");
+    $morningTaskFile = Get-Item -Path (Join-Path $tasksFolder -ChildPath "Morning-$timestamp.md");
+    $midDayTaskFile = Get-Item -Path (Join-Path $tasksFolder -ChildPath "Midday-$timestamp.md");
+    $endOfDayTaskFile = Get-Item -Path (Join-Path $tasksFolder -ChildPath "EndOfDay-$timestamp.md");
     $reportFile = Join-Path $tasksFolder -ChildPath "Summary-$timestamp.md";
     $outputFile = $reportFile.Replace(".md", ".pdf");
     if (Test-Path $reportFile) {
@@ -58,7 +58,7 @@ function New-EndOfDayReport {
     Move-Item $midDayTaskFile.FullName -Destination (Join-Path $archiveFolder -ChildPath $midDayTaskFile.Name);
     Move-Item $endOfDayTaskFile.FullName -Destination (Join-Path $archiveFolder -ChildPath $endOfDayTaskFile.Name);
     Set-Content -Path $reportFile -Value $reportContent;
-    & nano $reportFile;    
+    & $env:PSTT_Editor $reportFile;    
     & pandoc $reportFile -o $outputFile --template eisvogel | Out-Null;
     $output = Get-Item $outputFile;
     $outputFileName = $output.Name;
@@ -66,7 +66,6 @@ function New-EndOfDayReport {
     Copy-Item -Path $output.FullName -Destination $destination | Out-Null;
     Write-Host ("$outputFileName copied to '$destination'");
 }
-Set-Alias -Name Close -Value New-EndOfDayReport;
 Set-Alias -Name CloseDay -Value New-EndOfDayReport;
 Set-Alias -Name TaskReport -Value New-EndOfDayReport;
 Set-Alias -Name Report -Value New-EndOfDayReport;

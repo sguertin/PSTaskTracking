@@ -8,4 +8,4 @@ function Get-Reminders {
 
     Get-ChildItem -Path (Get-ReminderFolder) | Where-Object Name -Match $timestamp | Get-Content -Raw | ConvertFrom-Json -ErrorAction Stop;       
 }
-Set-Alias today -Value Get-Reminders;
+Set-Alias -Name today -Value Get-Reminders;

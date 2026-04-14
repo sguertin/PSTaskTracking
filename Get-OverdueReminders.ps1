@@ -20,4 +20,4 @@ function Get-OverdueReminders {
     
     Get-ChildItem -Path (Get-ReminderFolder) -File | Get-Content -Raw | ConvertFrom-Json -ErrorAction Stop | Where-Object Date -LT $today
 }
-Set-Alias overdue -Value Get-OverdueReminders;
+Set-Alias -Name overdue -Value Get-OverdueReminders;

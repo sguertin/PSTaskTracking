@@ -14,19 +14,22 @@ function Test-TaskLists {
     [CmdletBinding()]
     param()
     $tasksFolder = Get-TaskFolder;
-    $timestamp = (Get-Date).ToString("yyyy-MM-dd")
-    $morningTaskFile = Join-Path $tasksFolder "morning-$timestamp.md"
-    $midDayTaskFile = Join-Path $tasksFolder "midday-$timestamp.md"
-    $endOfDayTaskFile = Join-Path $tasksFolder "endofday-$timestamp.md"
-    $summaryReport = Join-Path $tasksFolder "summary-$timestamp.md";
     $now = Get-Date;
+    $timestamp = ($now).ToString("yyyy-MM-dd")
+    $morningTaskFile = Join-Path $tasksFolder "Morning-$timestamp.md"
+    $midDayTaskFile = Join-Path $tasksFolder "Midday-$timestamp.md"
+    $endOfDayTaskFile = Join-Path $tasksFolder "EndOfDay-$timestamp.md"
+    $summaryReport = Join-Path $tasksFolder "Summary-$timestamp.md";
+    
     # Time frames for each task list
-    $middayHour = 12;
-    $middayMinute = 0;
-    $endOfDayHour = 15;
-    $endOfDayMinute = 0;
-    $closeDayHour = 15;
-    $closeDayMinute = 50;
+    $morningHour = $env:PSTT_MorningHour;
+    $morningMinute = $env:PSTT_MorningMinute
+    $middayHour = $env:PSTT_MiddayHour;
+    $middayMinute = $env:PSTT_MiddayMinute;
+    $endOfDayHour = $env:PSTT_EndOfDayHour;
+    $endOfDayMinute = $env:PSTT_EndOfDayMinute;
+    $closeDayHour = $env:PSTT_CloseDayHour;
+    $closeDayMinute = $env:PSTT_CloseDayMinute;
     # end of time frames
     $uhOhCounter = 0;
     if ((($now.Hour) -ge $closeDayHour) -and ($now.Minute) -ge $closeDayMinute) {
@@ -36,9 +39,11 @@ function Test-TaskLists {
         }
     }
     if ((Test-Path $summaryReport) -eq $false) {
-        if ((Test-Path $morningTaskFile) -eq $false) {
-            $uhOhCounter += 1;
-            Write-Warning "Gotta start your morning tasks!"
+        if (($now.Hour) -ge $morningHour -and ($now.Minute) -ge $morningMinute) {
+            if ((Test-Path $morningTaskFile) -eq $false) {
+                $uhOhCounter += 1;
+                Write-Warning "Gotta start your morning tasks!"
+            }
         }
 
         if (($now.Hour) -ge $middayHour -and ($now.Minute) -ge $middayMinute) {

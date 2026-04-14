@@ -5,14 +5,14 @@ This is a homegrown task tracking system I built primarily to keep myself on top
 ## Prerequisites - Windows
 
 - [PowerShell](https://github.com/PowerShell/PowerShell), this is all designed and tested on pwsh 7.4.x but should work fine for any modern version of PowerShell, use PowerShell 5 at your own peril.
-- `nano` (I install this via [Cygwin](https://cygwin.com/index.html) but other options do exist.)
+- [micro](https://github.com/micro-editor/micro)
 - [pandoc](https://pandoc.org/)
 - [MikTex Console](https://miktex.org/) - specifically the pdfLatex package
 - [eisvogel](https://github.com/enhuiz/eisvogel)
 
 ## Getting Started
 
-The scripts provided in here need to be 'dot sourced' into your PS session. The sample PS profile file, .\Profile\Microsoft.PowerShell_profile.ps1 illustrates how to dot source all powershell scripts from a 'Scripts' folder in your user directory (C:\Users\<USERNAME>), it also shows how to integrate the task reminders into your prompt directly. One option for setting this up is to checkout this repository into that scripts folder. The path to your local powershell profile will always be in the `$PROFILE` variable in your powershell session.
+Download the latest release, place the release folder into a directory on your `PSModulePath`, typical path on Windows would be `C:\Users\<UserName>\Documents\PowerShell\Modules` or `/home/<User>/.local/share/powershell/Modules` on Linux.
 
 To initialize the whole task tracking system, run the `Initialize-PSTaskTracking` command, that will scaffold up the folders it uses for work and will create stubs for each of the main daily task lists. Feel free to edit those as you see fit, note that these three files will ultimately be concatenated into a single [Markdown](https://www.markdownguide.org/basic-syntax/) file that will then be converted to a PDF, so keeping the task lists in a Markdown compatible syntax is key.
 
@@ -39,15 +39,15 @@ The standard commands you'll use to start filling out your task list for that da
 
 `Start-EndOfDay`: `eod`, `EndDay`, `EndOfDay`
 
-Running any of these commands will drop you into a `nano` editor to fill out a fresh copy of the task list for that part of the day.
+Running any of these commands will drop you into a text editor to fill out a fresh copy of the task list for that part of the day.
 
 ## Creating a Day Summary Report
 
 The following command will execute the following steps:
 
 1. Combine all three task files into a single markdown file
-2. Launch `nano` to let you edit the final report as needed
-3. After exiting `nano`, a pdf will be generated from the report file via pandoc and dropped in your daily tasks folder.
+2. Launch the editor specified (default is micro) to let you edit the final report as needed
+3. After exiting the editor, a pdf will be generated from the report file via pandoc and dropped in your daily tasks folder.
 
 `New-EndOfDayReport`: `CloseDay`, `close`, `TaskReport`, `report`
 
@@ -84,7 +84,6 @@ When a reminder is created, it will get an Id assigned to it, and a date stamp, 
     close 2 -Date (Get-Date).AddDays(-1); # Closes reminder 2 from yesterday
 ```
 
-## What's Next?
+### Edit Settings
 
-- Make application more configurable via a config file instead of hard coding everything
-  - The default config should match the current hard coded settings
+The `Edit-Settings` command will allow you to change what editor is invoked as well as the time frames that the alerts will pop up.

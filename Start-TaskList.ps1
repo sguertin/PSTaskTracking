@@ -4,7 +4,7 @@ function Start-TaskList {
     Starts the specified task list
     
     .DESCRIPTION
-    Creates a copy of the specified task template and launches the nano text editor to begin filling it out
+    Creates a copy of the specified task template and launches the text editor to begin filling it out
     
     .PARAMETER TaskList
     The task list to create, expects Morning, Midday, or EndOfDay
@@ -16,6 +16,7 @@ function Start-TaskList {
     #>
     [CmdletBinding()]
     param(
+        [ValidateSet("Morning", "morning", "Midday", "midday", "endofday", "EndOfDay")]
         [Parameter(Mandatory, Position = 1)][string]$TaskList
     )
     $taskTemplate = Join-Path (Get-TemplatesFolder) -ChildPath "$TaskList.md";
@@ -37,5 +38,5 @@ function Start-TaskList {
         Set-Content $newTaskFile -Value $content
     }
 
-    & nano $newTaskFile;
+    & $env:PSTT_Editor $newTaskFile;
 }

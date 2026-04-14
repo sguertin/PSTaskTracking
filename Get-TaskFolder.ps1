@@ -9,6 +9,6 @@ function Get-TaskFolder {
     #>
     [CmdletBinding()]
     param()
-    $userDirectory = $env:USERPROFILE
-    return Join-Path $userDirectory -ChildPath "dailytasks"
+    
+    return Join-Path $env:LOCALAPPDATA -ChildPath "PSTaskTracking"
 }

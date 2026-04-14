@@ -4,7 +4,7 @@ function Start-MidDay {
     Start the midday task list
     
     .DESCRIPTION
-    Creates a copy of the midday task template and launches the nano text editor to begin filling it out
+    Creates a copy of the midday task template and launches the text editor to begin filling it out
     
     .EXAMPLE
     Start-MidDay;
