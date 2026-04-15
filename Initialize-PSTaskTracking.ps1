@@ -6,7 +6,7 @@ function Initialize-PSTaskTracking {
     }   
     $settingsFile = Get-TaskTrackerSettingsPath;
     if ((Test-Path $settingsFile) -eq $false) {
-        New-Item $settingsFile -ItemType File -Value (ConvertTo-Json Get-DefaultTaskTrackerSettings) -Force;    
+        New-Item $settingsFile -ItemType File -Value (ConvertTo-Json (Get-DefaultTaskTrackerSettings)) -Force;    
     }
 
     Sync-TaskTrackerSettings;
