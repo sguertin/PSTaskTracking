@@ -1,4 +1,4 @@
-function Start-Day {
+function Start-Morning {
     <#
     .SYNOPSIS
     Start the morning task list
@@ -7,15 +7,16 @@ function Start-Day {
     Creates a copy of the morning task template and launches the text editor to begin filling it out
     
     .EXAMPLE
-    Start-Day;
+    Start-Morning;
     
     .NOTES
     Aliased as morning
     #>
     [CmdletBinding()]
-    param([datetime]$Date = $null)
+    param(
+        [datetime]$Date = (Get-Date)
+    )
     
-    Start-TaskList "morning" -Date $Date;
+    Start-TaskList -TaskList "Morning" -Date $Date;
 }
-Set-Alias -Name morning -Value Start-Day;
-Set-Alias -Name Start-Morning -Value Start-Day;
+Set-Alias -Name morning -Value Start-Morning;

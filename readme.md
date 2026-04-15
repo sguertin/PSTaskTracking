@@ -14,7 +14,7 @@ This is a homegrown task tracking system I built primarily to keep myself on top
 
 Download the latest release, place the release folder into a directory on your `PSModulePath`, typical path on Windows would be `C:\Users\<UserName>\Documents\PowerShell\Modules` or `/home/<User>/.local/share/powershell/Modules` on Linux.
 
-The first time you import the module, it will scaffold up the folders it uses for work and will create stubs for each of the main daily task lists. There are commands to edit each of the task lists: `Edit-MorningTaskList`, `Edit-MiddayTaskList`, and `Edit-EndOfDayTaskList`, note that these three files will ultimately be concatenated into a single [Markdown](https://www.markdownguide.org/basic-syntax/) file that will then be converted to a PDF, so keeping the task lists in a Markdown compatible syntax will ensure you get the best results.
+The first time you import the module, it will scaffold up the folders it uses for work and will create stubs for each of the main daily task lists. There are commands to edit each of the task lists: `Edit-MorningTaskListTemplate` (or `MorningTemplate`), `Edit-MiddayTaskListTemplate` (or `MiddayTemplate`), and `Edit-EndOfDayTaskListTemplate` (or `EndOfDayTemplate`), note that these three files will ultimately be concatenated into a single [Markdown](https://www.markdownguide.org/basic-syntax/) file that will then be converted to a PDF, so keeping the task lists in a Markdown compatible syntax will ensure you get the best results.
 
 ## Daily Usage
 
@@ -34,7 +34,7 @@ no pdf will be generated. The command string will render an input file path as `
 
 The standard commands you'll use to start filling out your task list for that day have aliases (all case insensitive) for your convenience:
 
-`Start-Day`: `Morning`
+`Start-Morning`: `Morning`
 
 `Start-Midday`: `Midday`
 
@@ -54,7 +54,7 @@ The following command will execute the following steps:
 
 ### Weekly Tasks
 
-- You can add tasks that only need to be done once a week on a particular day as well, go to the templates folder (can be retrieved via the `Get-TemplatesFolder` command). In that folder if you create a file called `DayOfWeek`.`TimeOfDay`.tasks e.g. `friday.morning.tasks`, it will automatically include the contents of that file when creating the task file for that day/time.
+- You can add tasks that only need to be done once a week on a particular day as well, go to the templates folder (can be retrieved via the `Get-TemplatesFolder` command). In that folder if you create a file called `DayOfWeek`.`TimeOfDay`.md e.g. `Friday.Morning.md`, it will automatically include the contents of that file when creating the task file for that day/time.
 
 ## Reminders
 

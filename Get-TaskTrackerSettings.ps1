@@ -1,16 +1,11 @@
 function Get-TaskTrackerSettings {
     <#
     .SYNOPSIS
-    Retrieves 
-    
-    .DESCRIPTION
-    Long description
+    Retrieves the current task tracker settings.
     
     .EXAMPLE
-    An example
+    Get-TaskTrackerSettings
     
-    .NOTES
-    General notes
     #>
     [CmdletBinding()]
     param()

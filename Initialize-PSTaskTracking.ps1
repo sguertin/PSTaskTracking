@@ -18,17 +18,17 @@ function Initialize-PSTaskTracking {
     if ((Test-Path $morningTaskList) -eq $false) {
         Write-Host "Creating default version of Morning Task list..."
         New-Item $morningTaskList -ItemType File -Value "## Morning Task List`n`n1. Do your morning tasks`n" | Out-Null;
-        Write-Host "Created empty morning task list at:`n$morningTaskList`n You can edit the list with Edit-MorningTaskList.";
+        Write-Host "Created empty morning task list at:`n$morningTaskList`n You can edit the list with Edit-MorningTaskListTemplate.";
     } 
     if ((Test-Path $middayTaskList) -eq $false) {    
         Write-Host "Creating default version of Midday Task list..."
         New-Item $middayTaskList -ItemType File -Value "## Midday Task List`n`n1. Do your mid-day tasks`n";
-        Write-Host "Created empty midday task list at:`n$middayTaskList`n You can edit the list with Edit-MiddayTaskList.";
+        Write-Host "Created empty midday task list at:`n$middayTaskList`n You can edit the list with Edit-MiddayTaskListTemplate.";
     }
     if ((Test-Path $endOfDayTaskList) -eq $false) {    
         Write-Host "Creating default version of End Of Day Task list..."
         New-Item $endOfDayTaskList -ItemType File -Value "## End of Day Task List`n`n1. Do your end of day tasks`n" | Out-Null;
-        Write-Host "Created empty end of day task list at:`n$endOfDayTaskList`n You can edit the list with Edit-EndOfDayTaskList.";
+        Write-Host "Created empty end of day task list at:`n$endOfDayTaskList`n You can edit the list with Edit-EndOfDayTaskListTemplate.";
     }
     $remindersFolder = Get-ReminderFolder;
     $closedFolder = Join-Path $remindersFolder -ChildPath "closed";

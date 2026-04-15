@@ -22,8 +22,11 @@ if ($continue) {
     New-Item $outputDirectory -ItemType Directory -Force | Out-Null;
     foreach ($file in Get-ChildItem -Path $sourceDirectory -File -Filter "*.ps1" | Where-Object Name -NE "Update-Module.ps1") {
         $functionContent = Get-Content $file -Raw; 
-        $content += "$functionContent`n"; 
-        $functions += $file.Name.Replace(".ps1", "");
+        $content += "$functionContent`n`n";
+        $function = $file.Name.Replace(".ps1", "");
+        if (!$settings.FunctionsToExclude.Contains($function)) {
+            $functions += $function;
+        }        
         foreach ($match in ([regex]$aliasRegex).Matches($functionContent)) {
             $aliases += $match.Groups[1].Value
         }

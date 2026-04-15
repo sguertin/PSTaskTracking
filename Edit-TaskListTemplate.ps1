@@ -1,4 +1,4 @@
-function Edit-TaskList {
+function Edit-TaskListTemplate {
     [CmdletBinding()]
     param(
         [ValidateSet("Morning", "Midday", "EndOfDay")]

@@ -18,11 +18,9 @@ function Start-TaskList {
     param(
         [ValidateSet("Morning", "Midday", "EndOfDay")]
         [Parameter(Mandatory, Position = 1)][string]$TaskList,
-        [datetime]$Date = $null
+        [datetime]$Date = (Get-Date)
     )
-    $taskTemplate = Join-Path (Get-TemplatesFolder) -ChildPath "$TaskList.md";
-    
-    $Date = $Date ?? (Get-Date);
+    $taskTemplate = Join-Path (Get-TemplatesFolder) -ChildPath "$TaskList.md";    
     $timestamp = $Date.ToString("yyyy-MM-dd");
     $tasksFolder = Get-TaskFolder;
     $taskFilePath = Join-Path $tasksFolder -ChildPath "$TaskList-$timestamp.md";

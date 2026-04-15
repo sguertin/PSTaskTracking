@@ -1,7 +1,12 @@
 function Get-Reminders {
     <#
-        Retrieves all reminders for today.
-    #>    
+    .SYNOPSIS
+    
+    Retrieves all reminders for current day.
+    
+    .EXAMPLE
+    Get-Reminders;    
+    #> 
     [CmdletBinding()]
     param()
     $timestamp = (Get-Date).ToString("yyyy-MM-dd");

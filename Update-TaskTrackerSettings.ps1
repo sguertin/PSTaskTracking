@@ -1,4 +1,4 @@
-function Edit-TaskTrackerSettings {
+function Update-TaskTrackerSettings {
     [CmdletBinding()]
     param(
         [ValidateSet("nano", "micro", "vim", "spacevim", "emacs", "astrovim", "nvim")]
