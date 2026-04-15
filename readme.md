@@ -30,7 +30,7 @@ The close out report for the day is expected to be generated at 3:50PM
 
 These can be updated by using the `Edit-TaskTrackerSettings` command. This command can also allow you to change what text editor is used, as well
 as what directory to write the pdf reports, as well as what command you want to use for outputting a pdf. If you set the command to an empty string,
-no pdf will be generated. The command string will render an input file path as `#{inputfile}#
+no pdf will be generated. The command string will render an input file path as `#{input}#` and the output as `#{output}#`, so if you include those values in the command they will be inserted into the command string.
 
 The standard commands you'll use to start filling out your task list for that day have aliases (all case insensitive) for your convenience:
 
@@ -88,3 +88,5 @@ When a reminder is created, it will get an Id assigned to it, and a date stamp, 
 ### Edit Settings
 
 The `Edit-TaskTrackerSettings` command will allow you to change what editor is invoked as well as the time frames that the alerts will pop up.
+
+TODO: Update docstrings

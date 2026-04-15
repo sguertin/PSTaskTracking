@@ -40,5 +40,5 @@ if ($continue) {
     New-ModuleManifest -Path $manifestOutputPath -Guid $settings.ProjectId -ModuleVersion '2.0';
     Update-ModuleManifest -Path $manifestOutputPath -RootModule "PSTaskTracking.psm1" -FunctionsToExport $functions -AliasesToExport $aliases;
     $archiveFilePath = Join-Path $outputDirectory -ChildPath "PSTaskTracking";
-    Compress-Archive -Path $outputDirectory -CompressionLevel Fastest -DestinationPath $archiveFilePath;
+    Compress-Archive -Path $outputDirectory -CompressionLevel Optimal -DestinationPath $archiveFilePath;
 }
