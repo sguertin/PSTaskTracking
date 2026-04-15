@@ -13,8 +13,8 @@ function Start-MidDay {
     Aliased as Midday
     #>
     [CmdletBinding()]
-    param()
+    param([datetime]$Date = $null)
     
-    Start-TaskList "midday";
+    Start-TaskList "midday" -Date $Date;
 }
 Set-Alias -Name midday -Value Start-MidDay;

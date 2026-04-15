@@ -1,8 +1,9 @@
-function Sync-Settings {
+function Sync-TaskTrackerSettings {
     [CmdletBinding()]
     param()
 
-    $settings = Get-Content $settingsFile | ConvertFrom-Json;
+    $settings = Get-TaskTrackerSettings;
+
     $env:PSTT_Editor = $settings.Editor;
     $env:PSTT_MorningHour = $settings.Morning.Hour;
     $env:PSTT_MorningMinute = $settings.Morning.Minute;
@@ -14,5 +15,4 @@ function Sync-Settings {
     $env:PSTT_CloseDayMinute = $settings.Report.Minute;
     $env:PSTT_PdfOutput = $settings.MarkdownToPdfCommand;
     $env:PSTT_OutputDirectory = $settings.OutputDirectory;
-    
 }

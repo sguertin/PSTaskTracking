@@ -13,9 +13,9 @@ function Start-EndOfDay {
     Aliased as EndDay, EOD, and EndOfDay
     #>
     [CmdletBinding()]
-    param()
+    param([datetime]$Date = $null)
     
-    Start-TaskList "endofday";
+    Start-TaskList "endofday" -Date $Date;
 }
 Set-Alias -Name eod -Value Start-EndOfDay;
 Set-Alias -Name EndOfDay -Value Start-EndOfDay;

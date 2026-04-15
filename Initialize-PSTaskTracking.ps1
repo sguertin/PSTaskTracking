@@ -1,12 +1,12 @@
 function Initialize-PSTaskTracking {
     [CmdletBinding()]
     param()
-    $settingsFile = Get-TaskListSettings;
+    $settingsFile = Get-TaskTrackerSettingsPath;
     if ((Test-Path $settingsFile) -eq $false) {
-        New-Item $settingsFile -ItemType File -Value (ConvertTo-Json Get-DefaultTaskListSettings) -Force;    
+        New-Item $settingsFile -ItemType File -Value (ConvertTo-Json Get-DefaultTaskTrackerSettings) -Force;    
     }
 
-    Sync-Settings;
+    Get-TaskTrackerSettingsPath;
 
     $templatesFolder = Get-TemplatesFolder;
     if ((Test-Path $templatesFolder) -eq $false) {    

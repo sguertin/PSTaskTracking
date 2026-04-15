@@ -1,4 +1,4 @@
-function Get-TaskListSettings {
+function Get-TaskTrackerSettingsPath {
     [CmdletBinding()]
     param()
 

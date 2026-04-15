@@ -1,4 +1,4 @@
-function Get-DefaultTaskListSettings {
+function Get-DefaultTaskTrackerSettings {
     [CmdletBinding()]
     param()
 

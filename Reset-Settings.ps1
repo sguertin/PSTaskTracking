@@ -1,9 +1,9 @@
 function Reset-Settings {
     [CmdletBinding()]
     param()
-    $settingsFilePath = Get-TaskListSettings;
+    $settingsFilePath = Get-TaskTrackerSettingsPath;
 
-    $defaultSettings = Get-DefaultTaskListSettings;
+    $defaultSettings = Get-DefaultTaskTrackerSettings;
     Write-Host "Restoring default settings..."
     Set-Content -Path $settingsFilePath -Value (ConvertTo-Json $defaultSettings);
     Write-Host "Settings restored to defaults."

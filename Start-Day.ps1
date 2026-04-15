@@ -13,9 +13,9 @@ function Start-Day {
     Aliased as morning
     #>
     [CmdletBinding()]
-    param()
+    param([datetime]$Date = $null)
     
-    Start-TaskList "morning";
+    Start-TaskList "morning" -Date $Date;
 }
 Set-Alias -Name morning -Value Start-Day;
 Set-Alias -Name Start-Morning -Value Start-Day;

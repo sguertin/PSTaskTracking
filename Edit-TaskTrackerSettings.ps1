@@ -1,4 +1,4 @@
-function Edit-TaskListSettings {
+function Edit-TaskTrackerSettings {
     [CmdletBinding()]
     param(
         [ValidateSet("nano", "micro", "vim", "spacevim", "emacs", "astrovim", "nvim")]
@@ -20,8 +20,7 @@ function Edit-TaskListSettings {
         [switch]$Rollback
     )
     $validationFailed = $false;
-    $settingsFilePath = Get-TaskListSettings;
-    $settings = Get-TaskListSettings | ConvertFrom-Json;
+    $settings = Get-TaskTrackerSettings;
     $settings.Editor = $Editor ?? $settings.Editor;
     $settings.OutputDirectory = $OutputDirectory ?? $settings.OutputDirectory;
     $settings.MarkdownToPdfCommand = $MarkdownToPdfCommand ?? $settings.MarkdownToPdfCommand;
@@ -65,16 +64,7 @@ function Edit-TaskListSettings {
         return;
     } else {
         Set-Content -Path $settingsFilePath -Value (ConvertTo-Json $settings);
-        $env:PSTT_Editor = $settings.Editor;
-        $env:PSTT_MorningHour = $settings.Morning.Hour;
-        $env:PSTT_MorningMinute = $settings.Morning.Minute;
-        $env:PSTT_MiddayHour = $settings.Midday.Hour;
-        $env:PSTT_MiddayMinute = $settings.Midday.Minute;
-        $env:PSTT_EndOfDayHour = $settings.EndOfDay.Hour;
-        $env:PSTT_EndOfDayMinute = $settings.EndOfDay.Minute;
-        $env:PSTT_CloseDayHour = $settings.Report.Hour;
-        $env:PSTT_CloseDayMinute = $settings.Report.Minute;
-        $env:PSTT_PdfOutput = $settings.MarkdownToPdfCommand;
-        $env:PSTT_OutputDirectory = $settings.OutputDirectory;
+        
+        Sync-TaskTrackerSettings;
     }    
 }
