@@ -3,3 +3,4 @@ function Edit-MorningTaskList {
     param()
     Edit-TaskList -TaskList "Morning";
 }
+Set-Alias -Name MorningTemplate -Value Edit-MorningTaskList

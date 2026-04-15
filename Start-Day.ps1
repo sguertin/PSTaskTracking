@@ -18,3 +18,4 @@ function Start-Day {
     Start-TaskList "morning";
 }
 Set-Alias -Name morning -Value Start-Day;
+Set-Alias -Name Start-Morning -Value Start-Day;

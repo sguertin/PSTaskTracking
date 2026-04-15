@@ -14,7 +14,7 @@ This is a homegrown task tracking system I built primarily to keep myself on top
 
 Download the latest release, place the release folder into a directory on your `PSModulePath`, typical path on Windows would be `C:\Users\<UserName>\Documents\PowerShell\Modules` or `/home/<User>/.local/share/powershell/Modules` on Linux.
 
-To initialize the whole task tracking system, run the `Initialize-PSTaskTracking` command, that will scaffold up the folders it uses for work and will create stubs for each of the main daily task lists. Feel free to edit those as you see fit, note that these three files will ultimately be concatenated into a single [Markdown](https://www.markdownguide.org/basic-syntax/) file that will then be converted to a PDF, so keeping the task lists in a Markdown compatible syntax is key.
+The first time you import the module, it will scaffold up the folders it uses for work and will create stubs for each of the main daily task lists. There are commands to edit each of the task lists: `Edit-MorningTaskList`, `Edit-MiddayTaskList`, and `Edit-EndOfDayTaskList`, note that these three files will ultimately be concatenated into a single [Markdown](https://www.markdownguide.org/basic-syntax/) file that will then be converted to a PDF, so keeping the task lists in a Markdown compatible syntax will ensure you get the best results.
 
 ## Daily Usage
 
@@ -28,8 +28,9 @@ End of Day list expects to be started at 3PM
 
 The close out report for the day is expected to be generated at 3:50PM
 
-Each of these can be changed by adjusting the script `Test-TaskLists`, there are variables to specify when each task list should be done by, in military time.
-NOTE: all commands are case insensitive
+These can be updated by using the `Edit-TaskListSettings` command. This command can also allow you to change what text editor is used, as well
+as what directory to write the pdf reports, as well as what command you want to use for outputting a pdf. If you set the command to an empty string,
+no pdf will be generated. The command string will render an input file path as `#{inputfile}#
 
 The standard commands you'll use to start filling out your task list for that day have aliases (all case insensitive) for your convenience:
 
@@ -86,4 +87,4 @@ When a reminder is created, it will get an Id assigned to it, and a date stamp, 
 
 ### Edit Settings
 
-The `Edit-Settings` command will allow you to change what editor is invoked as well as the time frames that the alerts will pop up.
+The `Edit-TaskListSettings` command will allow you to change what editor is invoked as well as the time frames that the alerts will pop up.

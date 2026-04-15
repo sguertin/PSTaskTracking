@@ -16,27 +16,26 @@ function Start-TaskList {
     #>
     [CmdletBinding()]
     param(
-        [ValidateSet("Morning", "morning", "Midday", "midday", "endofday", "EndOfDay")]
-        [Parameter(Mandatory, Position = 1)][string]$TaskList
+        [ValidateSet("Morning", "Midday", "EndOfDay")]
+        [Parameter(Mandatory, Position = 1)][string]$TaskList,
+        [datetime]$Date = $null
     )
     $taskTemplate = Join-Path (Get-TemplatesFolder) -ChildPath "$TaskList.md";
-    $today = Get-Date;
-    $timestamp = $today.ToString("yyyy-MM-dd");
+    
+    $Date = $Date ?? (Get-Date);
+    $timestamp = $Date.ToString("yyyy-MM-dd");
     $tasksFolder = Get-TaskFolder;
-    $newTaskFile = Join-Path $tasksFolder -ChildPath "$TaskList-$timestamp.md";
-    if (Test-Path $newTaskFile) {
-        Write-Error "$newTaskFile already exists!"
-        return;
+    $taskFilePath = Join-Path $tasksFolder -ChildPath "$TaskList-$timestamp.md";
+    if ((Test-Path $taskFilePath) -eq $false) {        
+        Copy-Item $taskTemplate -Destination $taskFilePath;    
+        $dayOfWeek = $Date.DayOfWeek.ToString().ToLower();    
+        $dailyTasks = Join-Path (Get-TemplatesFolder) -ChildPath "$dayOfWeek.$TaskList.md";
+        if (Test-Path $dailyTasks) {
+            $content = Get-Content $taskFilePath;
+            $content += "`n### $dayOfWeek Tasks `n"
+            $content += Get-Content $dailyTasks -Raw;
+            Set-Content $taskFilePath -Value $content
+        }
     }
-    Copy-Item $taskTemplate -Destination $newTaskFile;    
-    $dayOfWeek = $today.DayOfWeek.ToString().ToLower();    
-    $dailyTasks = Join-Path (Get-TemplatesFolder) -ChildPath "$dayOfWeek.$TaskList.md";
-    if (Test-Path $dailyTasks) {
-        $content = Get-Content $newTaskFile;
-        $content += "`n### $dayOfWeek Tasks `n"
-        $content += Get-Content $dailyTasks -Raw;
-        Set-Content $newTaskFile -Value $content
-    }
-
-    & $env:PSTT_Editor $newTaskFile;
+    & $env:PSTT_Editor $taskFilePath;
 }
