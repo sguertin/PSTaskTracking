@@ -26,7 +26,7 @@ function Start-TaskList {
     $taskFilePath = Join-Path $tasksFolder -ChildPath "$TaskList-$timestamp.md";
     if ((Test-Path $taskFilePath) -eq $false) {        
         Copy-Item $taskTemplate -Destination $taskFilePath;    
-        $dayOfWeek = $Date.DayOfWeek.ToString().ToLower();    
+        $dayOfWeek = $Date.DayOfWeek.ToString();    
         $dailyTasks = Join-Path (Get-TemplatesFolder) -ChildPath "$dayOfWeek.$TaskList.md";
         if (Test-Path $dailyTasks) {
             $content = Get-Content $taskFilePath;
