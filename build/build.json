@@ -9,7 +9,6 @@
         "Get-ReminderFolder",
         "Get-TaskFolder",
         "Get-TaskFolder",
-        "Get-TaskTrackerSettings",
         "Get-TaskTrackerSettingsPath",
         "Get-TemplatesFolder",
         "Initialize-PSTaskTracking",

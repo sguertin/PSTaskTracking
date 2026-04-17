@@ -29,14 +29,8 @@ function New-EndOfDayReport {
     $morningTaskFile = Get-Item -Path (Join-Path $tasksFolder -ChildPath "Morning-$timestamp.md");
     $midDayTaskFile = Get-Item -Path (Join-Path $tasksFolder -ChildPath "Midday-$timestamp.md");
     $endOfDayTaskFile = Get-Item -Path (Join-Path $tasksFolder -ChildPath "EndOfDay-$timestamp.md");
-    
-    if ([string]::IsNullOrEmpty($env:PSTT_OutputDirectory)) {
-        $outputDirectory = Get-TaskFolder;
-    } else {
-        $outputDirectory = $env:PSTT_OutputDirectory
-    }
 
-    $reportFile = Join-Path $outputDirectory -ChildPath "Summary-$timestamp.md";
+    $reportFile = Join-Path $tasksFolder -ChildPath "Summary-$timestamp.md";
     if ((Test-Path $reportFile) -eq $false) {
         if ((Test-Path $morningTaskFile) -eq $false) {
             Write-Error "Unable to find $morningTaskFile, did you forget to create it?";
@@ -63,14 +57,19 @@ function New-EndOfDayReport {
         Set-Content -Path $reportFile -Value $reportContent;
     }
     & $env:PSTT_Editor $reportFile;
-    $outputCommand = $env:PSTT_PdfOutput;
-    if ([string]::IsNullOrEmpty($outputCommand) -eq $true) {        
+    
+    if ([string]::IsNullOrEmpty($env:PSTT_PdfOutput) -eq $true) {        
         return;
     }
-    $outputFileName = $reportFile.Replace(".md", ".pdf");
+    if ([string]::IsNullOrEmpty($env:PSTT_OutputDirectory)) {
+        $outputDirectory = Get-TaskFolder;
+    } else {
+        $outputDirectory = $env:PSTT_OutputDirectory
+    }
+    $outputFileName = (Split-Path -Path $reportFile -Leaf).Replace(".md", ".pdf");
     $outputFilePath = Join-Path -Path $outputDirectory -ChildPath $outputFileName;
-    $outputCommand.Replace("#{input}#", $reportFile).Replace("#{output}#", $outputFilePath);
-    & $outputCommand | Out-Null;
+    $outputCommand = $env:PSTT_PdfOutput.Replace("#{input}#", "$reportFile").Replace("#{output}#", $outputFilePath);
+    Invoke-Expression -Command $outputCommand | Out-Null;
     Write-Host "$outputFileName copied to '$outputDirectory'";
 }
 Set-Alias -Name CloseDay -Value New-EndOfDayReport;

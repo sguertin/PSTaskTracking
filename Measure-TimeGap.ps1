@@ -1,11 +1,11 @@
 function Measure-TimeGap {
     [CmdletBinding()]
     param(
-        [ValidateRange(1, 23)][Parameter(Mandatory, Position = 1)]
+        [ValidateRange(0, 23)][Parameter(Mandatory, Position = 1)]
         [int]$FirstHour,
         [ValidateRange(0, 59)][Parameter(Position = 2)]
         [int]$FirstMinute = 0,
-        [ValidateRange(1, 23)][Parameter(Mandatory, Position = 3)]
+        [ValidateRange(0, 23)][Parameter(Mandatory, Position = 3)]
         [int]$SecondHour,
         [ValidateRange(0, 59)][Parameter(Position = 4)]
         [int]$SecondMinute = 0
