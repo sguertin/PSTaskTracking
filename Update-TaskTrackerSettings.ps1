@@ -1,10 +1,10 @@
-function Validate-Time {
+function Assert-ValidTime {
     param(
         [int]$Hour,
         [int]$Minute,
         [string]$Label
     )
-    
+
     $hourValid = ($Hour -le 23) -and ($Hour -ge 0);
     if ($hourValid -eq $false) {
         Write-Error "$Label.Hour: $Hour is Invalid, expected a value between 0 and 23";
@@ -27,13 +27,13 @@ function Update-TaskTrackerSettings {
     $settingsFilePath = Get-TaskTrackerSettingsPath;
 
     & $env:PSTT_Editor $settingsFilePath;
-    
+
     $settings = Get-TaskTrackerSettings;
     if ($editors.Contains($settings.Editor) -eq $false) {
         Write-Warning  "'" + $settings.Editor + "' is not a known editor!"
     }
     Start-Sleep 1;
-    $valid = (Validate-Time -Hour $settings.Morning.Hour -Minute $settings.Morning.Minute -Label "Morning") -and (Validate-Time -Hour $settings.Midday.Hour -Minute $settings.Midday.Minute -Label "Midday") -and (Validate-Time -Hour $settings.EndOfDay.Hour -Minute $settings.EndOfDay.Minute -Label "EndOfDay") -and (Validate-Time -Hour $settings.Report.Hour -Minute $settings.Report.Minute -Label "Report");
+    $valid = (Assert-ValidTime -Hour $settings.Morning.Hour -Minute $settings.Morning.Minute -Label "Morning") -and (Assert-ValidTime -Hour $settings.Midday.Hour -Minute $settings.Midday.Minute -Label "Midday") -and (Assert-ValidTime -Hour $settings.EndOfDay.Hour -Minute $settings.EndOfDay.Minute -Label "EndOfDay") -and (Assert-ValidTime -Hour $settings.Report.Hour -Minute $settings.Report.Minute -Label "Report");
     if ($valid) {
         $morningGap = Measure-TimeGap $settings.Morning.Hour $settings.Morning.Minute $settings.Midday.Hour $settings.Midday.Minute;
         $middayGap = Measure-TimeGap $settings.Midday.Hour $settings.Midday.Minute $settings.EndOfDay.Hour $settings.EndOfDay.Minute;
@@ -59,7 +59,8 @@ function Update-TaskTrackerSettings {
         Write-Warning "No changes were committed to settings."
         Set-Content -Path $settingsFilePath -Value $originalSettings;
         return;
-    } else {
+    }
+    else {
         $newSettings = ConvertTo-Json $settings;
         Set-Content -Path $settingsFilePath -Value $newSettings;
         Sync-TaskTrackerSettings;
