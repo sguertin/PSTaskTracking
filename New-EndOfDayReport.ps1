@@ -49,7 +49,7 @@ function New-EndOfDayReport {
     }
     Set-Content -Path $reportFile -Value $reportContent;
     
-    return $reportFile;
+    return Get-Item -Path $reportFile;
 }
 
 Set-Alias -Name TaskReport -Value New-EndOfDayReport;

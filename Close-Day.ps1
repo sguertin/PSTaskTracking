@@ -11,13 +11,15 @@ function Close-Day {
     General notes
     #>
     [CmdletBinding()]
-    param()
+    param(
+        [DateTime]$Date = (Get-Date)
+    )
 
-    $reportFile = New-EndOfDayReport -Date (Get-Date);
+    $reportFile = New-EndOfDayReport -Date $Date;
     if ($null -eq $reportFile) {
         return;
     }
-    & $env:PSTT_Editor $reportFile;
+    & $env:PSTT_Editor $reportFile.FullName;
     
     if (Test-EmptyString $env:PSTT_PdfOutput) {        
         return;
@@ -27,10 +29,10 @@ function Close-Day {
     } else {
         $outputDirectory = $env:PSTT_OutputDirectory;
     }
-    $outputFileName = (Split-Path -Path $reportFile -Leaf).Replace(".md", ".pdf");
+    $outputFileName = $reportFile.Name.Replace(".md", ".pdf");
     $outputFilePath = Join-Path -Path $outputDirectory -ChildPath $outputFileName;
-    $outputCommand = $env:PSTT_PdfOutput.Replace("#{input}#", "$reportFile").Replace("#{output}#", $outputFilePath);
+    $outputCommand = $env:PSTT_PdfOutput.Replace("#{input}#", "`"" + $reportFile.FullName + "`"").Replace("#{output}#", "`"$outputFilePath`"");
     Invoke-Expression -Command $outputCommand | Out-Null;
     Write-Host "$outputFileName written to '$outputDirectory'";
 }
-Set-Alias -Name CloseDay -Value New-EndOfDayReport;
+Set-Alias -Name CloseDay -Value Close-Day;
