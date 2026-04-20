@@ -1,13 +1,13 @@
 function New-EndOfDayReport {
     <#
     .SYNOPSIS
-    Generate an end of day report
+    Generate an end of day report for a given date and returns the path to the new report.
     
     .DESCRIPTION
-    Concatenates together the contents of the morning, midday, and end of day task lists for the provided Date, today by default, then launches a text editor on the newly created markdown file. Upon exiting, it will generate a pdf of the file via pandoc.
+    Concatenates together the contents of the morning, midday, and end of day task lists for the provided Date
     
     .PARAMETER Date
-    The date to create a report for, defaults to today.
+    The date for the report, defaults to today.
     
     .EXAMPLE
     # Generate today's report
@@ -17,61 +17,40 @@ function New-EndOfDayReport {
     New-EndOfDayReport -Date (Get-Date).AddDays(-1);
     
     .NOTES
-    Several aliases are set for your convenience, Close, CloseDay, TaskReport, and Report
+    Aliases are set for your convenience TaskReport, and Report
     #>
     [CmdletBinding()]
     param(
         [DateTime]$Date = (Get-Date)
     )
-    $tasksFolder = Get-TaskFolder;   
-    $archiveFolder = Join-Path $tasksFolder -ChildPath "archive";
-    $timestamp = $Date.ToString("yyyy-MM-dd");
-    $morningTaskFile = Get-Item -Path (Join-Path $tasksFolder -ChildPath "Morning-$timestamp.md");
-    $midDayTaskFile = Get-Item -Path (Join-Path $tasksFolder -ChildPath "Midday-$timestamp.md");
-    $endOfDayTaskFile = Get-Item -Path (Join-Path $tasksFolder -ChildPath "EndOfDay-$timestamp.md");
-
-    $reportFile = Join-Path $tasksFolder -ChildPath "Summary-$timestamp.md";
-    if ((Test-Path $reportFile) -eq $false) {
-        if ((Test-Path $morningTaskFile) -eq $false) {
-            Write-Error "Unable to find $morningTaskFile, did you forget to create it?";
-            return;
-        }
-        if ((Test-Path $midDayTaskFile) -eq $false) {
-            Write-Error "Unable to find $midDayTaskFile, did you forget to create it?";
-            return;
-        }
-        if ((Test-Path $endOfDayTaskFile) -eq $false) {
-            Write-Error "Unable to find $endOfDayTaskFile, did you forget to create it?";
-            return;
-        }
-        $reportContent = "# Daily Task Report $timestamp`n`n";
-        $reportContent += (Get-Content $morningTaskFile -Raw);
-        $reportContent += "`n";
-        $reportContent += (Get-Content $midDayTaskFile -Raw);
-        $reportContent += "`n";
-        $reportContent += (Get-Content $endOfDayTaskFile -Raw);
-        $reportContent += "`n";
-        Move-Item $morningTaskFile.FullName -Destination (Join-Path $archiveFolder -ChildPath $morningTaskFile.Name);
-        Move-Item $midDayTaskFile.FullName -Destination (Join-Path $archiveFolder -ChildPath $midDayTaskFile.Name);
-        Move-Item $endOfDayTaskFile.FullName -Destination (Join-Path $archiveFolder -ChildPath $endOfDayTaskFile.Name);
-        Set-Content -Path $reportFile -Value $reportContent;
-    }
-    & $env:PSTT_Editor $reportFile;
     
-    if ([string]::IsNullOrEmpty($env:PSTT_PdfOutput) -eq $true) {        
-        return;
+    $reportFile = Get-TaskList -TaskList Summary;
+    if (Test-Path $reportFile) { 
+        return $reportFile;
     }
-    if ([string]::IsNullOrEmpty($env:PSTT_OutputDirectory)) {
-        $outputDirectory = Get-TaskFolder;
-    } else {
-        $outputDirectory = $env:PSTT_OutputDirectory
+    $archiveFolder = Join-Path (Get-TaskFolder) -ChildPath "archive";
+    $timestamp = $Date.ToString("yyyy-MM-dd");
+    $missingTaskList = $false;                
+    $reportContent = "# Daily Task Report $timestamp`n`n";
+    foreach ($taskList in @("Morning", "Midday", "EndOfDay")) {
+        $taskFile = Get-TaskList -TaskList $taskList;
+        if ($null -eq $taskFile) {
+            Write-Error "No $taskFile task list found!";
+            $missingTaskList = $true;
+        } else {
+            $reportContent += (Get-Content $taskFile -Raw);
+            $reportContent += "`n";
+            Move-Item $taskFile.FullName -Destination (Join-Path $archiveFolder -ChildPath $taskFile.Name);
+        }
     }
-    $outputFileName = (Split-Path -Path $reportFile -Leaf).Replace(".md", ".pdf");
-    $outputFilePath = Join-Path -Path $outputDirectory -ChildPath $outputFileName;
-    $outputCommand = $env:PSTT_PdfOutput.Replace("#{input}#", "$reportFile").Replace("#{output}#", $outputFilePath);
-    Invoke-Expression -Command $outputCommand | Out-Null;
-    Write-Host "$outputFileName copied to '$outputDirectory'";
+    if ($missingTaskList) {
+        Write-Error "Task files are missing, canceling report creation.";
+        return $null;
+    }
+    Set-Content -Path $reportFile -Value $reportContent;
+    
+    return $reportFile;
 }
-Set-Alias -Name CloseDay -Value New-EndOfDayReport;
+
 Set-Alias -Name TaskReport -Value New-EndOfDayReport;
-Set-Alias -Name Report -Value New-EndOfDayReport;
+Set-Alias -Name DayReport -Value New-EndOfDayReport;
