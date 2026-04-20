@@ -13,7 +13,7 @@ while (!$sourceDirectory.ToString().EndsWith("PSTaskTracking")) {
 if ($continue) {
     $settings = Get-Content (Join-Path "build" -ChildPath "build.json" ) -Raw | ConvertFrom-Json;
     $outputDirectory = Join-Path $PWD -ChildPath "Module" -AdditionalChildPath @("PSTaskTracking");
-    $archiveFilePath = Join-Path $PWD -ChildPath "PSTaskTracking";
+    $archiveFilePath = Join-Path $PWD -ChildPath "Module" -AdditionalChildPath @("PSTaskTracking");
     $content = "";
     $functions = @();
     $aliases = @();

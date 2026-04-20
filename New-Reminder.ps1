@@ -27,7 +27,7 @@ function New-Reminder {
         [Parameter(Mandatory, Position = 2)][DateTime]$Date,    
         [switch]$Day
     )
-    $reminderDirectory = Get-ReminderFolder;
+    $reminderDirectory = Get-RemindersFolder;
     $timestamp = $Date.ToString("yyyy-MM-dd")
     if ($Day -eq $true) {
         $Date = Get-Date $timestamp

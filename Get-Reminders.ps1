@@ -11,6 +11,6 @@ function Get-Reminders {
     param()
     $timestamp = (Get-Date).ToString("yyyy-MM-dd");
 
-    Get-ChildItem -Path (Get-ReminderFolder) | Where-Object Name -Match $timestamp | Get-Content -Raw | ConvertFrom-Json -ErrorAction Stop;       
+    Get-ChildItem -Path (Get-RemindersFolder) | Where-Object Name -Match $timestamp | Get-Content -Raw | ConvertFrom-Json -ErrorAction Stop;       
 }
 Set-Alias -Name today -Value Get-Reminders;

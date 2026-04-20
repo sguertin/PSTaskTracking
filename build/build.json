@@ -2,17 +2,16 @@
     "ModuleVersion": "1.2",
     "ProjectId": "2b006b41-ad23-496b-963e-3e3409effae6",
     "FunctionsToExclude": [
+        "Assert-ValidTime",
         "Edit-TaskListTemplate",
         "Get-DefaultTaskTrackSettings",
         "Get-ReminderFilePath",
-        "Get-ReminderFolder",
-        "Get-ReminderFolder",
-        "Get-TaskFolder",
-        "Get-TaskFolder",
+        "Get-RemindersFolder",
         "Get-TaskTrackerSettingsPath",
         "Get-TemplatesFolder",
         "Initialize-PSTaskTracking",
         "Measure-TimeGap",
-        "Start-TaskList"
+        "Start-TaskList",
+        "Test-EmptyString"
     ]
 }

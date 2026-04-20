@@ -51,7 +51,7 @@ function Close-Reminder {
         Resolution = $resolution
     } | ConvertTo-Json;
     Set-Content $filePath -Value $content;
-    $closedFolder = Join-Path (Get-ReminderFolder) -ChildPath "closed";
+    $closedFolder = Join-Path (Get-RemindersFolder) -ChildPath "closed";
     if ((Test-Path $closedFolder) -eq $false) {
         New-Item $closedFolder -ItemType Directory;
     }

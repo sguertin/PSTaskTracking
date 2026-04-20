@@ -1,10 +1,10 @@
-function Get-ReminderFolder {
+function Get-RemindersFolder {
     <#
     .SYNOPSIS
     Returns the path of the reminders folder
     
     .EXAMPLE
-    Get-ReminderFolder;
+    Get-RemindersFolder;
     
     #>
     [CmdletBinding()]

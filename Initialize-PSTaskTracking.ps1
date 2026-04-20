@@ -33,7 +33,7 @@ function Initialize-PSTaskTracking {
         New-Item $endOfDayTaskList -ItemType File -Value "## End of Day Task List`n`n1. Do your end of day tasks`n" | Out-Null;
         Write-Host "Created empty end of day task list at:`n$endOfDayTaskList`n You can edit the list with Edit-EndOfDayTaskListTemplate.";
     }
-    $remindersFolder = Get-ReminderFolder;
+    $remindersFolder = Get-RemindersFolder;
     $closedFolder = Join-Path $remindersFolder -ChildPath "closed";
     if (Test-Path $remindersFolder) {
         if ((Test-Path $closedFolder) -eq $false) {

@@ -12,11 +12,6 @@ function Get-ReminderFilePath {
     .PARAMETER Date
     The date of the reminder, if not today
     
-    .EXAMPLE
-    An example
-    
-    .NOTES
-    General notes
     #>
     [CmdletBinding()]
     param(
@@ -25,5 +20,5 @@ function Get-ReminderFilePath {
     )
     
     $timestamp = $Date.ToString("yyyy-MM-dd");
-    return Join-Path (Get-ReminderFolder) -ChildPath "reminder-$timestamp.$Id.json"
+    return Join-Path (Get-RemindersFolder) -ChildPath "reminder-$timestamp.$Id.json"
 }
