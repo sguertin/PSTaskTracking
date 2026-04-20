@@ -1,9 +1,11 @@
 function Initialize-PSTaskTracking {
     [CmdletBinding()]
     param()
-    if ([string]::IsNullOrEmpty($env:LOCALAPPDATA)) {
-        $env:LOCALAPPDATA = Join-Path -Path $env:HOME -ChildPath ".local";
-    }   
+    if (Test-EmptyString $env:LOCALAPPDATA) {
+        $env:PSTT_AppData = Join-Path -Path $env:HOME -ChildPath ".local";
+    } else {
+        $env:PSTT_AppData = $env:LOCALAPPDATA;
+    }
     $settingsFile = Get-TaskTrackerSettingsPath;
     if ((Test-Path $settingsFile) -eq $false) {
         New-Item $settingsFile -ItemType File -Value (ConvertTo-Json (Get-DefaultTaskTrackerSettings)) -Force;    

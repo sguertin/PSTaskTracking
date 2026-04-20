@@ -10,5 +10,5 @@ function Get-TaskFolder {
     [CmdletBinding()]
     param()
     
-    return Join-Path $env:LOCALAPPDATA -ChildPath "PSTaskTracking"
+    return Join-Path $env:PSTT_AppData -ChildPath "PSTaskTracking"
 }
