@@ -1,7 +1,7 @@
 function Initialize-PSTaskTracking {
     [CmdletBinding()]
     param()
-    if (Test-EmptyString $env:LOCALAPPDATA) {
+    if ([string]::IsNullOrEmpty($env:LOCALAPPDATA)) {
         $env:PSTT_AppData = Join-Path -Path $env:HOME -ChildPath ".local";
     } else {
         $env:PSTT_AppData = $env:LOCALAPPDATA;

@@ -9,8 +9,7 @@ function Restore-TaskTrackerSettings {
         Write-Warning "No backup settings found, exiting";
         return;
     }
-    if (Test-EmptyString $Id)
-    {
+    if ([string]::IsNullOrEmpty($Id)) {
         $options = @()
         foreach ($backupFile in $backupFiles) {
             $backupId = $backupFile.Name.Replace("settings.", "").Replace(".bak.json", "");

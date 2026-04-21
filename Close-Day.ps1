@@ -21,10 +21,10 @@ function Close-Day {
     }
     & $env:PSTT_Editor $reportFile.FullName;
     
-    if (Test-EmptyString $env:PSTT_PdfOutput) {        
+    if ([string]::IsNullOrEmpty($env:PSTT_PdfOutput)) {        
         return;
     }
-    if (Test-EmptyString $env:PSTT_OutputDirectory) {
+    if ([string]::IsNullOrEmpty($env:PSTT_OutputDirectory)) {
         $outputDirectory = Get-TaskFolder;
     } else {
         $outputDirectory = $env:PSTT_OutputDirectory;
