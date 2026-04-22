@@ -1,21 +1,14 @@
 function Initialize-PSTaskTracking {
     [CmdletBinding()]
     param()
-    if ([string]::IsNullOrEmpty($env:LOCALAPPDATA)) {
-        $env:PSTT_AppData = Join-Path -Path $env:HOME -ChildPath ".local";
-    } else {
-        $env:PSTT_AppData = $env:LOCALAPPDATA;
-    }
-    $settingsFile = Get-TaskTrackerSettingsPath;
-    if ((Test-Path $settingsFile) -eq $false) {
-        New-Item $settingsFile -ItemType File -Value (ConvertTo-Json (Get-DefaultTaskTrackerSettings)) -Force;    
-    }
-
-    Sync-TaskTrackerSettings;
-
+        
     $templatesFolder = Get-TemplatesFolder;
     if ((Test-Path $templatesFolder) -eq $false) {    
         New-Item $templatesFolder -ItemType Directory | Out-Null;
+    }
+    $archiveFolder = Join-Path (Get-TaskFolder) -ChildPath "archive";
+    if ((Test-Path $archiveFolder) -eq $false) {    
+        New-Item $archiveFolder -ItemType Directory | Out-Null;
     }
     $morningTaskList = Join-Path $templatesFolder -ChildPath "Morning.md";
     $middayTaskList = Join-Path $templatesFolder -ChildPath "Midday.md";

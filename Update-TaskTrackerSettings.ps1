@@ -2,29 +2,34 @@ function Update-TaskTrackerSettings {
     [CmdletBinding()]
     param()
 
-    $editors = @("nano", "micro", "vim", "spacevim", "emacs", "astrovim", "nvim");
+    $editors = @("nano", "micro", "vim", "spacevim", "emacs", "astrovim", "nvim", "neovim");
     $valid = $true;
-    $originalSettings = Get-TaskTrackerSettings | ConvertTo-Json;
-    $env:PSTT_PrevSettings = $originalSettings;
-    Write-Verbose "Original Settings:`n$originalSettings`n";
+    $originalSettings = Get-TaskTrackerSettings;
+    
+    Write-Verbose ("Original Settings:`n" + (ConvertTo-Json $originalSettings) + "`n");
     $settingsFilePath = Get-TaskTrackerSettingsPath;
     Start-Sleep 1;    
-    & $env:PSTT_Editor $settingsFilePath;
+    & $Settings.Editor $settingsFilePath;
+
     Start-Sleep 1;    
-    $settings = Get-TaskTrackerSettings;
-    
-    if ($editors.Contains($settings.Editor) -eq $false) {
-        Write-Warning  "'" + $settings.Editor + "' is not a known editor!"
+    $newSettings = Get-TaskTrackerSettings;
+    Write-Verbose ("New Settings:`n" + (ConvertTo-Json $newSettings) + "`n");
+
+    if ($editors.Contains($newSettings.Editor) -eq $false) {
+        Write-Warning  "'" + $newSettings.Editor + "' is not a known editor!"
     }
-    $valid = (Assert-ValidTime -Hour $settings.Morning.Hour -Minute $settings.Morning.Minute -Label "Morning") -and (Assert-ValidTime -Hour $settings.Midday.Hour -Minute $settings.Midday.Minute -Label "Midday") -and (Assert-ValidTime -Hour $settings.EndOfDay.Hour -Minute $settings.EndOfDay.Minute -Label "EndOfDay") -and (Assert-ValidTime -Hour $settings.Report.Hour -Minute $settings.Report.Minute -Label "Report");
+    $valid = (Assert-ValidTime -Hour $newSettings.Morning.Hour -Minute $newSettings.Morning.Minute -Label "Morning") -and `
+    (Assert-ValidTime -Hour $newSettings.Midday.Hour -Minute $newSettings.Midday.Minute -Label "Midday") -and `
+    (Assert-ValidTime -Hour $newSettings.EndOfDay.Hour -Minute $newSettings.EndOfDay.Minute -Label "EndOfDay") -and `
+    (Assert-ValidTime -Hour $newSettings.Report.Hour -Minute $newSettings.Report.Minute -Label "Report");
     if ($valid) {
-        $morningGap = Measure-TimeGap $settings.Morning.Hour $settings.Morning.Minute $settings.Midday.Hour $settings.Midday.Minute;
-        $middayGap = Measure-TimeGap $settings.Midday.Hour $settings.Midday.Minute $settings.EndOfDay.Hour $settings.EndOfDay.Minute;
-        $endOfDayGap = Measure-TimeGap $settings.EndOfDay.Hour $settings.EndOfDay.Minute $settings.Report.Hour $settings.Report.Minute;
-        $morningTime = $settings.Morning.Hour.ToString("00") + ":" + $settings.Morning.Minute.ToString("00");
-        $endOfDayTime = $settings.EndOfDay.Hour.ToString("00") + ":" + $settings.EndOfDay.Minute.ToString("00");
-        $middayTime = $settings.Midday.Hour.ToString("00") + ":" + $settings.Midday.Minute.ToString("00");
-        $reportTime = $settings.Report.Hour.ToString("00") + ":" + $settings.Report.Minute.ToString("00");
+        $morningGap = Measure-TimeGap $newSettings.Morning.Hour $newSettings.Morning.Minute $newSettings.Midday.Hour $newSettings.Midday.Minute;
+        $middayGap = Measure-TimeGap $newSettings.Midday.Hour $newSettings.Midday.Minute $newSettings.EndOfDay.Hour $newSettings.EndOfDay.Minute;
+        $endOfDayGap = Measure-TimeGap $newSettings.EndOfDay.Hour $newSettings.EndOfDay.Minute $newSettings.Report.Hour $newSettings.Report.Minute;
+        $morningTime = $newSettings.Morning.Hour.ToString("00") + ":" + $newSettings.Morning.Minute.ToString("00");
+        $endOfDayTime = $newSettings.EndOfDay.Hour.ToString("00") + ":" + $newSettings.EndOfDay.Minute.ToString("00");
+        $middayTime = $newSettings.Midday.Hour.ToString("00") + ":" + $newSettings.Midday.Minute.ToString("00");
+        $reportTime = $newSettings.Report.Hour.ToString("00") + ":" + $newSettings.Report.Minute.ToString("00");
         if ($morningGap -lt 1.0) {
             Write-Error ("Midday Time: $middayTime needs to be at least an hour after Morning Time: $morningTime, Current Gap: $morningGap hours");
             $valid = $false;
@@ -43,7 +48,7 @@ function Update-TaskTrackerSettings {
         Set-Content -Path $settingsFilePath -Value $originalSettings;
         return;
     } else {
-        $newSettings = ConvertTo-Json $settings;
+        $newSettings = ConvertTo-Json $newSettings;
         Set-Content -Path $settingsFilePath -Value $newSettings;
         Sync-TaskTrackerSettings;
     }

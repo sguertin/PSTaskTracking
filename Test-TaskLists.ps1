@@ -21,48 +21,37 @@ function Test-TaskLists {
     $endOfDayTaskFile = Join-Path $tasksFolder "EndOfDay-$timestamp.md"
     $summaryReport = Join-Path $tasksFolder "Summary-$timestamp.md";
     
-    # Time frames for each task list
-    $morningHour = $env:PSTT_MorningHour;
-    $morningMinute = $env:PSTT_MorningMinute
-    $middayHour = $env:PSTT_MiddayHour;
-    $middayMinute = $env:PSTT_MiddayMinute;
-    $endOfDayHour = $env:PSTT_EndOfDayHour;
-    $endOfDayMinute = $env:PSTT_EndOfDayMinute;
-    $closeDayHour = $env:PSTT_CloseDayHour;
-    $closeDayMinute = $env:PSTT_CloseDayMinute;
-    # end of time frames
     $uhOhCounter = 0;
-    if ((($now.Hour) -ge $closeDayHour) -and ($now.Minute) -ge $closeDayMinute) {
+    if ((($now.Hour) -ge $Settings.Report.Hour) -and ($now.Minute) -ge $Settings.Report.Minute) {
         if ((Test-Path $summaryReport) -eq $false) {
             $uhOhCounter += 1;
             Write-Warning "Gotta compile your end of day report!";
         }
     }
     if ((Test-Path $summaryReport) -eq $false) {
-        if (($now.Hour) -ge $morningHour -and ($now.Minute) -ge $morningMinute) {
+        if (($now.Hour) -ge $Settings.Morning.Hour -and ($now.Minute) -ge $Settings.Morning.Minute) {
             if ((Test-Path $morningTaskFile) -eq $false) {
                 $uhOhCounter += 1;
                 Write-Warning "Gotta start your morning tasks!"
             }
         }
 
-        if (($now.Hour) -ge $middayHour -and ($now.Minute) -ge $middayMinute) {
+        if (($now.Hour) -ge $Settings.Midday.Hour -and ($now.Minute) -ge $Settings.Midday.Minute) {
             if ((Test-Path $midDayTaskFile) -eq $false) {
                 $uhOhCounter += 1;
                 Write-Warning "Gotta start your midday tasks!";
             }
         }
 
-        if (($now.Hour) -ge $endOfDayHour -and ($now.Minute) -ge $endOfDayMinute) {
+        if (($now.Hour) -ge $Settings.EndOfDay.Hour -and ($now.Minute) -ge $Settings.EndOfDay.Minute) {
             if ((Test-Path $endOfDayTaskFile) -eq $false) {
                 $uhOhCounter += 1;
                 Write-Warning "Gotta start your end of day tasks!";
             }
         }
-    }
-
-    if ($uhOhCounter -gt 1) {
-        Write-Error "YOU NEED TO GET YOUR TASKS TOGETHER NOW";
+        if ($uhOhCounter -gt 1) {
+            Write-Error "YOU NEED TO GET YOUR TASKS TOGETHER NOW";
+        }
     }
 }
 Set-Alias -Name TaskStatus -Value Test-TaskLists;

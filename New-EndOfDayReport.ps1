@@ -28,19 +28,21 @@ function New-EndOfDayReport {
     if (Test-Path $reportFile) { 
         return $reportFile;
     }
-    $archiveFolder = Join-Path (Get-TaskFolder) -ChildPath "archive";
+    
     $timestamp = $Date.ToString("yyyy-MM-dd");
     $missingTaskList = $false;                
     $reportContent = "# Daily Task Report $timestamp`n`n";
     foreach ($taskList in @("Morning", "Midday", "EndOfDay")) {
-        $taskFile = Get-TaskList -TaskList $taskList;
+        $taskFile = Get-TaskList -TaskList $taskList;        
         if ($null -eq $taskFile) {
-            Write-Error "No $taskFile task list found!";
+            Write-Error "No $taskList task list found!";
             $missingTaskList = $true;
+            break;
         } else {
+            $archivePath = Join-Path $archiveFolder -ChildPath $taskFile.Name;
             $reportContent += (Get-Content $taskFile -Raw);
             $reportContent += "`n";
-            Move-Item $taskFile.FullName -Destination (Join-Path $archiveFolder -ChildPath $taskFile.Name);
+            Move-Item $taskFile -Destination $archivePath;
         }
     }
     if ($missingTaskList) {

@@ -9,6 +9,10 @@ function Get-TaskFolder {
     #>
     [CmdletBinding()]
     param()
-    
-    return Join-Path $env:PSTT_AppData -ChildPath "PSTaskTracking"
+    if ([string]::IsNullOrEmpty($env:LOCALAPPDATA)) {
+        $AppData = Join-Path -Path $env:HOME -ChildPath ".local";
+    } else {
+        $AppData = $env:LOCALAPPDATA;
+    }
+    return Join-Path ($AppData) -ChildPath "PSTaskTracking"
 }

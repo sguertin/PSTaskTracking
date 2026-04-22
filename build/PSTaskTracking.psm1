@@ -1,5 +1,5 @@
 #{ModuleContent}#
 
-Initialize-PSTaskTracking;
+$Settings = Get-TaskTrackerSettings;
 
-Sync-TaskTrackerSettings;
+Initialize-PSTaskTracking;

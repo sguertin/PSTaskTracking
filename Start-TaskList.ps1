@@ -35,5 +35,5 @@ function Start-TaskList {
             Set-Content $taskFilePath -Value $content
         }
     }
-    & $env:PSTT_Editor $taskFilePath;
+    & $Settings.Editor $taskFilePath;
 }

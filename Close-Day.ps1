@@ -19,19 +19,20 @@ function Close-Day {
     if ($null -eq $reportFile) {
         return;
     }
-    & $env:PSTT_Editor $reportFile.FullName;
+    & $Settings.Editor $reportFile.FullName;
     
-    if ([string]::IsNullOrEmpty($env:PSTT_PdfOutput)) {        
+    if ([string]::IsNullOrEmpty($Settings.MarkdownToPdfCommand)) {        
         return;
     }
-    if ([string]::IsNullOrEmpty($env:PSTT_OutputDirectory)) {
+    if ([string]::IsNullOrEmpty($Settings.OutputDirectory)) {
         $outputDirectory = Get-TaskFolder;
     } else {
-        $outputDirectory = $env:PSTT_OutputDirectory;
+        $outputDirectory = $Settings.OutputDirectory;
     }
     $outputFileName = $reportFile.Name.Replace(".md", ".pdf");
     $outputFilePath = Join-Path -Path $outputDirectory -ChildPath $outputFileName;
-    $outputCommand = $env:PSTT_PdfOutput.Replace("#{input}#", "`"" + $reportFile.FullName + "`"").Replace("#{output}#", "`"$outputFilePath`"");
+    $outputCommand = $Settings.MarkdownToPdfCommand.Replace("#{input}#", "`"" + $reportFile.FullName + "`"").Replace("#{output}#", "`"$outputFilePath`"");
+    Write-Host "> $outputCommand";
     Invoke-Expression -Command $outputCommand | Out-Null;
     Write-Host "$outputFileName written to '$outputDirectory'";
 }

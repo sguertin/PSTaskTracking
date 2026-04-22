@@ -39,6 +39,7 @@ function Get-TaskList {
     )
     $timestamp = $Date.ToString("yyyy-MM-dd");
     $taskFile = Join-Path (Get-TaskFolder) -ChildPath "$TaskList-$timestamp.md";
+    $archiveFolder = Join-Path (Get-TaskFolder) -ChildPath "archive";
     $archivedFile = Join-Path $archiveFolder -ChildPath "$TaskList-$timestamp.md";
     if (Test-Path $archivedFile) {
         return Get-Item -Path $archivedFile;
@@ -46,7 +47,7 @@ function Get-TaskList {
     if ((Test-Path $taskFile) -eq $false) {
         if ($TaskList -eq "Summary") {
             Write-Verbose "Summary report for $timestamp cannot be found."
-            return Get-Item -Path $taskFile;
+            return $taskFile;
         }        
         Write-Warning "No $TaskList task list found, do you want to create one now?"
         $response = Read-Host "[Y]es/[N]o:";
