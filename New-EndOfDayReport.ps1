@@ -26,20 +26,20 @@ function New-EndOfDayReport {
     
     $reportFile = Get-TaskList -TaskList Summary;
     if (Test-Path $reportFile) { 
-        return $reportFile;
+        return Get-Item -Path $reportFile;
     }
     
     $timestamp = $Date.ToString("yyyy-MM-dd");
     $missingTaskList = $false;                
     $reportContent = "# Daily Task Report $timestamp`n`n";
     foreach ($taskList in @("Morning", "Midday", "EndOfDay")) {
-        $taskFile = Get-TaskList -TaskList $taskList;        
+        $taskFile = Get-TaskList -TaskList $taskList -Prompt;        
         if ($null -eq $taskFile) {
             Write-Error "No $taskList task list found!";
             $missingTaskList = $true;
-            break;
         } else {
-            $archivePath = Join-Path $archiveFolder -ChildPath $taskFile.Name;
+            $archivePath = Join-Path (Get-TaskFolder) -ChildPath "archive" `
+                -AdditionalChildPath @($taskFile.Name);
             $reportContent += (Get-Content $taskFile -Raw);
             $reportContent += "`n";
             Move-Item $taskFile -Destination $archivePath;
@@ -53,6 +53,3 @@ function New-EndOfDayReport {
     
     return Get-Item -Path $reportFile;
 }
-
-Set-Alias -Name TaskReport -Value New-EndOfDayReport;
-Set-Alias -Name DayReport -Value New-EndOfDayReport;
