@@ -24,7 +24,7 @@ function New-EndOfDayReport {
         [DateTime]$Date = (Get-Date)
     )
     
-    $reportFile = Get-TaskList -TaskList Summary;
+    $reportFile = Get-TaskList -TaskList Summary -Date $Date;
     if (Test-Path $reportFile) { 
         return Get-Item -Path $reportFile;
     }
