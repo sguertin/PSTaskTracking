@@ -5,5 +5,5 @@ function Edit-TaskListTemplate {
         [Parameter(Mandatory, Position = 1)][string]$TaskList
     )
     $filePath = Join-Path (Get-TemplatesFolder) -ChildPath ("$TaskList.md")
-    & $script:Settings.Editor $filePath;
+    Invoke-TextEditor -Path $filePath;
 }

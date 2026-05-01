@@ -12,7 +12,10 @@ function Close-Day {
     #>
     [CmdletBinding()]
     param(
-        [DateTime]$Date = (Get-Date)
+        [ValidateScript({ if ($_ -gt (Get-Date)) {
+                    throw "`"$_`" is later than right now, no time travel allowed!"
+                } } )]
+        [datetime]$Date = (Get-Date)
     )
 
     $reportFile = New-EndOfDayReport -Date $Date;
@@ -21,7 +24,7 @@ function Close-Day {
     }
     $reportFilePath = $reportFile.FullName;
     $reportFileName = $reportFile.Name;
-    & $script:Settings.Editor $reportFilePath;
+    Invoke-TextEditor -Path $reportFilePath;
     $mdToPdfCmd = $script:Settings.MarkdownToPdfCommand;
     
     if ([string]::IsNullOrEmpty($script:Settings.OutputDirectory)) {        

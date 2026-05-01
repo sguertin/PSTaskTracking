@@ -18,6 +18,9 @@ function Start-TaskList {
     param(
         [ValidateSet("Morning", "Midday", "EndOfDay")]
         [Parameter(Mandatory, Position = 1)][string]$TaskList,
+        [ValidateScript({ if ($_ -gt (Get-Date)) {
+                    throw "`"$_`" is later than right now, no time travel allowed!"
+                } } )]
         [datetime]$Date = (Get-Date)
     )
     $taskTemplate = Join-Path (Get-TemplatesFolder) -ChildPath "$TaskList.md";    
@@ -35,5 +38,5 @@ function Start-TaskList {
             Set-Content $taskFilePath -Value $content
         }
     }
-    & $script:Settings.Editor $taskFilePath;
+    Invoke-TextEditor -Path $taskFilePath;
 }

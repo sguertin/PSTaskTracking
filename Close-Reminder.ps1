@@ -34,9 +34,15 @@ function Close-Reminder {
     #>    
     [CmdletBinding(DefaultParameterSetName = "Info")]
     param(
-        [Parameter(Mandatory, ParameterSetName = "Pipe", ValueFromPipeline = $true)][System.IO.FileInfo]$File,
-        [Parameter(Mandatory, Position = 1, ParameterSetName = "Info")][int]$Id,
-        [Parameter(Position = 2, ParameterSetName = "Info")][DateTime]$Date = (Get-Date)
+        [Parameter(Mandatory, ParameterSetName = "Pipe", ValueFromPipeline = $true)]
+        [System.IO.FileInfo]$File,
+        [Parameter(Mandatory, Position = 1, ParameterSetName = "Info")]
+        [int]$Id,
+        [Parameter(Position = 2, ParameterSetName = "Info")]
+        [ValidateScript({ if ($_ -gt (Get-Date)) {
+                    throw "`"$_`" is later than right now, no time travel allowed!"
+                } } )]
+        [datetime]$Date = (Get-Date)
     )
     if ($null -eq $File) {
         $filePath = Get-ReminderFilePath -Id $Id -Date $Date;

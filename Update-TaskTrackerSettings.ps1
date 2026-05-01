@@ -9,7 +9,7 @@ function Update-TaskTrackerSettings {
     Write-Verbose ("Original Settings:`n" + (ConvertTo-Json $originalSettings) + "`n");
     $settingsFilePath = Get-TaskTrackerSettingsPath;
     Start-Sleep 1;    
-    & $script:Settings.Editor $settingsFilePath;
+    Invoke-TextEditor -Path $settingsFilePath;
 
     Start-Sleep 1;    
     $newSettings = Get-TaskTrackerSettings;
@@ -48,8 +48,6 @@ function Update-TaskTrackerSettings {
         Set-Content -Path $settingsFilePath -Value $originalSettings;
         return;
     } else {
-        $newSettings = ConvertTo-Json $newSettings;
-        Set-Content -Path $settingsFilePath -Value $newSettings;
         Sync-TaskTrackerSettings;
     }
 }

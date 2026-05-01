@@ -7,5 +7,5 @@ function Edit-TaskTemplate {
     if ($null -eq $template) {
         $template = New-TaskTemplate -Task $Task;
     }    
-    & $script:Settings.Editor $template.FullName;
+    Invoke-TextEditor -Path $template.FullName;
 }
