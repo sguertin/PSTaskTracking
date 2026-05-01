@@ -29,9 +29,9 @@ function Test-Reminders {
     } 
     $dueReminders = Get-Reminders | Where-Object Date -LT $now;
     if ($dueReminders.Count -gt 0) {
-        Write-Warning ("You have " + $dueReminders.Count + " reminders that are due!");
+        Write-Host ("You have " + $dueReminders.Count + " reminders that are due!") -ForegroundColor Yellow;
         foreach ($reminder in $dueReminders) {
-            Write-Warning ("Id: " + $reminder.Id + ": [" + $reminder.Date.ToString("G") + "]" + $reminder.Reminder);
+            Write-Host ("Id: " + $reminder.Id + ": [" + $reminder.Date.ToString("G") + "]" + $reminder.Reminder) -ForegroundColor Yellow;
         }
     }
     if (($overdueReminders.Count -eq 0) -and ($dueReminders.Count -eq 0) -and !$SilentAllClear) {

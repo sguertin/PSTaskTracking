@@ -51,7 +51,7 @@ function Get-TaskList {
             return $taskFile;
         }
         if ($Prompt) {
-            Write-Warning "No $TaskList task list found, do you want to create one now?"
+            Write-Host "No $TaskList task list found, do you want to create one now?" -ForegroundColor Yellow;
             $response = Read-Host "[Y]es/[N]o:";
             if ($response.ToUpper().StartsWith("Y")) {
                 Start-TaskList -TaskList $TaskList -Date $Date;
