@@ -6,7 +6,7 @@ function Restore-TaskTrackerSettings {
     $taskFolder = Get-TaskFolder;
     $backupFiles = Get-ChildItem -Path $taskFolder -File -Filter "settings.*.bak.json";
     if ($backupFiles.Count -eq 0) {
-        Write-Warning "No backup settings found, exiting";
+        Write-Host "No backup settings found, exiting" -ForegroundColor Yellow;
         return;
     }
     if ([string]::IsNullOrEmpty($Id)) {
@@ -28,4 +28,5 @@ function Restore-TaskTrackerSettings {
     $settingsFilePath = Get-TaskTrackerSettingsPath;
     $restoredContent = Get-Content "settings.$Id.bak.json" -Raw;
     Set-Content -Path $settingsFilePath -Value $restoredContent;
+    Sync-TaskTrackerSettings;
 }

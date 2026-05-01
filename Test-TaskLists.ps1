@@ -14,29 +14,26 @@ function Test-TaskLists {
     [CmdletBinding()]
     param()
     $now = Get-Date;
-    [int]$uhOhCounter = 0;
+    $uhOhCounter = 0;
     if (Test-Path (Get-TaskList -TaskList Summary)) {
         return;
     }    
-    if (($now.Hour) -ge $Settings.Morning.Hour -and ($now.Minute) -ge $Settings.Morning.Minute) {
+    if (($now.Hour) -ge $script:Settings.Morning.Hour -and ($now.Minute) -ge $script:Settings.Morning.Minute) {
         if ($null -eq (Get-TaskList -TaskList Morning)) {
             $uhOhCounter++;
-            Write-Warning "Gotta start your morning tasks!"
         }
     }
-    if (($now.Hour) -ge $Settings.Midday.Hour -and ($now.Minute) -ge $Settings.Midday.Minute) {
+    if (($now.Hour) -ge $script:Settings.Midday.Hour -and ($now.Minute) -ge $script:Settings.Midday.Minute) {
         if ($null -eq (Get-TaskList -TaskList Midday)) {
             $uhOhCounter++;
-            Write-Warning "Gotta start your midday tasks!";
         }
     }
-    if (($now.Hour) -ge $Settings.EndOfDay.Hour -and ($now.Minute) -ge $Settings.EndOfDay.Minute) {
+    if (($now.Hour) -ge $script:Settings.EndOfDay.Hour -and ($now.Minute) -ge $script:Settings.EndOfDay.Minute) {
         if ($null -eq (Get-TaskList -TaskList EndOfDay)) {
             $uhOhCounter++;
-            Write-Warning "Gotta start your end of day tasks!";
         }
     }
-    if ((($now.Hour) -ge $Settings.Report.Hour) -and ($now.Minute) -ge $Settings.Report.Minute) {
+    if ((($now.Hour) -ge $script:Settings.Report.Hour) -and ($now.Minute) -ge $script:Settings.Report.Minute) {
         $uhOhCounter++;
         Write-Warning "Gotta compile your end of day report!";
     }

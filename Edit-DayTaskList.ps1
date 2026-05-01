@@ -31,5 +31,5 @@ function Edit-DayTaskList {
         Write-Host "Creating $fileName..."
         New-Item $taskListPath -ItemType File;
     }
-    & $Settings.Editor $taskListPath;
+    & $script:Settings.Editor $taskListPath;
 }

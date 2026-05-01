@@ -9,6 +9,6 @@ function Backup-TaskTrackerSettings {
         $backupId += 1;
         $backupFilePath = Join-Path -Path $taskFolder -ChildPath "settings.$backupId.bak.json";
     }
-    Set-Content $backupFilePath -Value (ConvertTo-Json $Settings);
+    Set-Content $backupFilePath -Value (ConvertTo-Json $script:Settings);
     Write-Verbose "Backup created at '$backupFilePath'";    
 }

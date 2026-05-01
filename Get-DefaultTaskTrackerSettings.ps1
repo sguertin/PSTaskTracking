@@ -18,7 +18,7 @@ function Get-DefaultTaskTrackerSettings {
         };
         Report               = @{
             Hour   = 15;
-            Minute = 30
+            Minute = 30;
         };
         MarkdownToPdfCommand = "pandoc #{input}# -o #{output}# --template eisvogel";
         OutputDirectory      = "";

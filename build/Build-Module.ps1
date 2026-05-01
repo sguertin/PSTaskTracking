@@ -5,13 +5,12 @@ while (!$sourceDirectory.ToString().EndsWith("PSTaskTracking")) {
     if ($parentDirectory.ToString() -eq $sourceDirectory.ToString()) {
         Write-Error "Unable to find PSTaskTracking directory!"
         $continue = $false;
-    }
-    else {
+    } else {
         $sourceDirectory = $parentDirectory;
     }
 }
 if ($continue) {
-    $settings = Get-Content (Join-Path "build" -ChildPath "build.json" ) -Raw | ConvertFrom-Json;
+    $buildSettings = Get-Content (Join-Path "build" -ChildPath "build.json" ) -Raw | ConvertFrom-Json;
     $outputDirectory = Join-Path $PWD -ChildPath "Module" -AdditionalChildPath @("PSTaskTracking");
     $archiveFilePath = Join-Path $PWD -ChildPath "Module" -AdditionalChildPath @("PSTaskTracking");
     $content = "";
@@ -29,7 +28,7 @@ if ($continue) {
         $functionContent = Get-Content $file -Raw;
         $content += "$functionContent`n`n";
         $function = $file.Name.Replace(".ps1", "");
-        if (!$settings.FunctionsToExclude.Contains($function)) {
+        if (!$buildSettings.FunctionsToExclude.Contains($function)) {
             $functions += $function;
         }
         foreach ($match in ([regex]"Set-Alias -Name (.*?) -Value .*").Matches($functionContent)) {
@@ -45,7 +44,7 @@ if ($continue) {
         $User = $env:USER;
     }
     New-Item -Path $moduleOutputPath -ItemType File -Value $moduleContent -Force | Out-Null;
-    New-ModuleManifest -Path $manifestOutputPath -Guid $settings.ProjectId -ModuleVersion $settings.ModuleVersion;
+    New-ModuleManifest -Path $manifestOutputPath -Guid $buildSettings.ProjectId -ModuleVersion $buildSettings.ModuleVersion;
     Update-ModuleManifest -Path $manifestOutputPath -RootModule "PSTaskTracking.psm1" -FunctionsToExport $functions -AliasesToExport $aliases;
     Compress-Archive -Path $outputDirectory -CompressionLevel Optimal -DestinationPath $archiveFilePath;
 }

@@ -19,19 +19,20 @@ function Close-Day {
     if ($null -eq $reportFile) {
         return;
     }
-    & $Settings.Editor $reportFile.FullName;
+    $reportFileName = $reportFile.FullName;
+    & $script:Settings.Editor $reportFileName;
     
-    if ([string]::IsNullOrEmpty($Settings.MarkdownToPdfCommand)) {        
+    if ([string]::IsNullOrEmpty($script:Settings.MarkdownToPdfCommand)) {        
         return;
     }
-    if ([string]::IsNullOrEmpty($Settings.OutputDirectory)) {
+    if ([string]::IsNullOrEmpty($script:Settings.OutputDirectory)) {
         $outputDirectory = Get-TaskFolder;
     } else {
-        $outputDirectory = $Settings.OutputDirectory;
+        $outputDirectory = $script:Settings.OutputDirectory;
     }
     $outputFileName = $reportFile.Name.Replace(".md", ".pdf");
     $outputFilePath = Join-Path -Path $outputDirectory -ChildPath $outputFileName;
-    $outputCommand = $Settings.MarkdownToPdfCommand.Replace("#{input}#", "`"" + $reportFile.FullName + "`"").Replace("#{output}#", "`"$outputFilePath`"");
+    $outputCommand = $script:Settings.MarkdownToPdfCommand.Replace("#{input}#", "`"$reportFileName`"").Replace("#{output}#", "`"$outputFilePath`"");
     Write-Host "> $outputCommand";
     Invoke-Expression -Command $outputCommand | Out-Null;
     Write-Host "$outputFileName written to '$outputDirectory'";
