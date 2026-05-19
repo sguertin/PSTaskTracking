@@ -3,23 +3,33 @@ function Resolve-Tokens {
     param(
         [Parameter(Mandatory, ValueFromPipeline = $true)]
         [string]$Content,        
-        [Parameter(Mandatory, Position = 1)]
-        [string]$Token,
-        [Parameter(Mandatory, Position = 2)]
-        [string]$Value,
+        [Parameter(Position = 1)]
+        [string]$Token = "",
+        [Parameter(Position = 2)]
+        [string]$Value = "",
         [Parameter(Position = 3)]
         [hashtable]$Values = $null
     )
     begin {
-        $tokenValue = "#{$Token}#";
+        if ($Token.Trim() -ne "") {
+            $tokenValue = "#{$Token}#";
+        } else {
+            $tokenValue = "";
+        }       
     }
     process {
+        if ($null -eq $Values -and $Token -eq "") {
+            return $Content;
+        }
         if ($null -ne $Values) {
             foreach ($key in $Values.keys) {
                 $value = $Values[$key];
                 $Content = $Content.Replace("#{$key}#", $value);
             }
         }
-        return $Content.Replace($tokenValue, $Value);
+        if ($Token -ne "") {
+            $Content = $Content.Replace($tokenValue, $Value);
+        }
+        return $Content;
     }
 }

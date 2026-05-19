@@ -7,6 +7,7 @@
         "Get-DefaultTaskTrackSettings",
         "Get-ReminderFilePath",
         "Measure-TimeGap",
+        "Resolve-Tokens",
         "Start-TaskList",
         "Test-EmptyString",
         "Write-PSHost",
