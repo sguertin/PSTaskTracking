@@ -4,6 +4,6 @@ function Edit-TaskListTemplate {
         [ValidateSet("Morning", "Midday", "EndOfDay")]
         [Parameter(Mandatory, Position = 1)][string]$TaskList
     )
-    $filePath = Join-Path (Get-TemplatesFolder) -ChildPath ("$TaskList.md")
+    $filePath = Join-Path $script:TemplatesFolder -ChildPath "$TaskList.md";
     & $script:Settings.Editor $filePath;
 }

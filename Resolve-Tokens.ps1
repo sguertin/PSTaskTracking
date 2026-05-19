@@ -7,6 +7,7 @@ function Resolve-Tokens {
         [string]$Token,
         [Parameter(Mandatory, Position = 2)]
         [string]$Value,
+        [Parameter(Position = 3)]
         [hashtable]$Values = $null
     )
     begin {
@@ -21,5 +22,4 @@ function Resolve-Tokens {
         }
         return $Content.Replace($tokenValue, $Value);
     }
-
 }

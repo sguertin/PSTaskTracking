@@ -29,7 +29,7 @@ function New-EndOfDayReport {
         return Get-Item -Path $reportFile;
     }
     
-    $timestamp = $Date.ToString("yyyy-MM-dd");
+    $timestamp = $Date.ToString($script:DateStamp);
     $missingTaskList = $false;                
     $reportContent = "# Daily Task Report $timestamp`n`n";
     $archivePaths = @();
@@ -39,8 +39,7 @@ function New-EndOfDayReport {
             Write-PSError "No $taskList task list found!";
             $missingTaskList = $true;
         } else {            
-            $archivePath = Join-Path (Get-TaskFolder) -ChildPath "archive" `
-                -AdditionalChildPath @($taskFile.Name);
+            $archivePath = Join-Path $script:ArchiveFolder -ChildPath $taskFile.Name;
             $reportContent += (Get-Content $taskFile -Raw);
             $reportContent += "`n";
             $archivePaths += @{ Original = $taskFile.FullName; Archive = $archivePath };

@@ -27,8 +27,8 @@ function New-Reminder {
         [Parameter(Mandatory, Position = 2)][DateTime]$Date,    
         [switch]$Day
     )
-    $reminderDirectory = Get-RemindersFolder;
-    $timestamp = $Date.ToString("yyyy-MM-dd")
+    
+    $timestamp = $Date.ToString($script:DateStamp)
     if ($Day -eq $true) {
         $Date = Get-Date $timestamp
     }
@@ -41,11 +41,11 @@ function New-Reminder {
         Resolution = $null
     };
     
-    $filePath = Join-Path -Path $reminderDirectory -ChildPath "reminder-$timestamp.$id.json";    
+    $filePath = Join-Path -Path $script:RemindersFolder -ChildPath "reminder-$timestamp.$id.json";    
     while (Test-Path -Path $filePath) {
         $id += 1;        
         $content.Id = $id
-        $filePath = Join-Path -Path $reminderDirectory -ChildPath "reminder-$timestamp.$id.json";        
+        $filePath = Join-Path -Path $script:RemindersFolder -ChildPath "reminder-$timestamp.$id.json";        
     }
     $content = $content | ConvertTo-Json;
     New-Item -Path $filePath -ItemType File -Value $content -Force | Out-Null;

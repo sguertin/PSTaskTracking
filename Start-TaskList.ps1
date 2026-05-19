@@ -20,14 +20,13 @@ function Start-TaskList {
         [Parameter(Mandatory, Position = 1)][string]$TaskList,
         [datetime]$Date = (Get-Date)
     )
-    $taskTemplate = Join-Path (Get-TemplatesFolder) -ChildPath "$TaskList.md";    
-    $timestamp = $Date.ToString("yyyy-MM-dd");
-    $tasksFolder = Get-TaskFolder;
-    $taskFilePath = Join-Path $tasksFolder -ChildPath "$TaskList-$timestamp.md";
+    $taskTemplate = Join-Path $script:TemplatesFolder -ChildPath "$TaskList.md";    
+    $timestamp = $Date.ToString($script:DateStamp);
+    $taskFilePath = Join-Path $script:TaskFolder -ChildPath "$TaskList-$timestamp.md";
     if ((Test-Path $taskFilePath) -eq $false) {        
         Copy-Item $taskTemplate -Destination $taskFilePath;    
         $dayOfWeek = $Date.DayOfWeek.ToString();    
-        $dailyTasks = Join-Path (Get-TemplatesFolder) -ChildPath "$dayOfWeek.$TaskList.md";
+        $dailyTasks = Join-Path $script:TemplatesFolder -ChildPath "$dayOfWeek.$TaskList.md";
         if (Test-Path $dailyTasks) {
             $content = Get-Content $taskFilePath;
             $content += "`n### $dayOfWeek Tasks `n"

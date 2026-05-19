@@ -3,8 +3,8 @@ function Restore-TaskTrackerSettings {
     param(
         [string]$Id = ""
     )
-    $taskFolder = Get-TaskFolder;
-    $backupFiles = Get-ChildItem -Path $taskFolder -File -Filter "settings.*.bak.json";
+    
+    $backupFiles = Get-ChildItem -Path $script:TaskFolder -File -Filter "settings.*.bak.json";
     if ($backupFiles.Count -eq 0) {
         Write-PSHost "No backup settings found, exiting" -ForegroundColor Yellow;
         return;
@@ -14,7 +14,7 @@ function Restore-TaskTrackerSettings {
         foreach ($backupFile in $backupFiles) {
             $backupId = $backupFile.Name.Replace("settings.", "").Replace(".bak.json", "");
             $options += $backupId;
-            $backupDate = $backupFile.LastWriteTime.ToString("yyyy-MM-dd hh:mm:ss");
+            $backupDate = $backupFile.LastWriteTime.ToString($script:DateTimeStamp);
             $backupContent = (Get-Content -Path $backupFile -Raw);
             Write-PSHost "Id: $backupId`nModifiedDate: $backupDate`nBackupContent:`n$backupContent";            
         }
@@ -25,8 +25,8 @@ function Restore-TaskTrackerSettings {
         }        
     }
     Backup-TaskTrackerSettings;
-    $settingsFilePath = Get-TaskTrackerSettingsPath;
+    
     $restoredContent = Get-Content "settings.$Id.bak.json" -Raw;
-    Set-Content -Path $settingsFilePath -Value $restoredContent;
+    Set-Content -Path $script:SettingsFile -Value $restoredContent;
     Sync-TaskTrackerSettings;
 }

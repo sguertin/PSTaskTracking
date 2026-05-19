@@ -38,10 +38,9 @@ function Get-TaskList {
         [switch]$Prompt
 
     )
-    $timestamp = $Date.ToString("yyyy-MM-dd");
-    $taskFile = Join-Path (Get-TaskFolder) -ChildPath "$TaskList-$timestamp.md";
-    $archiveFolder = Join-Path (Get-TaskFolder) -ChildPath "archive";
-    $archivedFile = Join-Path $archiveFolder -ChildPath "$TaskList-$timestamp.md";
+    $timestamp = $Date.ToString($script:DateStamp);
+    $taskFile = Join-Path $script:TaskFolder -ChildPath "$TaskList-$timestamp.md";
+    $archivedFile = Join-Path $script:ArchiveFolder -ChildPath "$TaskList-$timestamp.md";
     if (Test-Path $archivedFile) {
         return Get-Item -Path $archivedFile;
     }

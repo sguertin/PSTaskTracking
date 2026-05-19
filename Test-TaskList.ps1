@@ -10,7 +10,7 @@ function Test-TaskList {
         "Midday"   = "midday";
         "EndOfDay" = "end of day";
     }
-    $templateFile = Get-Item (Join-Path -Path (Get-TemplatesFolder) -ChildPath "$TaskList.md" );
+    $templateFile = Get-Item (Join-Path -Path $script:TemplatesFolder -ChildPath "$TaskList.md" );
     $taskFile = Get-TaskList -TaskList $TaskList -Date $Date;
     $listName = $lists[$TaskList];
     if ($null -eq $taskFile) {

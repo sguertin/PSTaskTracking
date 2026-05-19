@@ -1,4 +1,4 @@
-$PSTaskTrackerName = "PSTaskTracker";
+$PSTaskTrackerName = "PSTaskTracking";
 #{ModuleContent}#
 
 # Constants
@@ -8,9 +8,9 @@ $script:DateString = "G";
 
 if ([string]::IsNullOrEmpty($env:LOCALAPPDATA)) {
     $script:TaskFolder = Join-Path -Path $env:HOME `
-        -ChildPath ".local" -AdditionalChildPath @("PSTaskTracking");
+        -ChildPath ".local" -AdditionalChildPath @($PSTaskTrackerName);
 } else {
-    $script:TaskFolder = Join-Path ($env:LOCALAPPDATA) -ChildPath "PSTaskTracking";
+    $script:TaskFolder = Join-Path ($env:LOCALAPPDATA) -ChildPath $PSTaskTrackerName;
 }
 $script:TemplatesFolder = Join-Path $script:TaskFolder -ChildPath "templates";
 $script:ArchiveFolder = Join-Path $script:TaskFolder -ChildPath "archive";

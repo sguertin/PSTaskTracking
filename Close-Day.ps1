@@ -25,7 +25,7 @@ function Close-Day {
     $mdToPdfCmd = $script:Settings.MarkdownToPdfCommand;
     
     if ([string]::IsNullOrEmpty($script:Settings.OutputDirectory)) {        
-        $outputDirectory = Get-TaskFolder;
+        $outputDirectory = $script:TaskFolder;
     } else {
         $outputDirectory = $script:Settings.OutputDirectory;
     }
@@ -35,7 +35,8 @@ function Close-Day {
     } else {
         $outputFileName = $reportFileName.Replace(".md", ".pdf");
         $outputFilePath = Join-Path -Path $outputDirectory -ChildPath $outputFileName;
-        $outputCommand = $mdToPdfCmd.Replace("#{input}#", "`"$reportFilePath`"").Replace("#{output}#", "`"$outputFilePath`"");
+        $outputCommand = $mdToPdfCmd | Resolve-Tokens -Token "input" -Value "`"$reportFilePath`"" `
+        | Resolve-Tokens -Token "output" -Value "`"$outputFilePath`"";
         Write-PSHost "> $outputCommand";
         Invoke-Expression -Command $outputCommand | Out-Null;
         Write-PSHost "$outputFileName written to '$outputDirectory'";

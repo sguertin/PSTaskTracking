@@ -19,6 +19,6 @@ function Get-ReminderFilePath {
         [Parameter(Position = 2)][DateTime]$Date = (Get-Date)
     )
     
-    $timestamp = $Date.ToString("yyyy-MM-dd");
-    return Join-Path (Get-RemindersFolder) -ChildPath "reminder-$timestamp.$Id.json"
+    $timestamp = $Date.ToString($script:DateStamp);
+    return Join-Path $script:RemindersFolder -ChildPath "reminder-$timestamp.$Id.json"
 }
