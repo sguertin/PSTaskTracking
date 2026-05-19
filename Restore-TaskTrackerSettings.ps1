@@ -6,7 +6,7 @@ function Restore-TaskTrackerSettings {
     $taskFolder = Get-TaskFolder;
     $backupFiles = Get-ChildItem -Path $taskFolder -File -Filter "settings.*.bak.json";
     if ($backupFiles.Count -eq 0) {
-        Write-Host "No backup settings found, exiting" -ForegroundColor Yellow;
+        Write-PSHost "No backup settings found, exiting" -ForegroundColor Yellow;
         return;
     }
     if ([string]::IsNullOrEmpty($Id)) {
@@ -16,11 +16,11 @@ function Restore-TaskTrackerSettings {
             $options += $backupId;
             $backupDate = $backupFile.LastWriteTime.ToString("yyyy-MM-dd hh:mm:ss");
             $backupContent = (Get-Content -Path $backupFile -Raw);
-            Write-Host "Id: $backupId`nModifiedDate: $backupDate`nBackupContent:`n$backupContent";            
+            Write-PSHost "Id: $backupId`nModifiedDate: $backupDate`nBackupContent:`n$backupContent";            
         }
         $Id = Read-Host "Please choose which backup to restore, [$options]";
         if ($options.Contains($Id) -eq $false) {
-            Write-Error "Invalid value: $Id given! Expected [$options]";
+            Write-PSError "Invalid value: $Id given! Expected [$options]";
             return;
         }        
     }

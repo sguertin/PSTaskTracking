@@ -36,7 +36,7 @@ function New-EndOfDayReport {
     foreach ($taskList in @("Morning", "Midday", "EndOfDay")) {
         $taskFile = Get-TaskList -TaskList $taskList -Prompt;        
         if ($null -eq $taskFile) {
-            Write-Error "No $taskList task list found!";
+            Write-PSError "No $taskList task list found!";
             $missingTaskList = $true;
         } else {            
             $archivePath = Join-Path (Get-TaskFolder) -ChildPath "archive" `
@@ -47,7 +47,7 @@ function New-EndOfDayReport {
         }
     }
     if ($missingTaskList) {
-        Write-Error "Task files are missing, canceling report creation.";
+        Write-PSError "Task files are missing, canceling report creation.";
         return $null;
     } else {
         foreach ($path in $archivePaths) {

@@ -28,7 +28,7 @@ function Edit-DayTaskList {
     $fileName = "$DayOfWeek.$TimeOfDay.md";
     $taskListPath = Join-Path -Path (Get-TaskFolder) -ChildPath $fileName;
     if ((Test-Path $taskListPath) -eq $false) {
-        Write-Host "Creating $fileName..."
+        Write-PSHost "Creating $fileName..."
         New-Item $taskListPath -ItemType File;
     }
     & $script:Settings.Editor $taskListPath;

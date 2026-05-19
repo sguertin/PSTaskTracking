@@ -22,20 +22,20 @@ function Test-Reminders {
     $now = Get-Date;
     $overdueReminders = Get-OverdueReminders;
     if ($overdueReminders.Count -gt 0) {
-        Write-Error ("You have " + $overdueReminders.Count + " reminders that are OVERDUE!");
+        Write-PSError ("You have " + $overdueReminders.Count + " reminders that are OVERDUE!");
         foreach ($reminder in $overdueReminders) {
-            Write-Error ("Id: " + $reminder.Id + ": [" + $reminder.Date.ToString("G") + "]" + $reminder.Reminder);
+            Write-PSError ("Id: " + $reminder.Id + ": [" + $reminder.Date.ToString($script:DateString) + "]" + $reminder.Reminder);
         }
     } 
     $dueReminders = Get-Reminders | Where-Object Date -LT $now;
     if ($dueReminders.Count -gt 0) {
-        Write-Host ("You have " + $dueReminders.Count + " reminders that are due!") -ForegroundColor Yellow;
+        Write-PSWarning ("You have " + $dueReminders.Count + " reminders that are due!");
         foreach ($reminder in $dueReminders) {
-            Write-Host ("Id: " + $reminder.Id + ": [" + $reminder.Date.ToString("G") + "]" + $reminder.Reminder) -ForegroundColor Yellow;
+            Write-PSWarning ("Id: " + $reminder.Id + ": [" + $reminder.Date.ToString($script:DateString) + "]" + $reminder.Reminder);
         }
     }
     if (($overdueReminders.Count -eq 0) -and ($dueReminders.Count -eq 0) -and !$SilentAllClear) {
-        Write-Host "No reminders due at this time!" -ForegroundColor Green;
+        Write-PSHost "No reminders due at this time!" -ForegroundColor Green;
     }
 }
 Set-Alias reminders -Value Test-Reminders;

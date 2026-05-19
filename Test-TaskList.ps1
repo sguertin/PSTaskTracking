@@ -14,13 +14,13 @@ function Test-TaskList {
     $taskFile = Get-TaskList -TaskList $TaskList -Date $Date;
     $listName = $lists[$TaskList];
     if ($null -eq $taskFile) {
-        Write-Host "Gotta start your $listName tasks!" -ForegroundColor Yellow;
+        Write-PSWarning "Gotta start your $listName tasks!";
         return $false;
     }
     $templateContent = Get-Content $templateFile -Raw;
     $taskContent = Get-Content $taskFile -Raw;
     if ($templateContent -eq $taskContent) {
-        Write-Host "Gotta finish your $listName tasks!" -ForegroundColor Yellow;
+        Write-PSWarning "Gotta finish your $listName tasks!";
         return $false
     }
     return $true;

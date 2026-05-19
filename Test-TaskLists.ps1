@@ -35,10 +35,10 @@ function Test-TaskLists {
     }
     if ((($now.Hour) -ge $script:Settings.Report.Hour) -and ($now.Minute) -ge $script:Settings.Report.Minute) {
         $uhOhCounter++;
-        Write-Host "Gotta compile your end of day report!" -ForegroundColor; 
+        Write-PSWarning "Gotta compile your end of day report!"; 
     }
     if ($uhOhCounter -gt 1) {
-        Write-Host "YOU NEED TO GET YOUR TASKS TOGETHER NOW" -ForegroundColor Red;
+        Write-PSError "YOU NEED TO GET YOUR TASKS TOGETHER NOW";
     }
     return ($uhOhCounter -eq 0);
 }

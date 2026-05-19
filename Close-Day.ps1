@@ -30,15 +30,15 @@ function Close-Day {
         $outputDirectory = $script:Settings.OutputDirectory;
     }
     if ([string]::IsNullOrEmpty($mdToPdfCmd)) {
-        Write-Host "COPY $reportFileName ====> $outputDirectory";
+        Write-PSHost "COPY $reportFileName ====> $outputDirectory";
         Copy-Item -$reportFilePath -Destination (Join-Path $outputDirectory -ChildPath $reportFileName) -Force;
     } else {
         $outputFileName = $reportFileName.Replace(".md", ".pdf");
         $outputFilePath = Join-Path -Path $outputDirectory -ChildPath $outputFileName;
         $outputCommand = $mdToPdfCmd.Replace("#{input}#", "`"$reportFilePath`"").Replace("#{output}#", "`"$outputFilePath`"");
-        Write-Host "> $outputCommand";
+        Write-PSHost "> $outputCommand";
         Invoke-Expression -Command $outputCommand | Out-Null;
-        Write-Host "$outputFileName written to '$outputDirectory'";
+        Write-PSHost "$outputFileName written to '$outputDirectory'";
     }    
 }
 Set-Alias -Name CloseDay -Value Close-Day;

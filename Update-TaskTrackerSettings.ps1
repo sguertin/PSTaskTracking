@@ -7,16 +7,15 @@ function Update-TaskTrackerSettings {
     $originalSettings = Get-TaskTrackerSettings;
     
     Write-Verbose ("Original Settings:`n" + (ConvertTo-Json $originalSettings) + "`n");
-    $settingsFilePath = Get-TaskTrackerSettingsPath;
     Start-Sleep 1;    
-    & $script:Settings.Editor $settingsFilePath;
+    & $script:Settings.Editor $script:SettingsFile;
 
     Start-Sleep 1;    
     $newSettings = Get-TaskTrackerSettings;
     Write-Verbose ("New Settings:`n" + (ConvertTo-Json $newSettings) + "`n");
 
     if ($editors.Contains($newSettings.Editor) -eq $false) {
-        Write-Warning  "'" + $newSettings.Editor + "' is not a known editor!"
+        Write-PSWarning  "'" + $newSettings.Editor + "' is not a known editor!"
     }
     $valid = (Assert-ValidTime -Hour $newSettings.Morning.Hour -Minute $newSettings.Morning.Minute -Label "Morning") -and `
     (Assert-ValidTime -Hour $newSettings.Midday.Hour -Minute $newSettings.Midday.Minute -Label "Midday") -and `
@@ -31,25 +30,25 @@ function Update-TaskTrackerSettings {
         $middayTime = $newSettings.Midday.Hour.ToString("00") + ":" + $newSettings.Midday.Minute.ToString("00");
         $reportTime = $newSettings.Report.Hour.ToString("00") + ":" + $newSettings.Report.Minute.ToString("00");
         if ($morningGap -lt 1.0) {
-            Write-Error ("Midday Time: $middayTime needs to be at least an hour after Morning Time: $morningTime, Current Gap: $morningGap hours");
+            Write-PSHost ("Midday Time: $middayTime needs to be at least an hour after Morning Time: $morningTime, Current Gap: $morningGap hours") -ForegroundColor Red;
             $valid = $false;
         }
         if ($middayGap -lt 1.0) {
-            Write-Error ("EndOfDay Time: $middayTime needs to be at least an hour after Midday Time: $middayTime, Current Gap: $middayGap hours");
+            Write-PSHost ("EndOfDay Time: $middayTime needs to be at least an hour after Midday Time: $middayTime, Current Gap: $middayGap hours") -ForegroundColor Red;
             $valid = $false;
         }
         if ($endOfDayGap -lt 0.25) {
-            Write-Error ("Report Time: $reportTime needs to be at least fifteen minutes after EndOfDay Time: $endOfDayTime, Current Gap: $endOfDayGap hours");
+            Write-PSHost ("Report Time: $reportTime needs to be at least fifteen minutes after EndOfDay Time: $endOfDayTime, Current Gap: $endOfDayGap hours") -ForegroundColor Red;
             $valid = $false;
         }
     }
     if ($Rollback -or ($valid -eq $false)) {
-        Write-Warning "No changes were committed to settings."
-        Set-Content -Path $settingsFilePath -Value $originalSettings;
+        Write-PSWarning "No changes were committed to settings."
+        Set-Content -Path $script:SettingsFile -Value (ConvertTo-Json $originalSettings);
         return;
     } else {
         $newSettings = ConvertTo-Json $newSettings;
-        Set-Content -Path $settingsFilePath -Value $newSettings;
+        Set-Content -Path $script:SettingsFile -Value (ConvertTo-Json $newSettings);
         Sync-TaskTrackerSettings;
     }
 }
