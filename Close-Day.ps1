@@ -21,14 +21,11 @@ function Close-Day {
     }
     $reportFilePath = $reportFile.FullName;
     $reportFileName = $reportFile.Name;
-    & $script:Settings.Editor $reportFilePath;
+    Invoke-TextEditor -Path $reportFilePath;
     $mdToPdfCmd = $script:Settings.MarkdownToPdfCommand;
-    
-    if ([string]::IsNullOrEmpty($script:Settings.OutputDirectory)) {        
-        $outputDirectory = $script:TaskFolder;
-    } else {
-        $outputDirectory = $script:Settings.OutputDirectory;
-    }
+    $outputDirectory = [string]::IsNullOrEmpty($script:Settings.OutputDirectory) ?`
+        $script:TaskFolder : $script:Settings.OutputDirectory;
+
     if ([string]::IsNullOrEmpty($mdToPdfCmd)) {
         Write-PSHost "COPY $reportFileName ====> $outputDirectory";
         Copy-Item -$reportFilePath -Destination (Join-Path $outputDirectory -ChildPath $reportFileName) -Force;

@@ -34,5 +34,5 @@ function Start-TaskList {
             Set-Content $taskFilePath -Value $content
         }
     }
-    & $script:Settings.Editor $taskFilePath;
+    Invoke-TextEditor -Path $taskFilePath;
 }

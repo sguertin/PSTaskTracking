@@ -4,6 +4,7 @@ function Get-DefaultTaskTrackerSettings {
 
     return @{
         Editor               = "micro";
+        EditorCommand        = "& `"#{Editor}#`" `"#{Path}#`"";
         Morning              = @{
             Hour   = 0;
             Minute = 0;
@@ -20,7 +21,8 @@ function Get-DefaultTaskTrackerSettings {
             Hour   = 15;
             Minute = 30;
         };
-        MarkdownToPdfCommand = "pandoc #{input}# -o #{output}# --template eisvogel";
+        MarkdownToPdfCommand = "pandoc `"#{input}#`" -o `"#{output}#`" --template eisvogel";
         OutputDirectory      = "";
+        TicketUrl            = "";
     };
 }

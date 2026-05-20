@@ -3,33 +3,30 @@ function Update-TaskTrackerSettings {
     param(
         [switch]$Rollback
     )
-    $originalSettings = Get-TaskTrackerSettings | ConvertTo-Json;    
-    Set-Content -Path $script:TempSettingsFile -Value $originalSettings;
-
-    Write-Verbose ("Original Settings:`n$originalSettings`n");
+    $currentSettings = $script:Settings | ConvertTo-Json;
+    Set-Content -Path $script:TempSettingsFile -Value $currentSettings;
+    Write-Verbose ("Original Settings:`n$currentSettings`n");
     Start-Sleep 1;
-
-    & $script:Settings.Editor $script:TempSettingsFile;
-
+    Invoke-TextEditor -Path $script:TempSettingsFile;
     Start-Sleep 1;
     try {
         $newSettings = Get-Content $script:TempSettingsFile -Raw | ConvertFrom-Json -ErrorAction Stop;
     } catch {
         Write-PSError "The new settings file is invalid JSON!";
+        Remove-Item $script:TempSettingsFile;
         return;
     }
     $editors = @("nano", "micro", "vim", "spacevim", "emacs", "astrovim", "nvim", "neovim");
-    $valid = $true;    
     Write-Verbose ("New Settings:`n" + (ConvertTo-Json $newSettings) + "`n");
 
     if ($editors.Contains($newSettings.Editor) -eq $false) {
         Write-PSWarning  ("`"" + $newSettings.Editor + "`" is not a known terminal editor!")
     }
-    $valid = (Assert-ValidTime $newSettings.Morning.Hour $newSettings.Morning.Minute "Morning") -and `
+    $validTime = (Assert-ValidTime $newSettings.Morning.Hour $newSettings.Morning.Minute "Morning") -and `
     (Assert-ValidTime $newSettings.Midday.Hour $newSettings.Midday.Minute "Midday") -and `
     (Assert-ValidTime $newSettings.EndOfDay.Hour $newSettings.EndOfDay.Minute "EndOfDay") -and `
     (Assert-ValidTime $newSettings.Report.Hour $newSettings.Report.Minute "Report");
-    if ($valid) {
+    if ($validTime) {
         $morningGap = ConvertTo-TimeValue $newSettings.Midday.Hour $newSettings.Midday.Minute `
             - ConvertTo-TimeValue $newSettings.Morning.Hour $newSettings.Morning.Minute;
         $middayGap = ConvertTo-TimeValue $newSettings.EndOfDay.Hour $newSettings.EndOfDay.Minute `
@@ -42,28 +39,29 @@ function Update-TaskTrackerSettings {
         $reportTime = $newSettings.Report.Hour.ToString("00") + ":" + $newSettings.Report.Minute.ToString("00");
         if ($morningGap -lt 1.0) {
             Write-PSError ("Midday Time: $middayTime needs to be at least an hour after Morning Time: $morningTime, Current Gap: $morningGap hours");
-            $valid = $false;
+            $validTime = $false;
         }
         if ($middayGap -lt 1.0) {
             Write-PSError ("EndOfDay Time: $middayTime needs to be at least an hour after Midday Time: $middayTime, Current Gap: $middayGap hours");
-            $valid = $false;
+            $validTime = $false;
         }
         if ($endOfDayGap -lt 0.25) {
             Write-PSError ("Report Time: $reportTime needs to be at least fifteen minutes after EndOfDay Time: $endOfDayTime, Current Gap: $endOfDayGap hours");
-            $valid = $false;
+            $validTime = $false;
         }
     }
-    if ([string]::IsNullOrEmpty($newSettings.OutputDirectory) -eq $false) {
-        if ((Test-Path -Path $newSettings.OutputDirectory -IsValid) -eq $false) {
-            Write-PSError ("Output Directory: " + $newSettings.OutputDirectory + " is not a valid file path!");
-            $valid = $false;
-        }
+    if ([string]::IsNullOrEmpty($newSettings.OutputDirectory) `
+            -or (Test-Path -Path $newSettings.OutputDirectory -IsValid)) {
+        $validOutputDirectory = $true;
+    } else {
+        $validOutputDirectory = $false;
+        Write-PSError ("Output Directory: " + $newSettings.OutputDirectory + " is not a valid file path!");
     }
-    if ($Rollback -or ($valid -eq $false)) {
-        Write-PSWarning "No changes were committed to settings."
-        return;
+    if ($Rollback -or ($validTime -eq $false) -or ($validOutputDirectory -eq $false)) {
+        Write-PSWarning "No changes were committed to settings.";
     } else {
         Set-Content -Path $script:SettingsFile -Value (Get-Content $script:TempSettingsFile -Raw);
         Sync-TaskTrackerSettings | Out-Null;
     }
+    Remove-Item $script:TempSettingsFile;
 }
