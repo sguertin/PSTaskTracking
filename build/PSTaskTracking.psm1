@@ -18,6 +18,7 @@ $script:ArchiveFolder = Join-Path $script:TaskFolder -ChildPath "archive";
 $script:RemindersFolder = Join-Path $script:TaskFolder -ChildPath "reminders";
 $script:ClosedFolder = Join-Path $script:RemindersFolder -ChildPath "closed";
 $script:SettingsFile = Join-Path $script:TaskFolder -ChildPath "settings.json";
+$script:TempSettingsFile = Join-Path $env:TEMP -ChildPath "settings.json";
 
 #{ModuleContent}#
 
@@ -62,11 +63,9 @@ if (Test-Missing (Join-Path $script:TemplatesFolder -ChildPath "WorkLog.md")) {
     Write-Host "Created base work log task, you can edit the task with the command 'Edit-Task WorkLog'. ";
 }
 
-if (Test-Path $script:RemindersFolder) {
-    if (Test-Missing $script:ClosedFolder) {
-        New-Item $script:ClosedFolder -ItemType Directory -Force | Out-Null;
-    } 
-} else {        
+if (Test-Missing $script:RemindersFolder) {
     New-Item $script:RemindersFolder -ItemType Directory | Out-Null;        
-    New-Item $script:ClosedFolder -ItemType Directory | Out-Null;
-}
+    New-Item $script:ClosedFolder -ItemType Directory | Out-Null;    
+} elseif (Test-Missing $script:ClosedFolder) {
+    New-Item $script:ClosedFolder -ItemType Directory -Force | Out-Null;
+} 

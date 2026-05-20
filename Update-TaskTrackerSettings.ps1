@@ -3,25 +3,23 @@ function Update-TaskTrackerSettings {
     param(
         [switch]$Rollback
     )
+    $originalSettings = Get-TaskTrackerSettings | ConvertTo-Json;    
+    Set-Content -Path $script:TempSettingsFile -Value $originalSettings;
 
-    $editors = @("nano", "micro", "vim", "spacevim", "emacs", "astrovim", "nvim", "neovim");
-    $valid = $true;
-    $originalSettings = Get-TaskTrackerSettings;
-
-    Write-Verbose ("Original Settings:`n" + (ConvertTo-Json $originalSettings) + "`n");
+    Write-Verbose ("Original Settings:`n$originalSettings`n");
     Start-Sleep 1;
 
-    & $script:Settings.Editor $script:SettingsFile;
+    & $script:Settings.Editor $script:TempSettingsFile;
 
     Start-Sleep 1;
     try {
-        $newSettings = Get-Content $script:SettingsFile -Raw | ConvertFrom-Json -ErrorAction Stop;
+        $newSettings = Get-Content $script:TempSettingsFile -Raw | ConvertFrom-Json -ErrorAction Stop;
     } catch {
-        Write-PSError "The new settings file is invalid JSON! Reverting...";
-        Set-Content -Path $script:SettingsFile -Value (ConvertTo-Json $originalSettings);
+        Write-PSError "The new settings file is invalid JSON!";
         return;
     }
-
+    $editors = @("nano", "micro", "vim", "spacevim", "emacs", "astrovim", "nvim", "neovim");
+    $valid = $true;    
     Write-Verbose ("New Settings:`n" + (ConvertTo-Json $newSettings) + "`n");
 
     if ($editors.Contains($newSettings.Editor) -eq $false) {
@@ -63,11 +61,9 @@ function Update-TaskTrackerSettings {
     }
     if ($Rollback -or ($valid -eq $false)) {
         Write-PSWarning "No changes were committed to settings."
-        Set-Content -Path $script:SettingsFile -Value (ConvertTo-Json $originalSettings);
         return;
     } else {
-        $content = ConvertTo-Json $newSettings;
-        Set-Content -Path $script:SettingsFile -Value $content;
+        Set-Content -Path $script:SettingsFile -Value (Get-Content $script:TempSettingsFile -Raw);
         Sync-TaskTrackerSettings | Out-Null;
     }
 }
