@@ -1,11 +1,11 @@
 function Assert-ValidTime {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, Position = 1)]
         [int]$Hour,
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, Position = 2)]
         [int]$Minute,
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, Position = 3)]
         [string]$Label
     )
 
