@@ -57,15 +57,15 @@ if (Test-Missing (Join-Path $script:TemplatesFolder -ChildPath "EndOfDay.md")) {
     Write-PSHost "Created empty end of day task list. You can edit the list with Edit-EndOfDayTaskListTemplate.";
 }
 
-if (Test-Missing (Join-Path $script:TemplatesFolder -ChildPath "WorkLog.md")) {
-    New-Item (Join-Path $script:TemplatesFolder -ChildPath "WorkLog.md") -ItemType File `
-        -Value "## Work Log #{Name}# - #{DateTimeStamp}#`n`n#{Ticket}##{Time}#`n`n";
-    Write-Host "Created base work log task, you can edit the task with the command 'Edit-Task WorkLog'. ";
-}
+# if (Test-Missing (Join-Path $script:TemplatesFolder -ChildPath "WorkLog.md")) {
+#     New-Item (Join-Path $script:TemplatesFolder -ChildPath "WorkLog.md") -ItemType File `
+#         -Value "## Work Log #{Name}# - #{DateTimeStamp}#`n`n#{Ticket}##{Time}#`n`n";
+#     Write-Host "Created base work log task, you can edit the task with the command 'Edit-WorkLog'. ";
+# }
 
 if (Test-Missing $script:RemindersFolder) {
     New-Item $script:RemindersFolder -ItemType Directory | Out-Null;        
     New-Item $script:ClosedFolder -ItemType Directory | Out-Null;    
 } elseif (Test-Missing $script:ClosedFolder) {
     New-Item $script:ClosedFolder -ItemType Directory -Force | Out-Null;
-} 
+}
