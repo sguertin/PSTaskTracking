@@ -3,15 +3,16 @@
     "ProjectId": "2b006b41-ad23-496b-963e-3e3409effae6",
     "FunctionsToExclude": [
         "Assert-ValidTime",
+        "ConvertTo-TimeValue",
         "Edit-TaskListTemplate",
         "Get-DefaultTaskTrackSettings",
         "Get-ReminderFilePath",
-        "Measure-TimeGap",
         "Resolve-Tokens",
         "Start-TaskList",
         "Test-EmptyString",
-        "Write-PSHost",
+        "Test-Missing",
         "Write-PSError",
+        "Write-PSHost",
         "Write-PSWarning"
     ]
 }

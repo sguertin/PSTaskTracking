@@ -36,7 +36,7 @@ if ($continue) {
         }
     }
     $moduleContent = Get-Content (Join-Path "build" -ChildPath "PSTaskTracking.psm1") -Raw;
-    $moduleContent = $moduleContent.Replace("#{ModuleContent}#", $content);
+    $moduleContent = $moduleContent.Replace("#{ModuleContent}#", $content).Replace("#{ModuleVersion}#", $buildSettings.ModuleVersion);
     $moduleOutputPath = Join-Path $outputDirectory -ChildPath "PSTaskTracking.psm1";
     $manifestOutputPath = Join-Path $outputDirectory -ChildPath "PSTaskTracking.psd1";
     $User = $env:USERNAME;
@@ -45,6 +45,6 @@ if ($continue) {
     }
     New-Item -Path $moduleOutputPath -ItemType File -Value $moduleContent -Force | Out-Null;
     New-ModuleManifest -Path $manifestOutputPath -Guid $buildSettings.ProjectId -ModuleVersion $buildSettings.ModuleVersion;
-    Update-ModuleManifest -Path $manifestOutputPath -RootModule "PSTaskTracking.psm1" -FunctionsToExport $functions -AliasesToExport $aliases -VariablesToExport @("PSTaskTrackerName");
+    Update-ModuleManifest -Path $manifestOutputPath -RootModule "PSTaskTracking.psm1" -FunctionsToExport $functions -AliasesToExport $aliases -VariablesToExport @("PSTaskTrackingVersion");
     Compress-Archive -Path $outputDirectory -CompressionLevel Optimal -DestinationPath $zipFile;
 }

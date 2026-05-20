@@ -1,0 +1,14 @@
+function Test-Missing {
+    param(
+        [Parameter(Mandatory, ParameterSetName = "Pipe", ValueFromPipeline = $true)]
+        [System.IO.FileInfo]$Object,
+        [Parameter(Mandatory, ParameterSetName = "String")]
+        [string]$Path
+    )    
+    process {
+        if ($PSCmdlet.ParameterSetName -eq "Pipe") {
+            $Path = $Object.FullName;
+        } 
+        return (Test-Path -Path $Path) -eq $false;
+    }
+}

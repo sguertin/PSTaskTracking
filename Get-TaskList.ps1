@@ -44,7 +44,7 @@ function Get-TaskList {
     if (Test-Path $archivedFile) {
         return Get-Item -Path $archivedFile;
     }
-    if ((Test-Path $taskFile) -eq $false) {
+    if (Test-Missing $taskFile) {
         if ($TaskList -eq "Summary") {
             Write-Verbose "Summary report for $timestamp cannot be found."
             return $taskFile;
