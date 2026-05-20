@@ -1,5 +1,8 @@
-##### PSTaskTracking Module
-# Constants
+#####
+# PSTaskTracking Module V#{ModuleVersion}#
+#
+## Constants
+
 $PSTaskTrackingVersion = "#{ModuleVersion}#";
 
 $script:Version = $PSTaskTrackingVersion;
@@ -20,8 +23,13 @@ $script:ClosedFolder = Join-Path $script:RemindersFolder -ChildPath "closed";
 $script:SettingsFile = Join-Path $script:TaskFolder -ChildPath "settings.json";
 $script:TempSettingsFile = Join-Path $env:TEMP -ChildPath "settings.json";
 
+### End of Constants
+
 #{ModuleContent}#
 
+### Module Initialization
+
+$script:DefaultSettings = Get-DefaultTaskTrackerSettings;
 if (Test-Missing $script:SettingsFile) {
     $script:Settings = Reset-TaskTrackerSettings;
 } else {
@@ -69,3 +77,4 @@ if (Test-Missing $script:RemindersFolder) {
 } elseif (Test-Missing $script:ClosedFolder) {
     New-Item $script:ClosedFolder -ItemType Directory -Force | Out-Null;
 }
+
