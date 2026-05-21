@@ -2,7 +2,7 @@
 # PSTaskTracking Module V#{ModuleVersion}#
 #
 ## Constants
-
+$script:ApplicationName = "PSTaskTracking";
 $PSTaskTrackingVersion = "#{ModuleVersion}#";
 
 $script:Version = $PSTaskTrackingVersion;
@@ -12,9 +12,9 @@ $script:DateString = "G";
 
 if ([string]::IsNullOrEmpty($env:LOCALAPPDATA)) {
     $script:TaskFolder = Join-Path -Path $env:HOME `
-        -ChildPath ".local" -AdditionalChildPath @("PSTaskTracking");
+        -ChildPath ".local" -AdditionalChildPath @($script:ApplicationName);
 } else {
-    $script:TaskFolder = Join-Path ($env:LOCALAPPDATA) -ChildPath "PSTaskTracking";
+    $script:TaskFolder = Join-Path ($env:LOCALAPPDATA) -ChildPath $script:ApplicationName;
 }
 $script:TemplatesFolder = Join-Path $script:TaskFolder -ChildPath "templates";
 $script:ArchiveFolder = Join-Path $script:TaskFolder -ChildPath "archive";
@@ -65,11 +65,11 @@ if (Test-Missing (Join-Path $script:TemplatesFolder -ChildPath "EndOfDay.md")) {
     Write-PSHost "Created empty end of day task list. You can edit the list with Edit-EndOfDayTaskListTemplate.";
 }
 
-# if (Test-Missing (Join-Path $script:TemplatesFolder -ChildPath "WorkLog.md")) {
-#     New-Item (Join-Path $script:TemplatesFolder -ChildPath "WorkLog.md") -ItemType File `
-#         -Value "## Work Log #{Name}# - #{DateTimeStamp}#`n`n#{Ticket}##{Time}#`n`n";
-#     Write-Host "Created base work log task, you can edit the task with the command 'Edit-WorkLog'. ";
-# }
+if (Test-Missing (Join-Path $script:TemplatesFolder -ChildPath "WorkLog.md")) {
+    New-Item (Join-Path $script:TemplatesFolder -ChildPath "WorkLog.md") -ItemType File `
+        -Value "## Work Log #{Name}# - #{DateTimeStamp}#`n`n#{Ticket}##{Time}#`n`n";
+    Write-Host "Created base work log task, you can edit the task with the command 'Edit-WorkLog'. ";
+}
 
 if (Test-Missing $script:RemindersFolder) {
     New-Item $script:RemindersFolder -ItemType Directory | Out-Null;        
