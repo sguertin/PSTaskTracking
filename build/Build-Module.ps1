@@ -11,8 +11,8 @@ while (!$sourceDirectory.ToString().EndsWith("PSTaskTracking")) {
 }
 if ($continue) {
     $buildSettings = Get-Content (Join-Path "build" -ChildPath "build.json" ) -Raw | ConvertFrom-Json;
-    $outputDirectory = Join-Path $PWD -ChildPath "Module" -AdditionalChildPath @("PSTaskTracking");
-    $zipFile = Join-Path $PWD -ChildPath "Module" -AdditionalChildPath @("PSTaskTracking");
+    
+    $outputDirectory = Join-Path $PWD -ChildPath "build" -AdditionalChildPath @("output", "PSTaskTracking");
     $content = "";
     $functions = @();
     $aliases = @();
@@ -20,8 +20,8 @@ if ($continue) {
         Remove-Item $outputDirectory -Recurse -Force;
     }
 
-    if (Test-Path "$zipFile.zip") {
-        Remove-Item "$zipFile.zip" -Force;
+    if (Test-Path "$outputDirectory.zip") {
+        Remove-Item "$outputDirectory.zip" -Force;
     }
     New-Item $outputDirectory -ItemType Directory -Force | Out-Null;
     foreach ($file in Get-ChildItem -Path $sourceDirectory -File -Filter "*.ps1") {
@@ -44,7 +44,9 @@ if ($continue) {
         $User = $env:USER;
     }
     New-Item -Path $moduleOutputPath -ItemType File -Value $moduleContent -Force | Out-Null;
-    New-ModuleManifest -Path $manifestOutputPath -Guid $buildSettings.ProjectId -ModuleVersion $buildSettings.ModuleVersion;
-    Update-ModuleManifest -Path $manifestOutputPath -RootModule "PSTaskTracking.psm1" -FunctionsToExport $functions -AliasesToExport $aliases -VariablesToExport @("PSTaskTrackingVersion");
-    Compress-Archive -Path $outputDirectory -CompressionLevel Optimal -DestinationPath $zipFile;
+    New-ModuleManifest -Path $manifestOutputPath -Guid $buildSettings.ProjectId `
+    -ModuleVersion $buildSettings.ModuleVersion;
+    Update-ModuleManifest -Path $manifestOutputPath -RootModule "PSTaskTracking.psm1" `
+    -FunctionsToExport $functions -AliasesToExport $aliases -VariablesToExport @("PSTaskTrackingVersion");
+    Compress-Archive -Path $outputDirectory -CompressionLevel Optimal -DestinationPath $outputDirectory | Out-Null;
 }

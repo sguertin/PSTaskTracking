@@ -1,4 +1,4 @@
 .vscode/
 PSTaskTracking/
 PSTaskTracking.zip
-Module/
+build/output
