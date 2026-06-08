@@ -1,8 +1,8 @@
 function Test-Missing {
     param(
-        [Parameter(Mandatory, ParameterSetName = "Pipe", ValueFromPipeline = $true)]
+        [Parameter(Mandatory, ParameterSetName = "Pipe", Position = 1, ValueFromPipeline = $true)]
         [System.IO.FileInfo]$Object,
-        [Parameter(Mandatory, ParameterSetName = "String")]
+        [Parameter(Mandatory, ParameterSetName = "String", Position = 1)]
         [string]$Path
     )    
     process {

@@ -8,7 +8,7 @@ function Start-Task {
     )
     $timestamp = $Date.ToString($script:DateStamp)
     $templatePath = Join-Path $script:TemplatesFolder -ChildPath "$Name.md";
-    if (Test-Missing $templatePath) {
+    if (Test-Missing -Path $templatePath) {
         Write-PSError "Could not find template for task $Name!"
     }
     $DefaultData = @{ Name = $Name; $DateTimeStamp = $Date.ToString($script:DateTimeStamp); };

@@ -5,7 +5,7 @@ function New-Task {
         [string]$Name
     )
     $taskFilePath = Join-Path $script:TemplatesFolder -ChildPath "$Name.md";    
-    if (Test-Missing $taskFilePath) {
+    if (Test-Missing -Path $taskFilePath) {
         $content = "## $Name - #{DateTimeStamp}# `n`n1. Do the task.`n  - `n";    
         New-Item -Path $taskFilePath -ItemType File -Value $content | Out-Null;
     }
