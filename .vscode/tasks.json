@@ -1,0 +1,42 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "/usr/bin/pwsh",
+            "args": [
+                "-File", 
+                "\"${workspaceFolder}/build/Build-Module.ps1\"",
+                "-NoProfile"
+            ],
+            "windows": {
+                "command": "${workspaceFolder}\\build\\Build-Module.ps1",
+                "options": {
+                    "shell": {
+                        "executable": "pwsh"
+                    }
+                }
+            }
+        },
+        {
+            "label": "Deploy",
+            "type": "shell",            
+            "command": "cp -r \"${workspaceFolder}/build/output/PSTaskTracking\" \"${userHome}/PowerShell/Modules\"",
+            "windows": {
+                "options": {
+                    "shell": {
+                        "executable": "pwsh"
+                    }
+                },
+                "args": [
+                    "-Command",
+                    "\"Copy-Item -Path `\"${workspaceFolder}\\build\\output\\PSTaskTracking`\" -Destination `\"${userHome}\\PowerShell\\Modules`\" \""
+                ],
+                "command": "-c 'Copy-Item -Path \"${workspaceFolder}\\build\\output\\PSTaskTracking\" -Destination \"${userHome}\\PowerShell\\Modules\"'"
+            } 
+        }
+    ]
+}
