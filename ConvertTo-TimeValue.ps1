@@ -6,5 +6,5 @@ function ConvertTo-TimeValue {
         [Parameter(Mandatory, Position = 2)]
         [int]$Minute
     )
-    return $Hour + ($Minute / 60);
+    return ($Hour + ($Minute / 60));
 }

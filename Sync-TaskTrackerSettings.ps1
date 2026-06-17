@@ -10,10 +10,6 @@ function Sync-TaskTrackerSettings {
     if ([string]::IsNullOrEmpty($script:Settings.TicketUrl) -eq $false) {
         $script:TicketUrl = $script:Settings.TicketUrl;
     }
-    foreach ($key in $script:DefaultSettings.Keys) {
-        if (!$script:Settings.ContainsKey($key)) {
-            $script:Settings[$key] = $defaultSettings[$key]
-        }
-    }
+
     return $script:Settings;
 }

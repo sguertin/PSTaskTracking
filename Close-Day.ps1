@@ -23,8 +23,12 @@ function Close-Day {
     $reportFileName = $reportFile.Name;
     Invoke-TextEditor -Path $reportFilePath;
     $mdToPdfCmd = $script:Settings.MarkdownToPdfCommand;
-    $outputDirectory = [string]::IsNullOrEmpty($script:Settings.OutputDirectory) ?`
-        $script:TaskFolder : $script:Settings.OutputDirectory;
+    
+    if ([string]::IsNullOrEmpty($script:Settings.OutputDirectory)) {
+        $outputDirectory = $script:TaskFolder 
+    } else {
+        $outputDirectory = $script:Settings.OutputDirectory;
+    }
 
     if ([string]::IsNullOrEmpty($mdToPdfCmd)) {
         Write-PSHost "COPY $reportFileName ====> $outputDirectory";
