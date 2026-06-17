@@ -1,7 +1,7 @@
-function Write-PSError {
+function Write-PSWarning {
     param(
         [string]$Text, 
-        [ConsoleColor]$PrefixForegroundColor = "Yellow"
+        [System.ConsoleColor]$PrefixForegroundColor = "Yellow"
     )
     Write-PSHost -Text $Text -PrefixForegroundColor $PrefixForegroundColor -ForegroundColor Yellow;
 }

@@ -7,7 +7,7 @@ function Write-PSHost {
         [ConsoleColor]$PrefixForegroundColor = "Yellow"
     )
     $timestamp = (Get-Date).ToString($script:DateTimeStamp);
-    Write-PSHost "[$timestamp][$PSTaskTrackerName] " -ForegroundColor $PrefixForegroundColor -NoNewLine;
+    Write-Host "[$timestamp][$ApplicationName] " -ForegroundColor $PrefixForegroundColor -NoNewLine;
 
-    Write-PSHost $Text -ForegroundColor $ForegroundColor;
+    Write-Host $Text -ForegroundColor $ForegroundColor;
 }
