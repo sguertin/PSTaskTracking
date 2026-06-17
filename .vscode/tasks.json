@@ -6,37 +6,54 @@
         {
             "label": "Build",
             "type": "shell",
-            "command": "/usr/bin/pwsh",
-            "args": [
-                "-File", 
-                "\"${workspaceFolder}/build/Build-Module.ps1\"",
-                "-NoProfile"
-            ],
+            "command": "${workspaceFolder}/build/Build-Module.ps1",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "shell": {
+                    "executable": "/usr/bin/pwsh",
+                    "args": [
+                        "-NoProfile"
+                    ]
+                }
+            },
             "windows": {
                 "command": "${workspaceFolder}\\build\\Build-Module.ps1",
                 "options": {
+                    "cwd": "${workspaceFolder}",
                     "shell": {
-                        "executable": "pwsh"
+                        "executable": "pwsh",
+                        "args": [
+                            "-NoProfile"
+                        ]
                     }
-                }
+                },                
             }
         },
         {
             "label": "Deploy",
-            "type": "shell",            
-            "command": "cp -r \"${workspaceFolder}/build/output/PSTaskTracking\" \"${userHome}/PowerShell/Modules\"",
+            "type": "shell",
+            "command": "${workspaceFolder}/build/Deploy-Module.ps1",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "shell": {
+                    "executable": "/usr/bin/pwsh",
+                    "args": [
+                        "-NoProfile"              
+                    ]
+                }
+            },
             "windows": {
+                "command": "${workspaceFolder}\\build\\Deploy-Module.ps1",
                 "options": {
+                    "cwd": "${workspaceFolder}",
                     "shell": {
-                        "executable": "pwsh"
+                        "executable": "pwsh",
+                        "args": [
+                            "-NoProfile"              
+                        ]
                     }
-                },
-                "args": [
-                    "-Command",
-                    "\"Copy-Item -Path `\"${workspaceFolder}\\build\\output\\PSTaskTracking`\" -Destination `\"${userHome}\\PowerShell\\Modules`\" \""
-                ],
-                "command": "-c 'Copy-Item -Path \"${workspaceFolder}\\build\\output\\PSTaskTracking\" -Destination \"${userHome}\\PowerShell\\Modules\"'"
-            } 
+                }                
+            }
         }
     ]
 }
