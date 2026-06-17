@@ -10,7 +10,7 @@ while (!$sourceDirectory.ToString().EndsWith("PSTaskTracking")) {
     }
 }
 if ($continue) {
-    $buildSettings = Get-Content (Join-Path "build" -ChildPath "build.json" ) -Raw | ConvertFrom-Json;
+    $buildSettings = Get-Content (Join-Path "build" -ChildPath "build.json" ) -Raw | ConvertFrom-Json -AsHashtable;
     
     $outputDirectory = Join-Path $PWD -ChildPath "build" -AdditionalChildPath @("output", "PSTaskTracking");
     $content = "";

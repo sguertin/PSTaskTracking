@@ -1,49 +1,79 @@
 #####
 # PSTaskTracking Module V#{ModuleVersion}#
 #
-## Constants
-$script:ApplicationName = "PSTaskTracking";
-$PSTaskTrackingVersion = "#{ModuleVersion}#";
-
-$script:Version = $PSTaskTrackingVersion;
-$script:DateStamp = "yyyy-MM-dd";
-$script:DateTimeStamp = "yyyy-MM-dd hh:mm";
-$script:DateString = "G";
-
-if ([string]::IsNullOrEmpty($env:LOCALAPPDATA)) {
-    $script:TaskFolder = Join-Path -Path $env:HOME `
-        -ChildPath ".local" -AdditionalChildPath @($script:ApplicationName);
-} else {
-    $script:TaskFolder = Join-Path ($env:LOCALAPPDATA) -ChildPath $script:ApplicationName;
-}
-$script:TemplatesFolder = Join-Path $script:TaskFolder -ChildPath "templates";
-$script:ArchiveFolder = Join-Path $script:TaskFolder -ChildPath "archive";
-$script:RemindersFolder = Join-Path $script:TaskFolder -ChildPath "reminders";
-$script:ClosedFolder = Join-Path $script:RemindersFolder -ChildPath "closed";
-$script:SettingsFile = Join-Path $script:TaskFolder -ChildPath "settings.json";
-$script:TempSettingsFile = Join-Path $env:TEMP -ChildPath "settings.json";
-
-### End of Constants
+# Functions
+Write-Verbose "Loading Functions ";
 
 #{ModuleContent}#
 
+# End of Functions
+## Constants
+Write-PSVerbose "Module Initialization Finished";
+Write-PSVerbose "Initialize Constants...";
+New-Variable -Name "ApplicationName" -Scope Script -Option Constant -Value "#{ApplicationName}#";
+New-Variable -Name "PSTaskTrackingVersion" -Option Constant -Value "#{ModuleVersion}#";
+New-Variable -Name "Version" -Scope Script -Option Constant -Value $PSTaskTrackingVersion;
+New-Variable -Name "DateStamp" -Scope Script -Option Constant -Value "yyyy-MM-dd";
+New-Variable -Name "DateTimeStamp" -Scope Script -Option Constant -Value "yyyy-MM-dd hh:mm";
+New-Variable -Name "DateString" -Scope Script -Option Constant -Value "G";
+if ($IsLinux) {
+    New-Variable -Name "TaskFolder" -Scope Script -Option Constant -Value (Join-Path -Path $HOME -ChildPath ".local" -AdditionalChildPath @($script:ApplicationName));
+    New-Variable -Name "TempFolder" -Scope Script -Option Constant -Value (Join-Path "/" -ChildPath "tmp");    
+} else {
+    New-Variable -Name "TaskFolder" -Scope Script -Option Constant -Value (Join-Path ($env:LOCALAPPDATA) -ChildPath $script:ApplicationName);
+    New-Variable -Name "TempFolder" -Scope Script -Option Constant -Value $env:Temp;
+}
+New-Variable -Name "TemplatesFolder" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "templates");
+New-Variable -Name "ArchiveFolder" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "archive");
+New-Variable -Name "RemindersFolder" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "reminders");
+New-Variable -Name "ClosedFolder" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "closed");
+New-Variable -Name "SettingsFile" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "settings.json");
+New-Variable -Name "TempSettingsFile" -Scope Script -Option Constant -Value (Join-Path $script:TempFolder -ChildPath "PSTaskTracker.settings.json");
+
+Write-PSVerbose "TaskFolder:`t $TaskFolder";
+Write-PSVerbose "TemplatesFolder:`t $TemplatesFolder";
+Write-PSVerbose "ArchiveFolder:`t $ArchiveFolder";
+Write-PSVerbose "RemindersFolder:`t $RemindersFolder";
+Write-PSVerbose "ClosedFolder:`t $ClosedFolder";
+Write-PSVerbose "SettingsFile:`t $SettingsFile";
+Write-PSVerbose "TempSettingsFile:`t$TempSettingsFile";
+
+New-Variable -Name "DefaultSettings" -Scope Script -Option Constant -Value (Get-DefaultTaskTrackerSettings);
+
+### End of Constants
+
 ### Module Initialization
 
-$script:DefaultSettings = Get-DefaultTaskTrackerSettings;
+Write-PSVerbose "Settings Initialization";
+
 if (Test-Missing -Path $script:SettingsFile) {
-    $script:Settings = Reset-TaskTrackerSettings;
+    Reset-TaskTrackerSettings;
 } else {
-    $script:Settings = Sync-TaskTrackerSettings;
+    Sync-TaskTrackerSettings;
 }
 
-if (Test-Missing -Path $script:TemplatesFolder) {    
+Write-PSVerbose "Directory Initialization";
+if (Test-Missing -Path $script:TemplatesFolder) {
+    Write-PSVerbose "Creating TemplatesFolder: $TemplatesFolder";
     New-Item $script:TemplatesFolder -ItemType Directory | Out-Null;
 }
 
 if (Test-Missing -Path $script:ArchiveFolder) {    
+    Write-PSVerbose "Creating ArchiveFolder: $ArchiveFolder";
     New-Item $script:ArchiveFolder -ItemType Directory | Out-Null;
 }
 
+if (Test-Missing -Path $script:RemindersFolder) {
+    Write-PSVerbose "Creating RemindersFolder: $RemindersFolder";
+    New-Item $script:RemindersFolder -ItemType Directory | Out-Null;
+} 
+
+if (Test-Missing -Path $script:ClosedFolder) {
+    Write-PSVerbose "Creating ClosedFolder: $ClosedFolder";
+    New-Item $script:ClosedFolder -ItemType Directory -Force | Out-Null;
+}
+
+Write-PSVerbose "Default files Initialization"
 if (Test-Missing -Path (Join-Path $script:TemplatesFolder -ChildPath "Morning.md")) {
     Write-PSHost "Creating default version of Morning Task list..."
     New-Item (Join-Path $script:TemplatesFolder -ChildPath "Morning.md") -ItemType File `
@@ -66,15 +96,8 @@ if (Test-Missing -Path (Join-Path $script:TemplatesFolder -ChildPath "EndOfDay.m
 }
 
 if (Test-Missing -Path (Join-Path $script:TemplatesFolder -ChildPath "WorkLog.md")) {
+    Write-PSHost "Creating base work log task...";
     New-Item (Join-Path $script:TemplatesFolder -ChildPath "WorkLog.md") -ItemType File `
-        -Value "## Work Log #{Name}# - #{DateTimeStamp}#`n`n#{Ticket}##{Time}#`n`n";
-    Write-Host "Created base work log task, you can edit the task with the command 'Edit-WorkLog'. ";
+        -Value "## Work Log #{Name}# - #{DateTimeStamp}#`n`n#{Ticket}##{Time}#`n`n" | Out-Null;
+    Write-PSHost "Created base work log task, you can edit the task with the command 'Edit-WorkLog'. ";
 }
-
-if (Test-Missing -Path $script:RemindersFolder) {
-    New-Item $script:RemindersFolder -ItemType Directory | Out-Null;        
-    New-Item $script:ClosedFolder -ItemType Directory | Out-Null;    
-} elseif (Test-Missing -Path $script:ClosedFolder) {
-    New-Item $script:ClosedFolder -ItemType Directory -Force | Out-Null;
-}
-
