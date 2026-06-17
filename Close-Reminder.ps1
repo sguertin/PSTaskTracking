@@ -46,7 +46,7 @@ function Close-Reminder {
         $File = Get-Item $filePath;        
     } 
     $resolution = (Read-Host "How was this reminder resolved?");    
-    $content = Get-Content $filePath -Raw | ConvertFrom-Json;
+    $content = Get-Content $filePath -Raw | ConvertFrom-Json -AsHashtable;
     $content = @{
         Id         = $content.Id
         Reminder   = $content.Reminder

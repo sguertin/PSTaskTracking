@@ -2,22 +2,24 @@ function Get-DefaultTaskTrackerSettings {
     [CmdletBinding()]
     param()
 
-    return @{
+    return [hashtable]@{
         Editor               = "micro";
         EditorCommand        = "& `"#{Editor}#`" `"#{Path}#`"";
-        Morning              = @{
+        EnableReminders      = $true;
+        EnableTaskLists      = $true;
+        Morning              = [hashtable]@{
             Hour   = 0;
             Minute = 0;
         };
-        Midday               = @{
+        Midday               = [hashtable]@{
             Hour   = 12;
             Minute = 0;
         };
-        EndOfDay             = @{
+        EndOfDay             = [hashtable]@{
             Hour   = 15;
             Minute = 0;
         };
-        Report               = @{
+        Report               = [hashtable]@{
             Hour   = 15;
             Minute = 30;
         };

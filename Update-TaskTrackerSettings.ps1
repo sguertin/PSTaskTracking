@@ -4,14 +4,18 @@ function Update-TaskTrackerSettings {
         [switch]$Rollback
     )
     $currentSettings = $script:Settings | ConvertTo-Json;
-    Set-Content -Path $script:TempSettingsFile -Value $currentSettings;
-    Write-Verbose ("Original Settings:`n$currentSettings`n");
+    if (Test-Path $script:TempSettingsFile) {
+        Set-Content -Path $script:TempSettingsFile -Value $currentSettings -NoNewLine | Out-Null;
+    } else {
+        New-Item -Path $script:TempSettingsFile -ItemType File -Value $currentSettings | Out-Null;
+    }
+    
     Write-PSVerbose ("Original Settings:`n$currentSettings`n");
     Start-Sleep 1;
     Invoke-TextEditor -Path $script:TempSettingsFile;
     Start-Sleep 1;
     try {
-        $newSettings = Get-Content $script:TempSettingsFile -Raw | ConvertFrom-Json -ErrorAction Stop;
+        $newSettings = Get-Content $script:TempSettingsFile -Raw | ConvertFrom-Json -AsHashtable -ErrorAction Stop;
     } catch {
         Write-PSError "The new settings file is invalid JSON!";
         Remove-Item $script:TempSettingsFile;
@@ -28,12 +32,12 @@ function Update-TaskTrackerSettings {
     (Assert-ValidTime $newSettings.EndOfDay.Hour $newSettings.EndOfDay.Minute "EndOfDay") -and `
     (Assert-ValidTime $newSettings.Report.Hour $newSettings.Report.Minute "Report");
     if ($validTime) {
-        $morningGap = ConvertTo-TimeValue $newSettings.Midday.Hour $newSettings.Midday.Minute `
-            - ConvertTo-TimeValue $newSettings.Morning.Hour $newSettings.Morning.Minute;
-        $middayGap = ConvertTo-TimeValue $newSettings.EndOfDay.Hour $newSettings.EndOfDay.Minute `
-            - ConvertTo-TimeValue $newSettings.Midday.Hour $newSettings.Midday.Minute;
-        $endOfDayGap = ConvertTo-TimeValue $newSettings.Report.Hour $newSettings.Report.Minute `
-            - ConvertTo-TimeValue $newSettings.EndOfDay.Hour $newSettings.EndOfDay.Minute;
+        $morningGap = (ConvertTo-TimeValue $newSettings.Midday.Hour $newSettings.Midday.Minute) `
+            - (ConvertTo-TimeValue $newSettings.Morning.Hour $newSettings.Morning.Minute);
+        $middayGap = (ConvertTo-TimeValue $newSettings.EndOfDay.Hour $newSettings.EndOfDay.Minute) `
+            - (ConvertTo-TimeValue $newSettings.Midday.Hour $newSettings.Midday.Minute);
+        $endOfDayGap = (ConvertTo-TimeValue $newSettings.Report.Hour $newSettings.Report.Minute) `
+            - (ConvertTo-TimeValue $newSettings.EndOfDay.Hour $newSettings.EndOfDay.Minute);
         $morningTime = $newSettings.Morning.Hour.ToString("00") + ":" + $newSettings.Morning.Minute.ToString("00");
         $endOfDayTime = $newSettings.EndOfDay.Hour.ToString("00") + ":" + $newSettings.EndOfDay.Minute.ToString("00");
         $middayTime = $newSettings.Midday.Hour.ToString("00") + ":" + $newSettings.Midday.Minute.ToString("00");

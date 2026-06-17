@@ -19,7 +19,7 @@ function Get-OverdueReminders {
     $today = Get-Date ((Get-Date).ToString($script:DateStamp));
     
     Get-ChildItem -Path $script:RemindersFolder -File | Get-Content -Raw `
-    | ConvertFrom-Json -ErrorAction Stop `
+    | ConvertFrom-Json -AsHashtable -ErrorAction Stop `
     | Where-Object Date -LT $today;
 }
 Set-Alias -Name overdue -Value Get-OverdueReminders;

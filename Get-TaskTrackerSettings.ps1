@@ -10,5 +10,5 @@ function Get-TaskTrackerSettings {
     [CmdletBinding()]
     param()
 
-    return Get-Content ($script:SettingsFile) | ConvertFrom-Json;
+    return Get-Content ($script:SettingsFile) | ConvertFrom-Json -AsHashtable;
 }
