@@ -26,7 +26,12 @@
                             "-NoProfile"
                         ]
                     }
-                },                
+                }
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
             }
         },
         {
@@ -38,7 +43,7 @@
                 "shell": {
                     "executable": "/usr/bin/pwsh",
                     "args": [
-                        "-NoProfile"              
+                        "-NoProfile"
                     ]
                 }
             },
@@ -49,10 +54,10 @@
                     "shell": {
                         "executable": "pwsh",
                         "args": [
-                            "-NoProfile"              
+                            "-NoProfile"
                         ]
                     }
-                }                
+                }
             }
         }
     ]
