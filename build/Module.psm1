@@ -1,5 +1,5 @@
 #####
-# PSTaskTracking Module V#{ModuleVersion}#
+# #{ApplicationName}# Module V#{ModuleVersion}#
 #
 # Functions
 Write-Verbose "Loading Functions ";
@@ -11,8 +11,8 @@ Write-Verbose "Loading Functions ";
 Write-PSVerbose "Module Initialization Finished";
 Write-PSVerbose "Initialize Constants...";
 New-Variable -Name "ApplicationName" -Scope Script -Option Constant -Value "#{ApplicationName}#";
-New-Variable -Name "PSTaskTrackingVersion" -Option Constant -Value "#{ModuleVersion}#";
-New-Variable -Name "Version" -Scope Script -Option Constant -Value $PSTaskTrackingVersion;
+New-Variable -Name "#{ApplicationName}#Version" -Option Constant -Value "#{ModuleVersion}#";
+New-Variable -Name "Version" -Scope Script -Option Constant -Value $#{ApplicationName}#Version;
 New-Variable -Name "DateStamp" -Scope Script -Option Constant -Value "yyyy-MM-dd";
 New-Variable -Name "DateTimeStamp" -Scope Script -Option Constant -Value "yyyy-MM-dd hh:mm";
 New-Variable -Name "DateString" -Scope Script -Option Constant -Value "G";

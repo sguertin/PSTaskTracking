@@ -18,6 +18,7 @@
             },
             "windows": {
                 "command": "${workspaceFolder}\\build\\Build-Module.ps1",
+                "args": [ "-Certificate", "Cert:\\CurrentUser\\My" ],
                 "options": {
                     "cwd": "${workspaceFolder}",
                     "shell": {
@@ -58,7 +59,8 @@
                         ]
                     }
                 }
-            }
+            },
+            "problemMatcher": []
         }
     ]
 }
