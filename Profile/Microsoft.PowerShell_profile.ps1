@@ -2,8 +2,7 @@ Import-Module PSTaskTracking;
 
 [scriptblock]$PrePrompt = {
     $realLASTEXITCODE = $LASTEXITCODE;
-    Test-Reminders -SilentAllClear;
-    Test-TaskLists;
+    Test-PSTaskTrackerStatus;
     $global:LASTEXITCODE = $realLASTEXITCODE;
 };
 [scriptblock]$HomePrompt = {};
