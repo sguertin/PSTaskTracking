@@ -6,6 +6,7 @@ function Update-TaskTrackerSettings {
     $currentSettings = $script:Settings | ConvertTo-Json;
     Set-Content -Path $script:TempSettingsFile -Value $currentSettings;
     Write-Verbose ("Original Settings:`n$currentSettings`n");
+    Write-PSVerbose ("Original Settings:`n$currentSettings`n");
     Start-Sleep 1;
     Invoke-TextEditor -Path $script:TempSettingsFile;
     Start-Sleep 1;
@@ -17,7 +18,7 @@ function Update-TaskTrackerSettings {
         return;
     }
     $editors = @("nano", "micro", "vim", "spacevim", "emacs", "astrovim", "nvim", "neovim");
-    Write-Verbose ("New Settings:`n" + (ConvertTo-Json $newSettings) + "`n");
+    Write-PSVerbose ("New Settings:`n" + (ConvertTo-Json $newSettings) + "`n");
 
     if ($editors.Contains($newSettings.Editor) -eq $false) {
         Write-PSWarning  ("`"" + $newSettings.Editor + "`" is not a known terminal editor!")

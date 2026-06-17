@@ -46,7 +46,7 @@ function Get-TaskList {
     }
     if (Test-Missing -File $taskFile) {
         if ($TaskList -eq "Summary") {
-            Write-Verbose "Summary report for $timestamp cannot be found."
+            Write-PSVerbose "Summary report for $timestamp cannot be found."
             return $taskFile;
         }
         if ($Prompt) {
