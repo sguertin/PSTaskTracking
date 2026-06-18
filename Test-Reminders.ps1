@@ -2,19 +2,19 @@ function Test-Reminders {
     <#
     .SYNOPSIS
     Provides warnings if reminders have not been done.
-    
+
     .DESCRIPTION
     Checks if reminders are still pending based on the time of day
-    
+
     .PARAMETER SilentAllClear
     Silence output for reminders being pending
-    
+
     .EXAMPLE
     Test-Reminders;
-    
+
     .NOTES
     Aliased as reminders
-    #> 
+    #>
     [CmdletBinding()]
     param(
         [switch]$SilentAllClear
@@ -26,7 +26,7 @@ function Test-Reminders {
         foreach ($reminder in $overdueReminders) {
             Write-PSError ("Id: " + $reminder.Id + ": [" + $reminder.Date.ToString($script:DateString) + "]" + $reminder.Reminder);
         }
-    } 
+    }
     $dueReminders = Get-Reminders | Where-Object Date -LT $now;
     if ($dueReminders.Count -gt 0) {
         Write-PSWarning ("You have " + $dueReminders.Count + " reminders that are due!");

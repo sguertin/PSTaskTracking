@@ -4,7 +4,7 @@
 # Functions
 Write-Verbose "Loading Functions ";
 
-#{ModuleContent}#
+#{FunctionContent}#
 
 # End of Functions
 ## Constants
@@ -16,12 +16,14 @@ New-Variable -Name "Version" -Scope Script -Option Constant -Value $#{Applicatio
 New-Variable -Name "DateStamp" -Scope Script -Option Constant -Value "yyyy-MM-dd";
 New-Variable -Name "DateTimeStamp" -Scope Script -Option Constant -Value "yyyy-MM-dd hh:mm";
 New-Variable -Name "DateString" -Scope Script -Option Constant -Value "G";
-if ($IsLinux) {
-    New-Variable -Name "TaskFolder" -Scope Script -Option Constant -Value (Join-Path -Path $HOME -ChildPath ".local" -AdditionalChildPath @($script:ApplicationName));
-    New-Variable -Name "TempFolder" -Scope Script -Option Constant -Value (Join-Path "/" -ChildPath "tmp");    
-} else {
-    New-Variable -Name "TaskFolder" -Scope Script -Option Constant -Value (Join-Path ($env:LOCALAPPDATA) -ChildPath $script:ApplicationName);
+if ($IsWindows) {
+    New-Variable -Name "TaskFolder" -Scope Script -Option Constant -Value `
+    (Join-Path ($env:LOCALAPPDATA) -ChildPath $script:ApplicationName);
     New-Variable -Name "TempFolder" -Scope Script -Option Constant -Value $env:Temp;
+} else {
+    New-Variable -Name "TaskFolder" -Scope Script -Option Constant -Value `
+    (Join-Path -Path $HOME -ChildPath ".local" -AdditionalChildPath @("share", $script:ApplicationName));
+    New-Variable -Name "TempFolder" -Scope Script -Option Constant -Value (Join-Path "/" -ChildPath "tmp");
 }
 New-Variable -Name "TemplatesFolder" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "templates");
 New-Variable -Name "ArchiveFolder" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "archive");
@@ -58,7 +60,7 @@ if (Test-Missing -Path $script:TemplatesFolder) {
     New-Item $script:TemplatesFolder -ItemType Directory | Out-Null;
 }
 
-if (Test-Missing -Path $script:ArchiveFolder) {    
+if (Test-Missing -Path $script:ArchiveFolder) {
     Write-PSVerbose "Creating ArchiveFolder: $ArchiveFolder";
     New-Item $script:ArchiveFolder -ItemType Directory | Out-Null;
 }
@@ -66,7 +68,7 @@ if (Test-Missing -Path $script:ArchiveFolder) {
 if (Test-Missing -Path $script:RemindersFolder) {
     Write-PSVerbose "Creating RemindersFolder: $RemindersFolder";
     New-Item $script:RemindersFolder -ItemType Directory | Out-Null;
-} 
+}
 
 if (Test-Missing -Path $script:ClosedFolder) {
     Write-PSVerbose "Creating ClosedFolder: $ClosedFolder";
@@ -79,16 +81,16 @@ if (Test-Missing -Path (Join-Path $script:TemplatesFolder -ChildPath "Morning.md
     New-Item (Join-Path $script:TemplatesFolder -ChildPath "Morning.md") -ItemType File `
         -Value "## Morning Task List`n`n1. Do your morning tasks`n" | Out-Null;
     Write-PSHost "Created empty morning task list list. You can edit the list with Edit-MorningTaskListTemplate.";
-} 
+}
 
-if (Test-Missing -Path (Join-Path $script:TemplatesFolder -ChildPath "Midday.md")) {    
+if (Test-Missing -Path (Join-Path $script:TemplatesFolder -ChildPath "Midday.md")) {
     Write-PSHost "Creating default version of Midday Task list..."
     New-Item (Join-Path $script:TemplatesFolder -ChildPath "Midday.md") -ItemType File `
         -Value "## Midday Task List`n`n1. Do your mid-day tasks`n" | Out-Null;
     Write-PSHost "Created empty midday task list. You can edit the list with Edit-MiddayTaskListTemplate.";
 }
 
-if (Test-Missing -Path (Join-Path $script:TemplatesFolder -ChildPath "EndOfDay.md")) {    
+if (Test-Missing -Path (Join-Path $script:TemplatesFolder -ChildPath "EndOfDay.md")) {
     Write-PSHost "Creating default version of End Of Day Task list..."
     New-Item (Join-Path $script:TemplatesFolder -ChildPath "EndOfDay.md") -ItemType File `
         -Value "## End of Day Task List`n`n1. Do your end of day tasks`n" | Out-Null;

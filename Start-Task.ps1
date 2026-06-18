@@ -9,7 +9,7 @@ function Start-Task {
     $timestamp = $Date.ToString($script:DateStamp)
     $templatePath = Join-Path $script:TemplatesFolder -ChildPath "$Name.md";
     if (Test-Missing -Path $templatePath) {
-        Write-PSError "Could not find template for task $Name!"
+        Write-PSError "Could not find template for task $Name!" -Command $MyInvocation.MyCommand;
     }
     $DefaultData = @{ Name = $Name; $DateTimeStamp = $Date.ToString($script:DateTimeStamp); };
     # By having the parameter data resolve first, ensures user supplied data always takes precedence over defaults.
@@ -18,7 +18,7 @@ function Start-Task {
     $taskFilePath = Join-Path $script:TaskFolder -ChildPath "$Name-$timestamp.$taskId.md";
 
     New-Item -Path $taskFilePath -ItemType File -Value $content;
-    
+
     Invoke-TextEditor -Path $taskFilePath;
 }
 Set-Alias -Name Task -Value Start-Task;

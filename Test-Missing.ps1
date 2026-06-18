@@ -4,11 +4,11 @@ function Test-Missing {
         [System.IO.FileInfo]$Object,
         [Parameter(Mandatory, ParameterSetName = "String", Position = 1)]
         [string]$Path
-    )    
+    )
     process {
         if ($PSCmdlet.ParameterSetName -eq "Pipe") {
             $Path = $Object.FullName;
-        } 
+        }
         return (Test-Path -Path $Path) -eq $false;
     }
 }

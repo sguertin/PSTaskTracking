@@ -2,14 +2,14 @@ function Reset-TaskTrackerSettings {
     <#
     .SYNOPSIS
     Reverts the TaskTrackerSettings to their defaults
-    
+
     .EXAMPLE
-    Reset-TaskTrackerSettings    
+    Reset-TaskTrackerSettings
     #>
     [CmdletBinding()]
     param()
-    
-    Write-PSHost "Restoring default settings..."
+
+    Write-PSHost "Restoring default settings..." -Command $MyInvocation.MyCommand
     if (Test-Missing $script:SettingsFile) {
         New-Item -Path $script:SettingsFile -ItemType File -Force;
     }

@@ -1,6 +1,6 @@
 function Backup-TaskTrackerSettings {
     [CmdletBinding()]
-    param()    
+    param()
     $backupId = (Get-ChildItem -Path $script:TaskFolder -File -Filter "settings.*.bak.json").Count + 1;
     $backupFilePath = Join-Path -Path $script:TaskFolder -ChildPath "settings.$backupId.bak.json";
     while (Test-Path $backupFilePath) {
@@ -9,5 +9,5 @@ function Backup-TaskTrackerSettings {
         $backupFilePath = Join-Path -Path $script:TaskFolder -ChildPath "settings.$backupId.bak.json";
     }
     Set-Content $backupFilePath -Value (ConvertTo-Json $script:Settings);
-    Write-PSVerbose "Backup created at '$backupFilePath'";    
+    Write-PSVerbose "Backup created at '$backupFilePath'";
 }

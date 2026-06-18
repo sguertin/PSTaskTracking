@@ -2,7 +2,7 @@ function Resolve-Tokens {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory, ValueFromPipeline = $true)]
-        [string]$Content,        
+        [string]$Content,
         [Parameter(Position = 1)]
         [string]$Token = "",
         [Parameter(Position = 2)]
@@ -11,24 +11,23 @@ function Resolve-Tokens {
         [hashtable]$Values = $null
     )
     begin {
+        $tokenKey = "";
         if ($Token.Trim() -ne "") {
-            $tokenValue = "#{$Token}#";
-        } else {
-            $tokenValue = "";
-        }       
+            $tokenKey = "#{$Token}#";
+        }
     }
     process {
         if ($null -eq $Values -and $Token -eq "") {
             return $Content;
         }
         if ($null -ne $Values) {
-            foreach ($key in $Values.keys) {
+            foreach ($key in $Values.Keys) {
                 $value = $Values[$key];
                 $Content = $Content.Replace("#{$key}#", $value);
             }
         }
         if ($Token -ne "") {
-            $Content = $Content.Replace($tokenValue, $Value);
+            $Content = $Content.Replace($tokenKey, $Value);
         }
         return $Content;
     }

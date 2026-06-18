@@ -2,17 +2,17 @@ function Edit-DayTaskList {
     <#
     .SYNOPSIS
     Creates or Edits an existing Day TaskList.
-    
+
     .DESCRIPTION
-    Creates a Day Task List for the specified DayOfWeek and TimeOfDay specified and then launches the text editor. 
+    Creates a Day Task List for the specified DayOfWeek and TimeOfDay specified and then launches the text editor.
     If a task list already exists for that day, the text editor is simply launched.
-    
+
     .PARAMETER DayOfWeek
     The day of the week for the task list (Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday)
-    
+
     .PARAMETER TimeOfDay
     The time of day, Morning, Midday, or EndOfDay, that this task list will be appended.
-    
+
     .EXAMPLE
     Edit-DayTaskList -DayOfWeek Sunday -TimeOfDay Midday;
 
@@ -30,7 +30,7 @@ function Edit-DayTaskList {
     $fileName = "$DayOfWeek.$TimeOfDay.md";
     $taskListPath = Join-Path -Path $script:TaskFolder -ChildPath $fileName;
     if (Test-Missing -Path $taskListPath) {
-        Write-PSHost "Creating $fileName..."
+        Write-PSHost "Creating $fileName..." -Command $MyInvocation.MyCommand
         New-Item $taskListPath -ItemType File;
     }
     Invoke-TextEditor -Path $taskListPath;

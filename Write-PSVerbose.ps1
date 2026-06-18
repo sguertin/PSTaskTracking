@@ -1,9 +1,15 @@
 function Write-PSVerbose {
+    [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
-        [string]$Text
+        [string]$Text,
+        [string]$Command = $null
     )
+
     $timestamp = (Get-Date).ToString($script:DateTimeStamp);
-    
-    Write-Verbose "[$timestamp][$ApplicationName] $Text";
+    $prefix = "[$timestamp][$ApplicationName]"
+    if ([string]::IsNullOrEmpty($Command) -eq $false) {
+        $prefix = "$prefix[$Command]"
+    }
+    Write-Verbose "$prefix $Text";
 }

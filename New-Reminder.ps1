@@ -1,38 +1,38 @@
 function New-Reminder {
     <#
     .SYNOPSIS
-    Creates a reminder 
-    
+    Creates a reminder
+
     .DESCRIPTION
     Creates a new reminder file in the reminders folder
-    
+
     .PARAMETER Reminder
     The text of the reminder i.e. what you want to be reminded to do.
-    
+
     .PARAMETER Date
     The date/time that you want to start being reminded for.
-    
+
     .PARAMETER Day
     If passed, reminder will be set to midnight of the date provided
-    
+
     .EXAMPLE
     New-Reminder "Remember to review your reminders!";
-    
+
     .NOTES
     Aliased as reminder
     #>
     [CmdletBinding()]
     param(
         [Parameter(Mandatory, Position = 1)][string]$Reminder,
-        [Parameter(Mandatory, Position = 2)][DateTime]$Date,    
+        [Parameter(Mandatory, Position = 2)][DateTime]$Date,
         [switch]$Day
     )
-    
+
     $timestamp = $Date.ToString($script:DateStamp)
     if ($Day -eq $true) {
         $Date = Get-Date $timestamp
     }
-    
+
     $id = 1;
     $content = @{
         Id         = $id
@@ -40,13 +40,14 @@ function New-Reminder {
         Date       = $Date
         Resolution = $null
     };
-    
-    $filePath = Join-Path -Path $script:RemindersFolder -ChildPath "reminder-$timestamp.$id.json";    
+
+    $filePath = Join-Path -Path $script:RemindersFolder -ChildPath "reminder-$timestamp.$id.json";
     while (Test-Path -Path $filePath) {
-        $id += 1;        
+        $id += 1;
         $content.Id = $id
-        $filePath = Join-Path -Path $script:RemindersFolder -ChildPath "reminder-$timestamp.$id.json";        
+        $filePath = Join-Path -Path $script:RemindersFolder -ChildPath "reminder-$timestamp.$id.json";
     }
+
     $content = $content | ConvertTo-Json;
     New-Item -Path $filePath -ItemType File -Value $content -Force | Out-Null;
 }

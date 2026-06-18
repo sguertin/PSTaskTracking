@@ -36,7 +36,6 @@ function Get-TaskList {
         [Parameter(Mandatory, Position = 1)][string]$TaskList,
         [Parameter(Position = 2)][DateTime]$Date = (Get-Date),
         [switch]$Prompt
-
     )
     $timestamp = $Date.ToString($script:DateStamp);
     $taskFile = Join-Path $script:TaskFolder -ChildPath "$TaskList-$timestamp.md";

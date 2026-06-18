@@ -9,23 +9,23 @@ function Update-TaskTrackerSettings {
     } else {
         New-Item -Path $script:TempSettingsFile -ItemType File -Value $currentSettings | Out-Null;
     }
-    
-    Write-PSVerbose ("Original Settings:`n$currentSettings`n");
+
+    Write-PSVerbose ("Original Settings:`n$currentSettings`n") -Command $MyInvocation.MyCommand;
     Start-Sleep 1;
     Invoke-TextEditor -Path $script:TempSettingsFile;
     Start-Sleep 1;
     try {
         $newSettings = Get-Content $script:TempSettingsFile -Raw | ConvertFrom-Json -AsHashtable -ErrorAction Stop;
     } catch {
-        Write-PSError "The new settings file is invalid JSON!";
+        Write-PSError "The new settings file is invalid JSON!" -Command $MyInvocation.MyCommand;
         Remove-Item $script:TempSettingsFile;
         return;
     }
     $editors = @("nano", "micro", "vim", "spacevim", "emacs", "astrovim", "nvim", "neovim");
-    Write-PSVerbose ("New Settings:`n" + (ConvertTo-Json $newSettings) + "`n");
+    Write-PSVerbose ("New Settings:`n" + (ConvertTo-Json $newSettings) + "`n") -Command $MyInvocation.MyCommand;
 
     if ($editors.Contains($newSettings.Editor) -eq $false) {
-        Write-PSWarning  ("`"" + $newSettings.Editor + "`" is not a known terminal editor!")
+        Write-PSWarning  ("`"" + $newSettings.Editor + "`" is not a known terminal editor!") -Command $MyInvocation.MyCommand
     }
     $validTime = (Assert-ValidTime $newSettings.Morning.Hour $newSettings.Morning.Minute "Morning") -and `
     (Assert-ValidTime $newSettings.Midday.Hour $newSettings.Midday.Minute "Midday") -and `
@@ -43,15 +43,15 @@ function Update-TaskTrackerSettings {
         $middayTime = $newSettings.Midday.Hour.ToString("00") + ":" + $newSettings.Midday.Minute.ToString("00");
         $reportTime = $newSettings.Report.Hour.ToString("00") + ":" + $newSettings.Report.Minute.ToString("00");
         if ($morningGap -lt 1.0) {
-            Write-PSError ("Midday Time: $middayTime needs to be at least an hour after Morning Time: $morningTime, Current Gap: $morningGap hours");
+            Write-PSError ("Midday Time: $middayTime needs to be at least an hour after Morning Time: $morningTime, Current Gap: $morningGap hours") -Command $MyInvocation.MyCommand;
             $validTime = $false;
         }
         if ($middayGap -lt 1.0) {
-            Write-PSError ("EndOfDay Time: $middayTime needs to be at least an hour after Midday Time: $middayTime, Current Gap: $middayGap hours");
+            Write-PSError ("EndOfDay Time: $middayTime needs to be at least an hour after Midday Time: $middayTime, Current Gap: $middayGap hours") -Command $MyInvocation.MyCommand;
             $validTime = $false;
         }
         if ($endOfDayGap -lt 0.25) {
-            Write-PSError ("Report Time: $reportTime needs to be at least fifteen minutes after EndOfDay Time: $endOfDayTime, Current Gap: $endOfDayGap hours");
+            Write-PSError ("Report Time: $reportTime needs to be at least fifteen minutes after EndOfDay Time: $endOfDayTime, Current Gap: $endOfDayGap hours") -Command $MyInvocation.MyCommand;
             $validTime = $false;
         }
     }
@@ -60,10 +60,10 @@ function Update-TaskTrackerSettings {
         $validOutputDirectory = $true;
     } else {
         $validOutputDirectory = $false;
-        Write-PSError ("Output Directory: " + $newSettings.OutputDirectory + " is not a valid file path!");
+        Write-PSError ("Output Directory: " + $newSettings.OutputDirectory + " is not a valid file path!") -Command $MyInvocation.MyCommand;
     }
     if ($Rollback -or ($validTime -eq $false) -or ($validOutputDirectory -eq $false)) {
-        Write-PSWarning "No changes were committed to settings.";
+        Write-PSWarning "No changes were committed to settings." -Command $MyInvocation.MyCommand;
     } else {
         Set-Content -Path $script:SettingsFile -Value (Get-Content $script:TempSettingsFile -Raw);
         Sync-TaskTrackerSettings | Out-Null;

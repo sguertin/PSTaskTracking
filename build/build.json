@@ -2,6 +2,7 @@
     "ModuleVersion": "1.4",
     "ProjectId": "2b006b41-ad23-496b-963e-3e3409effae6",
     "ApplicationName": "PSTaskTracking",
+    "FunctionContent": "",
     "FunctionsToExclude": [
         "Assert-ValidTime",
         "ConvertTo-TimeValue",
@@ -10,7 +11,6 @@
         "Get-ReminderFilePath",
         "Resolve-Tokens",
         "Start-TaskList",
-        "Test-EmptyString",
         "Test-Missing",
         "Write-PSError",
         "Write-PSHost",

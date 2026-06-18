@@ -2,7 +2,7 @@ function Edit-EndOfDayTaskListTemplate {
     <#
     .SYNOPSIS
     Launches an editor to update the EndOfDay Task list template.
-    
+
     .EXAMPLE
     Edit-EndOfDayTaskListTemplate
     #>

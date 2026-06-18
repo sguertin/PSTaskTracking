@@ -17,7 +17,7 @@ function Test-TaskLists {
     $uhOhCounter = 0;
     if (Test-Path (Get-TaskList -TaskList Summary)) {
         return $true;
-    }    
+    }
     if (($now.Hour) -ge $script:Settings.Morning.Hour -and ($now.Minute) -ge $script:Settings.Morning.Minute) {
         if ((Test-TaskList -TaskList Morning -Date $now) -eq $false) {
             $uhOhCounter++;
@@ -35,7 +35,7 @@ function Test-TaskLists {
     }
     if ((($now.Hour) -ge $script:Settings.Report.Hour) -and ($now.Minute) -ge $script:Settings.Report.Minute) {
         $uhOhCounter++;
-        Write-PSWarning "Gotta compile your end of day report!"; 
+        Write-PSWarning "Gotta compile your end of day report!";
     }
     if ($uhOhCounter -gt 1) {
         Write-PSError "YOU NEED TO GET YOUR TASKS TOGETHER NOW";

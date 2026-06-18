@@ -2,7 +2,7 @@ function Edit-MiddayTaskListTemplate {
     <#
     .SYNOPSIS
     Launches an editor to update the Midday Task list template.
-    
+
     .EXAMPLE
     Edit-MiddayTaskListTemplate
     #>

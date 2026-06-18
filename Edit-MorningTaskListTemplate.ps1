@@ -2,7 +2,7 @@ function Edit-MorningTaskListTemplate {
     <#
     .SYNOPSIS
     Launches an editor to update the Morning Task list template.
-    
+
     .EXAMPLE
     Edit-MorningTaskListTemplate
     #>
@@ -10,4 +10,4 @@ function Edit-MorningTaskListTemplate {
     param()
     Edit-TaskListTemplate -TaskList "Morning";
 }
-Set-Alias -Name MorningTemplate -Value Edit-MorningTaskListTemplate
+Set-Alias -Name MorningTemplate -Value Edit-MorningTaskListTemplate;

@@ -32,11 +32,11 @@ function New-EndOfDayReport {
     $timestamp = $Date.ToString($script:DateStamp);
     $workLogs = Get-WorkDayLogs -Date $Date;
     if ($null -eq $workLogs) {
-        Write-PSError "No worklogs found for $Date!";
+        Write-PSError "No worklogs found for $Date!" -Command $MyInvocation.MyCommand;
         return;
     }
     $reportContent = "# Daily Task Report $timestamp`n`n";
-    foreach($workLog in $workLogs) {
+    foreach ($workLog in $workLogs) {
         $taskContent = (Get-Content $workLog.Path -Raw);
         if ($taskContent.EndsWith("`n") -eq $false) {
             $taskContent += "`n";
