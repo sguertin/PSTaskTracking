@@ -2,23 +2,22 @@ param(
     [string]$Certificate = $null
 )
 $sourceDirectory = $PWD;
-$buildSettings = Get-Content (Join-Path "build" -ChildPath "build.json" ) -Raw | ConvertFrom-Json -AsHashtable;
+$buildSettings = Get-Content (Join-Path "build" -ChildPath "build.json" ) -Raw `
+| ConvertFrom-Json -AsHashtable;
 $applicationName = $buildSettings.ApplicationName
 $continue = $true;
 
-while (!$sourceDirectory.ToString().EndsWith($applicationName)) {
+while ($sourceDirectory.ToString().EndsWith($applicationName) -eq $false) {
     $parentDirectory = Split-Path -Parent $PWD;
-    if ($parentDirectory.ToString() -eq $sourceDirectory.ToString()) {
+    if ($parentDirectory.ToString().EndsWith($applicationName) -eq $false) {
         Write-Error "Unable to find $applicationName directory!"
-        $continue = $false;
+        return;
     } else {
         $sourceDirectory = $parentDirectory;
     }
 }
 if ($continue) {
-
     $outputDirectory = Join-Path $PWD -ChildPath "build" -AdditionalChildPath @("output", $applicationName);
-    $functions = @();
     $aliases = @();
     if (Test-Path $outputDirectory) {
         Remove-Item $outputDirectory -Recurse -Force;
@@ -30,17 +29,10 @@ if ($continue) {
     Write-Output "Building $ApplicationName.psm1...";
     New-Item $outputDirectory -ItemType Directory -Force | Out-Null;
     $files = Get-ChildItem -Path $sourceDirectory -File -Filter "*.ps1"
-    $files | Where-Object {
-        $buildSettings.FunctionsToExclude.Contains($_.Name.Replace(".ps1","")) -eq $false
-    } | ForEach-Object {
-        $functions += $_.Name.Replace(".ps1", "");
-    };
-    $files | ForEach-Object {
-        $fileContent = Get-Content $_.FullName -Raw;
-        $buildSettings.FunctionContent += "$fileContent`n`n";
-        foreach ($match in ([regex]"Set-Alias -Name (.*?) -Value .*").Matches($fileContent)) {
-            $aliases += $match.Groups[1].Value
-        }
+    $functions = $files | Where-Object BaseName -NotIn $buildSettings.FunctionsToExclude | Select-Object -ExpandProperty BaseName;
+    $buildSettings.FunctionContent = $files | Get-Content -Raw | Join-String;
+    foreach ($match in ([regex]"Set-Alias -Name (.*?) -Value .*").Matches($buildSettings.FunctionContent)) {
+        $aliases += $match.Groups[1].Value
     }
     $moduleContent = Get-Content (Join-Path "build" -ChildPath "Module.psm1") -Raw;
     foreach($key in $buildSettings.Keys) {
@@ -48,10 +40,7 @@ if ($continue) {
     }
     $moduleOutputPath = Join-Path $outputDirectory -ChildPath "$applicationName.psm1";
     $manifestOutputPath = Join-Path $outputDirectory -ChildPath "$applicationName.psd1";
-    $User = $env:USERNAME;
-    if ([string]::IsNullOrEmpty($User)) {
-        $User = $env:USER;
-    }
+
     New-Item -Path $moduleOutputPath -ItemType File -Value $moduleContent -Force | Out-Null;
     Write-Output "$applicationName.psm1 ====> $outputDirectory";
     New-ModuleManifest -Path $manifestOutputPath -Guid $buildSettings.ProjectId `
@@ -70,12 +59,14 @@ if ($continue) {
             Set-AuthenticodeSignature `
                 -FilePath $moduleOutputPath `
                 -Certificate $cert `
-                -TimestampServer $private:TimestampServer;
+                -TimestampServer $private:TimestampServer
+                -ErrorAction Stop;
             Write-Host "Signing '$manifestOutputPath' with '$Certificate' Code Signing Certificate";
             Set-AuthenticodeSignature `
                 -FilePath $manifestOutputPath `
                 -Certificate $cert `
-                -TimestampServer $private:TimestampServer;
+                -TimestampServer $private:TimestampServer
+                -ErrorAction Stop;
         } catch {
             Write-Host $_;
         }
