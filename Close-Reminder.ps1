@@ -32,30 +32,40 @@ function Close-Reminder {
     .NOTES
     Aliased as finish
     #>
-    [CmdletBinding(DefaultParameterSetName = "Info")]
+    [CmdletBinding()]
     param(
-        [Parameter(Mandatory, ParameterSetName = "Pipe", ValueFromPipeline = $true)]
-        [System.IO.FileInfo]$File,
-        [Parameter(Mandatory, Position = 1, ParameterSetName = "Info")]
+        [Parameter(Mandatory, Position = 1)]
         [int]$Id,
-        [Parameter(Position = 2, ParameterSetName = "Info")]
+        [Parameter(Position = 2)]
         [DateTime]$Date = (Get-Date)
     )
-    if ($null -eq $File) {
-        $filePath = Get-ReminderFilePath -Id $Id -Date $Date;
-        $File = Get-Item $filePath;
+    $timestamp = $Date.ToString($script:DateStamp);
+    $closedReminderPath = Join-Path $script:ClosedFolder -ChildPath "closed-reminders-$timestamp.json";
+    if (Test-Path $closedReminderPath) {
+        $closedReminders = Get-Content $closedReminderPath | ConvertFrom-Json;
+    } else {
+        $closedReminders = @();
     }
-    $resolution = (Read-Host "How was this reminder resolved?");
-    $content = Get-Content $filePath -Raw | ConvertFrom-Json -AsHashtable;
-    $content = @{
-        Id         = $content.Id
-        Reminder   = $content.Reminder
-        Date       = $content.Date
-        Resolution = $resolution
-    } | ConvertTo-Json;
-    Set-Content $filePath -Value $content;
-    $closedItem = Join-Path $script:ClosedFolder -ChildPath $File.Name;
-    $currentItem = $File.FullName;
-    Move-Item $currentItem -Destination $closedItem -Force | Out-Null;
+    $reminders = Get-Reminders;
+    $reminder = $reminders | Where-Object Id -EQ $Id;
+    if ($reminder.Length -eq 0) {
+        throw "No reminder found for Id of '$Id'!"
+    }
+    $reminder.Resolution = (Read-Host "How was this reminder resolved?");
+    $closedReminders += $reminder;
+    $closedContent = ConvertTo-Json $closedReminders;
+    if ($closedReminders.Length -eq 1) {
+        $closedContent = "[$closedContent]";
+    }
+    Set-Content $closedReminderPath -Value $closedContent;
+    $remainingReminders = $reminders | Where-Object Id -NE $Id;
+    $remainingContent = ConvertTo-Json $remainingReminders;
+    # A list of one object gets converted into a single object not a list
+    if ($remainingReminders.Length -le 1) {
+        $remainingContent = "[$remainingContent]";
+    } else {
+        $remainingContent = ConvertTo-Json $remainingReminders;
+    }
+    Set-Content $script:RemindersFile -Value $remainingContent;
 }
 Set-Alias -Name finish -Value Close-Reminder;

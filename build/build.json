@@ -1,20 +1,21 @@
 {
-    "ModuleVersion": "1.4",
-    "ProjectId": "2b006b41-ad23-496b-963e-3e3409effae6",
-    "ApplicationName": "PSTaskTracking",
-    "FunctionContent": "",
-    "FunctionsToExclude": [
-        "Assert-ValidTime",
-        "ConvertTo-TimeValue",
-        "Edit-TaskListTemplate",
-        "Get-DefaultTaskTrackSettings",
-        "Get-ReminderFilePath",
-        "Resolve-Tokens",
-        "Start-TaskList",
-        "Test-Missing",
-        "Write-PSError",
-        "Write-PSHost",
-        "Write-PSWarning",
-        "Write-PSVerbose"
-    ]
+  "ModuleVersion": "1.4",
+  "ProjectId": "2b006b41-ad23-496b-963e-3e3409effae6",
+  "ApplicationName": "PSTaskTracking",
+  "FunctionContent": "",
+  "FunctionsToExclude": [
+    "Assert-ValidTime",
+    "ConvertTo-TimeValue",
+    "ConvertTo-ReminderString",
+    "Edit-TaskListTemplate",
+    "Get-DefaultTaskTrackSettings",
+    "Get-ReminderFilePath",
+    "Resolve-Tokens",
+    "Start-TaskList",
+    "Test-Missing",
+    "Write-PSError",
+    "Write-PSHost",
+    "Write-PSWarning",
+    "Write-PSVerbose"
+  ]
 }

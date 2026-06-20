@@ -6,7 +6,7 @@ function New-Reminder {
     .DESCRIPTION
     Creates a new reminder file in the reminders folder
 
-    .PARAMETER Reminder
+    .PARAMETER Text
     The text of the reminder i.e. what you want to be reminded to do.
 
     .PARAMETER Date
@@ -23,32 +23,41 @@ function New-Reminder {
     #>
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory, Position = 1)][string]$Reminder,
-        [Parameter(Mandatory, Position = 2)][DateTime]$Date,
+        [Parameter(Mandatory, Position = 1)][string]$Text,
+        [Parameter(Position = 2)][DateTime]$Date = (Get-Date),
+        [int]$Days = 0,
+        [int]$Hours = 0,
+        [int]$Minutes = 0,
         [switch]$Day
     )
 
     $timestamp = $Date.ToString($script:DateStamp)
     if ($Day -eq $true) {
-        $Date = Get-Date $timestamp
+        $Date = Get-Date -Date $timestamp
     }
-
+    $Date = $Date.AddDays($Days).AddHours($Hours).AddMinutes($Minutes);
+    if (Test-Path $script:RemindersFile) {
+        $reminders = Get-Content $script:RemindersFile | ConvertFrom-Json;
+    } else {
+        New-Item $script:RemindersFile -ItemType File;
+        $reminders = @()
+    }
     $id = 1;
-    $content = @{
-        Id         = $id
-        Reminder   = $Reminder
-        Date       = $Date
-        Resolution = $null
-    };
-
-    $filePath = Join-Path -Path $script:RemindersFolder -ChildPath "reminder-$timestamp.$id.json";
-    while (Test-Path -Path $filePath) {
-        $id += 1;
-        $content.Id = $id
-        $filePath = Join-Path -Path $script:RemindersFolder -ChildPath "reminder-$timestamp.$id.json";
+    foreach($reminder in $reminders) {
+        if ($reminder.Id -gt $id) {
+            $id = $reminder.Id + 1;
+        }
     }
-
-    $content = $content | ConvertTo-Json;
-    New-Item -Path $filePath -ItemType File -Value $content -Force | Out-Null;
+    $reminders += @{
+        Id         = $id
+        Text       = $Text
+        Date       = $Date
+        Resolution = "None"
+    };
+    $content = ConvertTo-Json $reminders;
+    if ($reminders.Length -eq 1) {
+        $content = "[$content]";
+    }
+    Set-Content $script:RemindersFile -Value $content;
 }
 Set-Alias -Name reminder -Value New-Reminder;

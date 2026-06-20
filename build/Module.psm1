@@ -27,7 +27,7 @@ if ($IsWindows) {
 }
 New-Variable -Name "TemplatesFolder" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "templates");
 New-Variable -Name "ArchiveFolder" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "archive");
-New-Variable -Name "RemindersFolder" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "reminders");
+New-Variable -Name "RemindersFile" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "reminders.json");
 New-Variable -Name "ClosedFolder" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "closed");
 New-Variable -Name "SettingsFile" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "settings.json");
 New-Variable -Name "TempSettingsFile" -Scope Script -Option Constant -Value (Join-Path $script:TempFolder -ChildPath "PSTaskTracker.settings.json");
@@ -35,7 +35,7 @@ New-Variable -Name "TempSettingsFile" -Scope Script -Option Constant -Value (Joi
 Write-PSVerbose "TaskFolder:`t $TaskFolder";
 Write-PSVerbose "TemplatesFolder:`t $TemplatesFolder";
 Write-PSVerbose "ArchiveFolder:`t $ArchiveFolder";
-Write-PSVerbose "RemindersFolder:`t $RemindersFolder";
+Write-PSVerbose "RemindersFile:`t $RemindersFile";
 Write-PSVerbose "ClosedFolder:`t $ClosedFolder";
 Write-PSVerbose "SettingsFile:`t $SettingsFile";
 Write-PSVerbose "TempSettingsFile:`t$TempSettingsFile";
@@ -56,22 +56,17 @@ if (Test-Missing -Path $script:SettingsFile) {
 
 Write-PSVerbose "Directory Initialization";
 if (Test-Missing -Path $script:TemplatesFolder) {
-    Write-PSVerbose "Creating TemplatesFolder: $TemplatesFolder";
+    Write-PSVerbose "Creating Templates Folder: $TemplatesFolder";
     New-Item $script:TemplatesFolder -ItemType Directory | Out-Null;
 }
 
 if (Test-Missing -Path $script:ArchiveFolder) {
-    Write-PSVerbose "Creating ArchiveFolder: $ArchiveFolder";
+    Write-PSVerbose "Creating Archive Folder: $ArchiveFolder";
     New-Item $script:ArchiveFolder -ItemType Directory | Out-Null;
 }
 
-if (Test-Missing -Path $script:RemindersFolder) {
-    Write-PSVerbose "Creating RemindersFolder: $RemindersFolder";
-    New-Item $script:RemindersFolder -ItemType Directory | Out-Null;
-}
-
 if (Test-Missing -Path $script:ClosedFolder) {
-    Write-PSVerbose "Creating ClosedFolder: $ClosedFolder";
+    Write-PSVerbose "Creating Closed Folder: $ClosedFolder";
     New-Item $script:ClosedFolder -ItemType Directory -Force | Out-Null;
 }
 
@@ -102,4 +97,9 @@ if (Test-Missing -Path (Join-Path $script:TemplatesFolder -ChildPath "WorkLog.md
     New-Item (Join-Path $script:TemplatesFolder -ChildPath "WorkLog.md") -ItemType File `
         -Value "## Work Log #{Name}# - #{DateTimeStamp}#`n`n#{Ticket}##{Time}#`n`n" | Out-Null;
     Write-PSHost "Created base work log task, you can edit the task with the command 'Edit-WorkLog'. ";
+}
+
+if (Test-Missing -Path $script:RemindersFile) {
+    Write-PSVerbose "Creating Reminders File: $RemindersFile";
+    New-Item $script:RemindersFile -ItemType File -Value "[]" | Out-Null;
 }

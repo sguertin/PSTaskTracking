@@ -20,18 +20,20 @@ function Test-Reminders {
         [switch]$SilentAllClear
     )
     $now = Get-Date;
-    $overdueReminders = Get-OverdueReminders;
+    $reminders = Get-Reminders;
+    $overdueDate = $now.AddDays(-1);
+    $dueReminders = Get-Reminders | Where-Object Date -LT $now;
+    $overdueReminders = $reminders | Where-Object Date -LT $overdueDate;
     if ($overdueReminders.Count -gt 0) {
         Write-PSError ("You have " + $overdueReminders.Count + " reminders that are OVERDUE!");
         foreach ($reminder in $overdueReminders) {
-            Write-PSError ("Id: " + $reminder.Id + ": [" + $reminder.Date.ToString($script:DateString) + "]" + $reminder.Reminder);
+            Write-PSError (ConvertTo-ReminderString $reminder);
         }
     }
-    $dueReminders = Get-Reminders | Where-Object Date -LT $now;
     if ($dueReminders.Count -gt 0) {
         Write-PSWarning ("You have " + $dueReminders.Count + " reminders that are due!");
         foreach ($reminder in $dueReminders) {
-            Write-PSWarning ("Id: " + $reminder.Id + ": [" + $reminder.Date.ToString($script:DateString) + "]" + $reminder.Reminder);
+            Write-PSWarning (ConvertTo-ReminderString $reminder);
         }
     }
     if (($overdueReminders.Count -eq 0) -and ($dueReminders.Count -eq 0) -and !$SilentAllClear) {

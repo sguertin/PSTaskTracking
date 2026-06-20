@@ -9,9 +9,14 @@ function Get-Reminders {
     #>
     [CmdletBinding()]
     param()
-    $timestamp = (Get-Date).ToString($script:DateStamp);
-
-    Get-ChildItem -Path $script:RemindersFolder | Where-Object Name -Match $timestamp `
-    | Get-Content -Raw | ConvertFrom-Json -AsHashtable -ErrorAction Stop;
+    $reminders = @()
+    if (Test-Path $script:RemindersFile) {
+        Get-Content $script:RemindersFile | ConvertFrom-Json | ForEach-Object {
+            $reminders += $_;
+        };
+    } else {
+        New-Item $script:RemindersFile -ItemType File -Value "[]";
+    }
+    return $reminders;
 }
 Set-Alias -Name today -Value Get-Reminders;
