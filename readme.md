@@ -1,7 +1,7 @@
 # PSTaskTracking
 
-This is a homegrown task tracking system I built primarily to keep myself on top
-of my day to day tasks.
+This is a homegrown task tracking system built primarily to keep on top of
+day-to-day tasks.
 
 ## Prerequisites - Windows
 
@@ -67,19 +67,19 @@ The following command will execute the following steps:
 
 1. Combine all three task files into a single markdown file
 2. Launch the editor specified (default is micro) to let you edit the final
-report as needed
+   report as needed
 3. After exiting the editor, a pdf will be generated from the report file via
-pandoc and dropped in your daily tasks folder.
+   pandoc and dropped in your daily tasks folder.
 
 `New-EndOfDayReport`: `CloseDay`, `close`, `TaskReport`, `report`
 
 ### Weekly Tasks
 
 - You can add tasks that only need to be done once a week on a particular day as
-well, go to the templates folder (can be retrieved via the `Get-TemplatesFolder`
-command). In that folder if you create a file called `DayOfWeek`.`TimeOfDay`.md
-e.g. `Friday.Morning.md`, it will automatically include the contents of that
-file when creating the task file for that day/time.
+  well, go to the templates folder (can be retrieved via the `Get-TemplatesFolder`
+  command). In that folder if you create a file called `DayOfWeek`.`TimeOfDay`.md
+  e.g. `Friday.Morning.md`, it will automatically include the contents of that
+  file when creating the task file for that day/time.
 
 ## Reminders
 
@@ -90,9 +90,9 @@ after a command. The following commands are available for managing reminders:
 - `New-Reminder`, alias: `reminder` - creates a new reminder
 - `Get-Reminders`, alias: `today` - lists all reminders pending for today
 - `Get-OverdueReminders`, alias: `overdue` - lists all incomplete reminders from
-prior days
+  prior days
 - `Test-Reminders`, alias: `reminders` - lists you to what reminders are due as
-of right now.
+  of right now.
 - `Close-Reminder`, alias: `close` - Marks a reminder as complete.
 
 ### Creating a Reminder
@@ -143,7 +143,7 @@ parameters that will be rendered into the template.
 
 ### Data Rendering
 
-Tasks except a hashtable object as a parameter, the keys will replace tokens
+Tasks accept a hashtable object as a parameter, the keys will replace tokens
 defined as follows `#{key}#`, and will replace those tokens with the value
 associated with those keys.
 
@@ -151,7 +151,9 @@ For a task template that is defined as follows:
 
 ```md
 ## Backup Production Database - #{TicketNumber}# - #{DateTime}#
+
 1. Run the back up script
+
 -
 ```
 
@@ -169,6 +171,8 @@ the template will render to:
 
 ```md
 ## Backup Production Database - ServiceDesk-123 - 2026-05-26
+
 1. Run the back up script
+
 -
 ```
