@@ -32,13 +32,13 @@ New-Variable -Name "ClosedFolder" -Scope Script -Option Constant -Value (Join-Pa
 New-Variable -Name "SettingsFile" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "settings.json");
 New-Variable -Name "TempSettingsFile" -Scope Script -Option Constant -Value (Join-Path $script:TempFolder -ChildPath "PSTaskTracker.settings.json");
 
-Write-PSVerbose "TaskFolder:`t $TaskFolder";
-Write-PSVerbose "TemplatesFolder:`t $TemplatesFolder";
-Write-PSVerbose "ArchiveFolder:`t $ArchiveFolder";
-Write-PSVerbose "RemindersFile:`t $RemindersFile";
-Write-PSVerbose "ClosedFolder:`t $ClosedFolder";
-Write-PSVerbose "SettingsFile:`t $SettingsFile";
-Write-PSVerbose "TempSettingsFile:`t$TempSettingsFile";
+Write-PSVerbose "TaskFolder:`t`t $TaskFolder";
+Write-PSVerbose "TemplatesFolder:`t`t $TemplatesFolder";
+Write-PSVerbose "ArchiveFolder:`t`t $ArchiveFolder";
+Write-PSVerbose "RemindersFile:`t`t $RemindersFile";
+Write-PSVerbose "ClosedFolder:`t`t $ClosedFolder";
+Write-PSVerbose "SettingsFile:`t`t $SettingsFile";
+Write-PSVerbose "TempSettingsFile:`t`t $TempSettingsFile";
 
 New-Variable -Name "DefaultSettings" -Scope Script -Option Constant -Value (Get-DefaultTaskTrackerSettings);
 
