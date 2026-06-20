@@ -1,13 +1,19 @@
 #####
 # #{ApplicationName}# Module V#{ModuleVersion}#
-#
-# Functions
+#####
+
 Write-Verbose "Loading Functions ";
-
+##### 
+# Functions
+#
 #{FunctionContent}#
-
+#
 # End of Functions
-## Constants
+#####
+
+#####
+# Constants
+#
 Write-PSVerbose "Module Initialization Finished";
 Write-PSVerbose "Initialize Constants...";
 New-Variable -Name "ApplicationName" -Scope Script -Option Constant -Value "#{ApplicationName}#";
@@ -41,11 +47,13 @@ Write-PSVerbose "SettingsFile:`t`t $SettingsFile";
 Write-PSVerbose "TempSettingsFile:`t`t $TempSettingsFile";
 
 New-Variable -Name "DefaultSettings" -Scope Script -Option Constant -Value (Get-DefaultTaskTrackerSettings);
+#
+# End of Constants
+#####
 
-### End of Constants
-
-### Module Initialization
-
+#####
+# Module Initialization
+#
 Write-PSVerbose "Settings Initialization";
 
 if (Test-Missing -Path $script:SettingsFile) {
@@ -103,3 +111,6 @@ if (Test-Missing -Path $script:RemindersFile) {
     Write-PSVerbose "Creating Reminders File: $RemindersFile";
     New-Item $script:RemindersFile -ItemType File -Value "[]" | Out-Null;
 }
+#
+# End of Module Initialization
+#####
