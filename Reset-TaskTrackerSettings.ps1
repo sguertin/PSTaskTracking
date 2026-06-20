@@ -10,7 +10,7 @@ function Reset-TaskTrackerSettings {
     param()
 
     Write-PSHost "Restoring default settings..." -Command $MyInvocation.MyCommand
-    if (Test-Missing $script:SettingsFile) {
+    if (Test-Missing -Path $script:SettingsFile) {
         New-Item -Path $script:SettingsFile -ItemType File -Force;
     }
     Set-Content -Path $script:SettingsFile -Value (ConvertTo-Json (Get-DefaultTaskTrackerSettings));

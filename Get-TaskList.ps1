@@ -43,7 +43,7 @@ function Get-TaskList {
     if (Test-Path $archivedFile) {
         return Get-Item -Path $archivedFile;
     }
-    if (Test-Missing -File $taskFile) {
+    if (Test-Missing -Object $taskFile) {
         if ($TaskList -eq "Summary") {
             Write-PSVerbose "Summary report for $timestamp cannot be found."
             return $taskFile;
