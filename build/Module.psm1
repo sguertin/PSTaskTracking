@@ -14,7 +14,7 @@ Write-Verbose "Loading Functions ";
 #####
 # Constants
 #
-Write-PSVerbose "Module Initialization Finished";
+Write-PSVerbose "#{ApplicationName}# Module Initialization Finished";
 Write-PSVerbose "Initialize Constants...";
 # Constant values
 New-Variable -Name "ApplicationName" -Scope Script -Option Constant -Value "#{ApplicationName}#";
@@ -38,7 +38,7 @@ New-Variable -Name "ClosedFolder" -Scope Script -Option Constant -Value (Join-Pa
 # Files
 New-Variable -Name "RemindersFile" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "reminders.json");
 New-Variable -Name "SettingsFile" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "settings.json");
-New-Variable -Name "TempSettingsFile" -Scope Script -Option Constant -Value (Join-Path $script:TempFolder -ChildPath "PSTaskTracker.settings.json");
+New-Variable -Name "TempSettingsFile" -Scope Script -Option Constant -Value (Join-Path $script:TempFolder -ChildPath "#{ApplicationName}#.settings.json");
 
 Write-PSVerbose "TaskFolder:`t`t $TaskFolder";
 Write-PSVerbose "TemplatesFolder:`t`t $TemplatesFolder";

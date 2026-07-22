@@ -25,7 +25,7 @@ function Start-WorkLog {
             $workLogData[$key] = $Data[$key];
         }
     }
-    Start-Task -Name "WorkLog" -Date $Date -Data $workLogData;
+    Start-PSTask -Name "WorkLog" -Date $Date -Data $workLogData;
 }
 Set-Alias -Name WorkLog -Value Start-WorkLog;
 Set-Alias -Name wl -Value Start-WorkLog;

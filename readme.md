@@ -132,7 +132,7 @@ end of day report as part of your activity.
 
 `New-PSTask` can be used to create a new task template, e.g. `New-PSTask -Name "BackupProduction"`
 
-`Start-Task` can then be used to create a fresh copy of that task, that you can
+`Start-PSTask` can then be used to create a fresh copy of that task, that you can
 then fill out with whatever notes you see fit. These tasks will be included in
 the order they are were done, along with the regular task list activity.
 
@@ -164,7 +164,7 @@ $input = @{
     TicketNumber = "ServiceDesk-123";
     DateTime = "2026-05-26";
 };
-Start-Task -Name "BackupProduction" -Data $input;
+Start-PSTask -Name "BackupProduction" -Data $input;
 ```
 
 the template will render to:

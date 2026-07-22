@@ -11,21 +11,17 @@
                 "cwd": "${workspaceFolder}",
                 "shell": {
                     "executable": "/usr/bin/pwsh",
-                    "args": [
-                        "-NoProfile"
-                    ]
+                    "args": ["-NoProfile"]
                 }
             },
             "windows": {
                 "command": "${workspaceFolder}\\build\\Build-Module.ps1",
-                "args": [ "-Certificate", "Cert:\\CurrentUser\\My" ],
+                "args": ["-Certificate", "My"],
                 "options": {
                     "cwd": "${workspaceFolder}",
                     "shell": {
                         "executable": "pwsh",
-                        "args": [
-                            "-NoProfile"
-                        ]
+                        "args": ["-NoProfile"]
                     }
                 }
             },
@@ -43,9 +39,7 @@
                 "cwd": "${workspaceFolder}",
                 "shell": {
                     "executable": "/usr/bin/pwsh",
-                    "args": [
-                        "-NoProfile"
-                    ]
+                    "args": ["-NoProfile"]
                 }
             },
             "windows": {
@@ -54,9 +48,7 @@
                     "cwd": "${workspaceFolder}",
                     "shell": {
                         "executable": "pwsh",
-                        "args": [
-                            "-NoProfile"
-                        ]
+                        "args": ["-NoProfile"]
                     }
                 }
             },
