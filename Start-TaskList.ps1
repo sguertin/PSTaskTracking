@@ -24,15 +24,16 @@ function Start-TaskList {
     $timestamp = $Date.ToString($script:DateStamp);
     $taskFilePath = Join-Path $script:TaskFolder -ChildPath "$TaskList-$timestamp.md";
     if (Test-Missing -Path $taskFilePath) {
-        Copy-Item $taskTemplate -Destination $taskFilePath;
+        $defaultData = Get-DefaultData -Name $TaskList -Date $Date;
         $dayOfWeek = $Date.DayOfWeek.ToString();
         $dailyTasks = Join-Path $script:TemplatesFolder -ChildPath "$dayOfWeek.$TaskList.md";
         if (Test-Path $dailyTasks) {
-            $content = Get-Content $taskFilePath;
-            $content += "`n### $dayOfWeek Tasks `n"
-            $content += Get-Content $dailyTasks -Raw;
-            Set-Content $taskFilePath -Value $content
+            $taskContent += "`n### #{DateStamp}# $dayOfWeek Tasks`n"
+            $taskContent += Get-Content $dailyTasks -Raw;
         }
+        $taskContent = Get-Content $taskTemplate -Raw | Resolve-Tokens -Values $defaultData;
+        New-Item $taskFilePath -ItemType File -Value $taskContent;
+
     }
     Invoke-TextEditor -Path $taskFilePath;
 }
