@@ -1,4 +1,4 @@
-function New-Task {
+function New-PSTask {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
@@ -13,4 +13,4 @@ function New-Task {
 
     return $taskFilePath;
 }
-Set-Alias -Name Edit-Task -Value New-Task;
+Set-Alias -Name Edit-PSTask -Value New-PSTask;

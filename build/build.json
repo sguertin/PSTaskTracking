@@ -11,7 +11,6 @@
     "Get-DefaultTaskTrackSettings",
     "Get-ReminderFilePath",
     "Resolve-Tokens",
-    "Start-TaskList",
     "Test-Missing",
     "Write-PSError",
     "Write-PSHost",

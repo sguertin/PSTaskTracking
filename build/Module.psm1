@@ -3,7 +3,7 @@
 #####
 
 Write-Verbose "Loading Functions ";
-##### 
+#####
 # Functions
 #
 #{FunctionContent}#
@@ -16,12 +16,13 @@ Write-Verbose "Loading Functions ";
 #
 Write-PSVerbose "Module Initialization Finished";
 Write-PSVerbose "Initialize Constants...";
+# Constant values
 New-Variable -Name "ApplicationName" -Scope Script -Option Constant -Value "#{ApplicationName}#";
 New-Variable -Name "#{ApplicationName}#Version" -Option Constant -Value "#{ModuleVersion}#";
-New-Variable -Name "Version" -Scope Script -Option Constant -Value $#{ApplicationName}#Version;
 New-Variable -Name "DateStamp" -Scope Script -Option Constant -Value "yyyy-MM-dd";
 New-Variable -Name "DateTimeStamp" -Scope Script -Option Constant -Value "yyyy-MM-dd hh:mm";
 New-Variable -Name "DateString" -Scope Script -Option Constant -Value "G";
+# Directories
 if ($IsWindows) {
     New-Variable -Name "TaskFolder" -Scope Script -Option Constant -Value `
     (Join-Path ($env:LOCALAPPDATA) -ChildPath $script:ApplicationName);
@@ -33,8 +34,9 @@ if ($IsWindows) {
 }
 New-Variable -Name "TemplatesFolder" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "templates");
 New-Variable -Name "ArchiveFolder" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "archive");
-New-Variable -Name "RemindersFile" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "reminders.json");
 New-Variable -Name "ClosedFolder" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "closed");
+# Files
+New-Variable -Name "RemindersFile" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "reminders.json");
 New-Variable -Name "SettingsFile" -Scope Script -Option Constant -Value (Join-Path $script:TaskFolder -ChildPath "settings.json");
 New-Variable -Name "TempSettingsFile" -Scope Script -Option Constant -Value (Join-Path $script:TempFolder -ChildPath "PSTaskTracker.settings.json");
 

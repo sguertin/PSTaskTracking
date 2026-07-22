@@ -23,6 +23,7 @@ function Resolve-Tokens {
         if ($null -ne $Values) {
             foreach ($key in $Values.Keys) {
                 $value = $Values[$key];
+                Write-Host "$key : $value";
                 $Content = $Content.Replace("#{$key}#", $value);
             }
         }

@@ -40,6 +40,5 @@ function Test-TaskLists {
     if ($uhOhCounter -gt 1) {
         Write-PSError "YOU NEED TO GET YOUR TASKS TOGETHER NOW";
     }
-    return ($uhOhCounter -eq 0);
 }
 Set-Alias -Name TaskStatus -Value Test-TaskLists;

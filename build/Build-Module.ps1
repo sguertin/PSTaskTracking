@@ -35,7 +35,7 @@ if ($continue) {
         $aliases += $match.Groups[1].Value
     }
     $moduleContent = Get-Content (Join-Path "build" -ChildPath "Module.psm1") -Raw;
-    foreach($key in $buildSettings.Keys) {
+    foreach ($key in $buildSettings.Keys) {
         $moduleContent = $moduleContent.Replace("#{$key}#", $buildSettings[$key]);
     }
     $moduleOutputPath = Join-Path $outputDirectory -ChildPath "$applicationName.psm1";
@@ -44,13 +44,13 @@ if ($continue) {
     New-Item -Path $moduleOutputPath -ItemType File -Value $moduleContent -Force | Out-Null;
     Write-Output "$applicationName.psm1 ====> $outputDirectory";
     New-ModuleManifest -Path $manifestOutputPath -Guid $buildSettings.ProjectId `
-    -ModuleVersion $buildSettings.ModuleVersion;
+        -ModuleVersion $buildSettings.ModuleVersion;
     Update-ModuleManifest -Path $manifestOutputPath -RootModule "$applicationName.psm1" `
-    -FunctionsToExport $functions -AliasesToExport $aliases -VariablesToExport @(("$applicationName"+"Version"));
+        -FunctionsToExport $functions -AliasesToExport $aliases -VariablesToExport @(("$applicationName" + "Version"));
 
     if ([string]::IsNullOrEmpty($Certificate) -eq $false) {
         try {
-            $cert = Get-ChildItem $Certificate -CodeSigningCert -ErrorAction Stop | Select-Object -First 1 -ErrorAction Stop;
+            $cert = Get-ChildItem -Path "Cert:\CurrentUser\$Certificate" -CodeSigningCert -ErrorAction Stop | Select-Object -First 1 -ErrorAction Stop;
             if ($null -eq $cert) {
                 throw "No Code Signing Cert found for '$Certificate'";
             }
@@ -59,13 +59,13 @@ if ($continue) {
             Set-AuthenticodeSignature `
                 -FilePath $moduleOutputPath `
                 -Certificate $cert `
-                -TimestampServer $private:TimestampServer
+                -TimestampServer $private:TimestampServer `
                 -ErrorAction Stop;
             Write-Host "Signing '$manifestOutputPath' with '$Certificate' Code Signing Certificate";
             Set-AuthenticodeSignature `
                 -FilePath $manifestOutputPath `
                 -Certificate $cert `
-                -TimestampServer $private:TimestampServer
+                -TimestampServer $private:TimestampServer `
                 -ErrorAction Stop;
         } catch {
             Write-Host $_;

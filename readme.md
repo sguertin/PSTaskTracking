@@ -130,7 +130,7 @@ end of day report as part of your activity.
 
 ### Basic Usage
 
-`New-Task` can be used to create a new task template, e.g. `New-Task -Name "BackupProduction"`
+`New-PSTask` can be used to create a new task template, e.g. `New-PSTask -Name "BackupProduction"`
 
 `Start-Task` can then be used to create a fresh copy of that task, that you can
 then fill out with whatever notes you see fit. These tasks will be included in
