@@ -39,5 +39,6 @@ function Test-Reminders {
     if (($overdueReminders.Count -eq 0) -and ($dueReminders.Count -eq 0) -and !$SilentAllClear) {
         Write-PSHost "No reminders due at this time!" -ForegroundColor Green;
     }
+    return (($overdueReminders.Count -eq 0) -and ($dueReminders.Count -eq 0));
 }
 Set-Alias reminders -Value Test-Reminders;

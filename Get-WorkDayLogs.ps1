@@ -10,22 +10,22 @@ function Get-WorkDayLogs {
         $filePath = Join-Path $script:TaskFolder -ChildPath ("$taskList-$dateStamp.md");
         if (Test-Path $filePath) {
             $file = Get-Item -Path $filePath;
-            $logs.Add(@{
-                    Path          = $file.FullName;
-                    ArchivePath   = (Join-Path $script:ArchiveFolder -ChildPath $file.Name);
-                    LastWriteTime = $file.LastWriteTime;
-                });
+            $logs += @{
+                Path          = $file.FullName;
+                ArchivePath   = (Join-Path $script:ArchiveFolder -ChildPath $file.Name);
+                LastWriteTime = $file.LastWriteTime;
+            };
         } else {
             Write-PSError "Could not find $taskList tasks for $dateStamp!" -Command $MyInvocation.MyCommand;
             return $null;
         }
     }
     Get-ChildItem $script:TaskFolder -Filter "*-$dateStamp.*.md" | ForEach-Object {
-        $logs.Add(@{
-                Path          = $_.FullName;
-                ArchivePath   = (Join-Path $script:ArchiveFolder -ChildPath $_.Name);
-                LastWriteTime = $_.LastWriteTime;
-            });
+        $logs += @{
+            Path          = $_.FullName;
+            ArchivePath   = (Join-Path $script:ArchiveFolder -ChildPath $_.Name);
+            LastWriteTime = $_.LastWriteTime;
+        };
     }
     return $logs | Sort-Object LastWriteTime;
 }

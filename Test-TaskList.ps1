@@ -15,13 +15,10 @@ function Test-TaskList {
     $listName = $lists[$TaskList];
     if ($null -eq $taskFile) {
         Write-PSWarning "Gotta start your $listName tasks!";
-        return $false;
     }
     $templateContent = Get-Content $templateFile -Raw;
     $taskContent = Get-Content $taskFile -Raw;
     if ($templateContent -eq $taskContent) {
         Write-PSWarning "Gotta finish your $listName tasks!";
-        return $false
     }
-    return $true;
 }
