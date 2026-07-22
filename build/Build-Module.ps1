@@ -29,12 +29,13 @@ if ($continue) {
     Write-Output "Building $ApplicationName.psm1...";
     New-Item $outputDirectory -ItemType Directory -Force | Out-Null;
     $files = Get-ChildItem -Path $sourceDirectory -File -Filter "*.ps1"
-    $functions = $files | Where-Object BaseName -NotIn $buildSettings.FunctionsToExclude | Select-Object -ExpandProperty BaseName;
+    $functions = $files | Where-Object BaseName -NotIn $buildSettings.FunctionsToExclude `
+    | Select-Object -ExpandProperty BaseName;
     $buildSettings.FunctionContent = $files | Get-Content -Raw | Join-String;
     foreach ($match in ([regex]"Set-Alias -Name (.*?) -Value .*").Matches($buildSettings.FunctionContent)) {
         $aliases += $match.Groups[1].Value
     }
-    $moduleContent = Get-Content (Join-Path "Module" -ChildPath "Module.psm1") -Raw;
+    $moduleContent = Get-Content (Join-Path "Module" -ChildPath "BaseModule.psm1") -Raw;
     foreach ($key in $buildSettings.Keys) {
         $moduleContent = $moduleContent.Replace("#{$key}#", $buildSettings[$key]);
     }
@@ -50,7 +51,8 @@ if ($continue) {
 
     if ([string]::IsNullOrEmpty($Certificate) -eq $false) {
         try {
-            $cert = Get-ChildItem -Path "Cert:\CurrentUser\$Certificate" -CodeSigningCert -ErrorAction Stop | Select-Object -First 1 -ErrorAction Stop;
+            $cert = Get-ChildItem -Path "Cert:\CurrentUser\$Certificate" -CodeSigningCert -ErrorAction Stop `
+            | Select-Object -First 1 -ErrorAction Stop;
             if ($null -eq $cert) {
                 throw "No Code Signing Cert found for '$Certificate'";
             }
