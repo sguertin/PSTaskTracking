@@ -34,7 +34,7 @@ if ($continue) {
     foreach ($match in ([regex]"Set-Alias -Name (.*?) -Value .*").Matches($buildSettings.FunctionContent)) {
         $aliases += $match.Groups[1].Value
     }
-    $moduleContent = Get-Content (Join-Path "build" -ChildPath "Module.psm1") -Raw;
+    $moduleContent = Get-Content (Join-Path "Module" -ChildPath "Module.psm1") -Raw;
     foreach ($key in $buildSettings.Keys) {
         $moduleContent = $moduleContent.Replace("#{$key}#", $buildSettings[$key]);
     }
